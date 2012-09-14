@@ -57,7 +57,7 @@
                                                 [% END %]
                                             [% END %]
                                             </div>       
-                                            <input class="btn btn-info" disabled value="[% cat_ref_tipo_nivel3_name %]" />
+                                            <input class="btn btn-primary btn-large" disabled value="[% cat_ref_tipo_nivel3_name %]" />
                                         [% INCLUDE 'opac-detail_partial_N1.inc' %]
                                           <dl class="listado_sin_margen">
                                               [% FOREACH nivel2_array %]
@@ -127,10 +127,14 @@
                                             [% PERL %]
 
                                                print C4::AR::Filtros::action_button( 
-                                                                  button    => "btn btn-primary disabled btn-mini 10_top_margin",
+                                                                  button    => "btn btn-info disabled btn-mini 10_top_margin",
                                                                   action    => "showModalReporteCatalogo([% id2 %])",
                                                                   icon      => "",
                                                                   title     => "[% 'Algo est&aacute; mal' | i18n %]",
+                                                                  popover => { title   =>'[% "Informe" | i18n %]',
+                                                                               text    => '[% "Podes informarnos acerca de posibles errores que haya con esta edici&oacute;n" | i18n %]',
+                                                                               placement => "right",
+                                                                             }
                                                               );
                                             [% END %]
                                         [% END %]

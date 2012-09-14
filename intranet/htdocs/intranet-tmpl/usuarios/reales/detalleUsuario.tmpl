@@ -93,6 +93,7 @@ var loaderPath= "";
 	                                             title           => "[% socio.persona.getNombre %], [% socio.persona.getApellido %]",
 	                                             button          => 'btn btn-primary',
 	                                             action 		 => 'modificarDatosDeUsuario()', 
+                                                 modifier        => "btn-large",
 	                                             icon 			 => "icon-white icon-pencil",
 	                                             actions         => [  [% IF needsDataValidation %]
 	                                                                       {title => "Validar datos Censales", action=>'validarDatosCensales();',icon=>"icon-share-alt"},
