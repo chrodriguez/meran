@@ -725,8 +725,14 @@ sub getDestacados{
     my $rating = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros, db => $db,);
     my $rating_count = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros, db => $db,);
 
-    # foreach my $r (@$rating)
-    
+    my @array_rating;
+
+    foreach my $r (@$rating){
+        my $n2 = getNivel2FromId2($r->getId2);
+        push(@array_rating, $n2);
+    }
+
+
     $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db;
 
     push (@filtros, (promoted => {eq => "1"}));
@@ -735,7 +741,7 @@ sub getDestacados{
     my $promoted_count = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2_count(query => \@filtros, db => $db,);
 
 
-    return ($rating, $rating_count, $promoted, $promoted_count);
+    return (\@array_rating, $rating_count, $promoted, $promoted_count);
 
 }
 
