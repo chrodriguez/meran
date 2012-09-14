@@ -172,7 +172,7 @@ if [ $(dpkg -l |grep apache2|grep ii |wc -l ) -eq 0 ];
           #Instalar paquetes
           #su
           apt-get update
-          apt-get install apache2 mysql-server libapache2-mod-perl2 htmldoc libgd2-xpm libxpm4 htmldoc libaspell15
+          apt-get install apache2 mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15
 
 
           #Configurar apache
