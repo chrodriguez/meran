@@ -1448,7 +1448,7 @@ sub busquedaCombinada_newTemp{
     my $query = "";
     my @boolean_ops = ("&","|","!","-");
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
-    my $orden       = $obj_for_log->{'orden'} || 'titulo';
+    my $orden       = $obj_for_log->{'orden'} || undef;
     my $sentido_orden = $obj_for_log->{'sentido_orden'};
 
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
@@ -1489,23 +1489,22 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     C4::AR::Debug::debug("Busquedas => query string ".$query);
 
     $sphinx->SetMatchMode($tipo_match);
-    # if ($orden eq 'autor') {
-    #         if ($sentido_orden){
-    #             $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
-    #         } else {
-    #             $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
-    #         }
-    # } elsif ($orden eq 'titulo') {
-    #         if ($sentido_orden){
-    #             $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
-    #         } else {
-    #             $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
-    #         }
-    # } else {
-    #     C4::AR::Debug::error("ESTAMOS ROCKEANDO????????????????????????????????????????");
-    #         $sphinx->SetSortMode(SPH_SORT_EXTENDED,"hits DESC, titulo_local ASC");
-    # }
- $sphinx->SetSortMode(SPH_SORT_EXTENDED,"hits DESC, titulo_local ASC");
+    if ($orden eq 'autor') {
+            if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
+            }
+    } elsif ($orden eq 'titulo') {
+            if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+            }
+    } else {
+            $sphinx->SetSortMode(SPH_SORT_EXTENDED,"hits DESC, titulo_local ASC");
+    }
+
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
 
     #FIX porque cuando viene 1, se saltea el primer resultado

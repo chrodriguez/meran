@@ -21,7 +21,7 @@
                                             </div>
                                             <script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
                                          [% END %]
-    <div class="right" style="width: 150px;">
+    <div class="right" style="width: 150px; margin-bottom: 20px;">
         <!-- AddThis Button BEGIN -->
         <div class="addthis_toolbox addthis_default_style ">
         <a class="addthis_button_preferred_1"></a>
@@ -123,7 +123,17 @@
                                                     [% END %]
 
                                            [% END %]
-                                           
+                                        [% IF socio_data.usr_nro_socio %]
+                                            [% PERL %]
+
+                                               print C4::AR::Filtros::action_button( 
+                                                                  button    => "btn btn-primary disabled btn-mini 10_top_margin",
+                                                                  action    => "showModalReporteCatalogo([% id2 %])",
+                                                                  icon      => "",
+                                                                  title     => "[% 'Algo est&aacute; mal' | i18n %]",
+                                                              );
+                                            [% END %]
+                                        [% END %]
                                       </div>
                                 </div>
                                 
@@ -148,6 +158,24 @@
                                             <a href="#" class="btn btn-primary" onclick="reservar([% id1 %],[% id2 %]);">[% 'Reservar' | i18n %]</a>
                                           </div>
                                 </div>
+
+                                [% IF socio_data.usr_nro_socio %]
+                                    <div id="modal_reporte_catalogo[% id2 %]" class="modal hide fade">
+                                              <div class="modal-header">
+                                                <a href="#" class="close" data-dismiss="modal">×</a>
+                                                <h4>[% 'Reportar problema de registro' | i18n %]</h4>
+                                              </div>
+                                              <div class="modal-body">
+                                                <textarea type="text" rows="6" style="width: 90%;" id="text_reporte_catalogo[% id2 %]"
+                                                        placeholder="[% 'Contanos cual es el problema con el registro. S&eacute; lo m&aacute;s detallado posible. Gracias por el inter&eacute;s.' | i18n %]"></textarea>
+                                              </div>
+                                              <div class="modal-footer">
+                                                <a href="#" class="btn btn-primary" onclick="enviarReporteCatalogo([% id2 %]);">
+                                                  <i class="icon-white icon-ok"></i> [% 'Enviar' | i18n %]
+                                                </a>
+                                              </div>
+                                    </div>
+                                [% END %]
                             [% END %]  <!--END  IF nivel2_array -->
     
                             [% INCLUDE 'e-docs_grupo.inc' %]

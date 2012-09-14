@@ -49,6 +49,29 @@ sub agregar{
     $self->save();
 }
 
+sub reporteCatalogo{
+    my ($self) = shift;
+    my ($data_hash,$socio_reporte) = @_;
+    use C4::AR::Nivel1;
+    use HTML::Entities;
+    my $nivel1 = C4::AR::Nivel1::getNivel1FromId2($data_hash->{'id2'});
+
+    $self->setTrato("Contacto de reporte catalogo");
+    $self->setNombre($socio_reporte->persona->getNombre);
+    $self->setApellido($socio_reporte->persona->getApellido);
+    $self->setDireccion($socio_reporte->persona->getCalle);
+    $self->setCodigoPostal($socio_reporte->persona->getCodigoPostal);
+    $self->setCiudad($socio_reporte->persona->ciudad_ref->NOMBRE);
+    $self->setPais(C4::AR::Filtros::i18n("Sacar del socio"));
+    $self->setTelefono($socio_reporte->persona->getTelefono);
+    $self->setEmail($socio_reporte->persona->getEmail);
+    $self->setAsunto(C4::AR::Filtros::i18n('OPAC - Error en detalle de').' '.(Encode::decode_utf8(Encode::decode_utf8($nivel1->getTitulo))).' (Ed. '.$data_hash->{'id2'}.')');
+    $self->setMensaje($data_hash->{'informe'});
+    $self->setHora();
+    $self->setFecha();
+
+    $self->save();
+}
 
 
 sub getObjeto{

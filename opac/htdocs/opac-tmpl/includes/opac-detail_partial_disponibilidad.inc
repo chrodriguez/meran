@@ -76,9 +76,8 @@
 
 </div>
 
-          [% IF socio_data %]
-              [% INCLUDE 'rating.inc' %]
-          [% END %]
+          [% INCLUDE 'rating.inc' %]
+
           <h3>
             [% PERL %]
                 print C4::AR::Filtros::action_link_button(

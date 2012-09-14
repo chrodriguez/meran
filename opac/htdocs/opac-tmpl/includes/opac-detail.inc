@@ -6,9 +6,42 @@
 
 <script type="text/javascript">
 
+	function showModalReporteCatalogo(id2){
+		$("#modal_reporte_catalogo" + id2).modal('show'); 
+	}
+	
 	function mostrarIndice(id2){
 	    $("#indice_data" + id2).modal(); 
 	}
+	
+
+    function enviarReporteCatalogo(id2){
+
+        hideReservar(id2);
+        objAH               = new AjaxHelper(updateEnviarReporteCatalogo);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        //para busquedas combinables
+        objAH.url           = URL_PREFIX+'/opac-reporte-catalogo.pl';
+        objAH.id2           = id2;
+        objAH.informe       = $("#text_reporte_catalogo" + id2).val();
+        objAH.sendToServer();
+        $("#modal_reporte_catalogo" + id2).modal('hide'); 
+        
+            
+    }
+
+    /*
+    * Funcion que muestra la informacion de las reservas
+    */
+    function updateEnviarReporteCatalogo(responseText){
+        var Messages = JSONstring.toObject(responseText);
+        setMessages(Messages);
+        
+        infoReservas();
+        infoSanciones();
+    }
+
 	
 	function ProcessGBSBookInfo(booksInfo) {
 		for (id in booksInfo) {
@@ -47,7 +80,7 @@
     <div class="detalle_completo_niveles">
         <div class="main-subcontent" style="width:100%; float:left">
             <div class="subcontent-unit-border" style="width:100%;">
-                <div class="round-border-topleft""></div>
+                <div class="round-border-topleft"></div>
                     <div class="main-subcontent" style="width:100%; float:left;">
 						 <legend class="trigger trigger_estado_coleccion_[% id1 %] click" ><h1>[% "Estado de Colecci&oacute;n" | i18n %]</h1></legend>
 						         <div id="estado_coleccion[% id1 %]" class="detalle_total estado_coleccion[% id1 %]">

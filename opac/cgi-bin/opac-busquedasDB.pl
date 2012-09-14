@@ -43,7 +43,7 @@ $obj->{'from_suggested'}    = CGI::escapeHTML($input->param('from_suggested'));
 $obj->{'tipo_nivel3_name'}  = ($input->param('tipo_nivel3_name'));
 $obj->{'tipoBusqueda'}      = 'all';
 $obj->{'token'}             = CGI::escapeHTML($input->param('token'));
-$obj->{'orden'}             = $input->param('orden')|| "titulo";
+$obj->{'orden'}             = $input->param('orden')|| undef;
 $obj->{'primera_vez'}       = $input->param('primera_vez') || "2";
 
 
