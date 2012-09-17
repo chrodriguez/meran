@@ -1,3 +1,7 @@
+h1 {
+    font-size: 23px !important;
+}
+
 .navbar-inner {
     display: none;
 }
@@ -11,5 +15,17 @@
 }
 
 .btn {
+    display: none;
+}
+
+ /* FIXME */
+.alert {
+    display: none;
+}
+
+.portadaEdicionImage {
+    display: none;
+
+#divDisponivilidadOpac { 
     display: none;
 }
