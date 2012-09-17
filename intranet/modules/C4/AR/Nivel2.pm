@@ -743,7 +743,6 @@ sub getDestacados{
     foreach my $r (@$promoted){
         $r->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'S');
 
-
         $r->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'M');
         $r->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'L');
         $r->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($r->getId2);
@@ -751,9 +750,9 @@ sub getDestacados{
 
         C4::AR::Debug::debug("portada: ".$r->{'portada_registro'});
 
-         C4::AR::Debug::debug("portada: ".$r->{'portada_registro_medium'});
-          C4::AR::Debug::debug("portada: ".$r->{'portada_registro_big'});
-           C4::AR::Debug::debug("portada: ".$r->{'portada_edicion_local'});
+        C4::AR::Debug::debug("portada: ".$r->{'portada_registro_medium'});
+        C4::AR::Debug::debug("portada: ".$r->{'portada_registro_big'});
+        C4::AR::Debug::debug("portada: ".$r->{'portada_edicion_local'});
 
 
     }
