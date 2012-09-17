@@ -9,10 +9,10 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id           => { type => 'serial', overflow => 'truncate', not_null => 1 },
-        nombre       => { type => 'varchar', overflow => 'truncate', length => 128, not_null => 1 },
-        apellido     => { type => 'varchar', overflow => 'truncate', length => 128, not_null => 1 },
+        nombre       => { type => 'varchar', overflow => 'truncate', length => 128, not_null => 0 },
+        apellido     => { type => 'varchar', overflow => 'truncate', length => 128, not_null => 0 },
         nacionalidad => { type => 'character', overflow => 'truncate', length => 3 },
-        completo     => { type => 'varchar', overflow => 'truncate', length => 260, not_null => 1 },
+        completo     => { type => 'varchar', overflow => 'truncate', length => 260, not_null => 0 },
     ],
 #     alias_column => ['id', 'campo'],
     primary_key_columns => [ 'id' ],

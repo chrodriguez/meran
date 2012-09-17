@@ -856,12 +856,14 @@ sub action_set_button{
     my $action      = $params_hash_ref{'action'} || undef;
     my $url         = $params_hash_ref{'url'} || undef;
     my $class       = $params_hash_ref{'class'} || undef;
+    my $modifier    = $params_hash_ref{'modifier'} || undef;
     
     my $icon  = $params_hash_ref{'icon'} || 'icon white user'; #obtengo el title de la componete
 
     my $actions     = $params_hash_ref{'actions'} || [];
     
     my $button   = $params_hash_ref{'button'} || "btn btn-primary";
+       $button   .= ' '.$modifier;
 
     my $popover = $params_hash_ref{'popover'} ||undef;
     my $popopver_attr = "";

@@ -57,7 +57,7 @@
                                                 [% END %]
                                             [% END %]
                                             </div>       
-                                            <input class="btn btn-info" disabled value="[% cat_ref_tipo_nivel3_name %]" />
+                                            <input class="btn btn-primary btn-large" disabled value="[% cat_ref_tipo_nivel3_name %]" />
                                         [% INCLUDE 'opac-detail_partial_N1.inc' %]
                                           <dl class="listado_sin_margen">
                                               [% FOREACH nivel2_array %]
@@ -123,14 +123,18 @@
                                                     [% END %]
 
                                            [% END %]
-                                        [% IF socio_data.usr_nro_socio %]
+                                        [% IF socio_data.usr_nro_socio && informar_error %]
                                             [% PERL %]
 
                                                print C4::AR::Filtros::action_button( 
-                                                                  button    => "btn btn-primary disabled btn-mini 10_top_margin",
+                                                                  button    => "btn btn-info disabled btn-mini 10_top_margin",
                                                                   action    => "showModalReporteCatalogo([% id2 %])",
                                                                   icon      => "",
                                                                   title     => "[% 'Algo est&aacute; mal' | i18n %]",
+                                                                  popover => { title   =>'[% "Informe" | i18n %]',
+                                                                               text    => '[% "Podes informarnos acerca de posibles errores que haya con esta edici&oacute;n" | i18n %]',
+                                                                               placement => "right",
+                                                                             }
                                                               );
                                             [% END %]
                                         [% END %]
@@ -166,8 +170,10 @@
                                                 <h4>[% 'Reportar problema de registro' | i18n %]</h4>
                                               </div>
                                               <div class="modal-body">
-                                                <textarea type="text" rows="6" style="width: 90%;" id="text_reporte_catalogo[% id2 %]"
-                                                        placeholder="[% 'Contanos cual es el problema con el registro. S&eacute; lo m&aacute;s detallado posible. Gracias por el inter&eacute;s.' | i18n %]"></textarea>
+                                                <textarea type="text" rows="6" style="width: 90%; white-space: pre-line;" id="text_reporte_catalogo[% id2 %]"
+                                                        placeholder="[% 'Contanos cual es el problema con el registro. S&eacute; lo m&aacute;s detallado posible.  
+                                                                         Ej.: La edici&oacute;n es incorrecta. // Algunos car&aacute;cteres no se ven. // No figura el a&ntilde;o // Etc...  
+                                                                         Gracias por el inter&eacute;s.' | i18n %]"></textarea>
                                               </div>
                                               <div class="modal-footer">
                                                 <a href="#" class="btn btn-primary" onclick="enviarReporteCatalogo([% id2 %]);">
