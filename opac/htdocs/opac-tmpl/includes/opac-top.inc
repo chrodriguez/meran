@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
   <link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/[% user_theme %]/includes/opac-FF_fix.css" />  
   <link rel="stylesheet" href="/includes/jquery/fancybox/fancybox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/includes/css/print-opac.css" type="text/css" media="print" />
 
   <script type="text/javascript">
     var token               = '[% token %]';
