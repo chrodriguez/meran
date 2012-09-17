@@ -43,6 +43,7 @@ $t_params->{'pref_e_documents'}             = C4::AR::Preferencias::getValorPref
 $t_params->{'mostrar_ui_opac'}              = C4::AR::Preferencias::getValorPreferencia("mostrar_ui_opac");
 $t_params->{'mostrarDetalleDisponibilidad'} = C4::AR::Preferencias::getValorPreferencia("mostrarDetalleDisponibilidad");
 $t_params->{'mostrarSignaturaEnDetalleOPAC'}= C4::AR::Preferencias::getValorPreferencia("mostrarSignaturaEnDetalleOPAC");
+$t_params->{'informar_error'}               = C4::AR::Preferencias::getValorPreferencia("problem_catalog_opac");
 $t_params->{'nav_elements'}                 = C4::AR::Nivel2::buildNavForGroups($t_params);
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

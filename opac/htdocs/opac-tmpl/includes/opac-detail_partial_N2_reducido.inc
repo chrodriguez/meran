@@ -123,7 +123,7 @@
                                                     [% END %]
 
                                            [% END %]
-                                        [% IF socio_data.usr_nro_socio %]
+                                        [% IF socio_data.usr_nro_socio && informar_error %]
                                             [% PERL %]
 
                                                print C4::AR::Filtros::action_button( 
