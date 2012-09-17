@@ -93,9 +93,8 @@ sub _meran_to_marc{
             my $subcampo_hash_ref = $subcampos_hash->{$j};
              # C4::AR::Debug::debug("_meran_to_marc => subcampo_hash_ref => ".$subcampo_hash_ref);
             while ( my ($key, $value) = each(%$subcampo_hash_ref) ) {
-                 # C4::AR::Debug::debug("_meran_to_marc => hash key value => ".$key.", ".$value);
-              #   C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
-              #   C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
+                 
+                 C4::AR::Debug::debug("_meran_to_marc => hash key value => ".$key.", ".$value);
 
                 if($with_references){
                     $value = _procesar_referencia($campo, $key, $value, $itemtype, $nivel);
@@ -1012,9 +1011,9 @@ sub getRefFromStringConArrobas{
     @datos_array[2]; #dato
 =cut
 
-#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato: ".$dato);
-#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 1: ".@datos_array[1]);
-#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 2: ".@datos_array[2]);
+     #C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato: ".$dato);
+     #C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 1: ".@datos_array[1]);
+     #C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 2: ".@datos_array[2]);
 
     return @datos_array[1];
 }
@@ -1049,29 +1048,38 @@ Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de refer
 sub _procesar_referencia {
     my ($campo, $subcampo, $dato, $itemtype, $nivel) = @_;
 
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => campo => ".$campo);
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => subcampo => ".$subcampo);
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => itemype => ".$itemtype);
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => nivel => ".$nivel);
+     #C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
+     #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => campo => ".$campo);
+     #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => subcampo => ".$subcampo);
+     #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => itemype => ".$itemtype);
+     #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => nivel => ".$nivel);
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype, $nivel);
+     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => DESPUES _getEstructuraFromCampoSubCampo");
+     
     if($estructura) {
        if($estructura->getReferencia){
             #tiene referencia
             my $pref_tabla_referencia   = C4::Modelo::PrefTablaReferencia->new();
 
             eval{
+                
+                #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => ESTRUCTURA 1 = ". $estructura->getReferencia);
+                #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => ESTRUCTURA 2 = ". $estructura->infoReferencia);
+                #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => ESTRUCTURA 3 = ". $estructura->infoReferencia->getReferencia);  
+                
                 my $obj_generico            = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+
+                #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => OBJETO TABLA REF".$obj_generico->getTableName);
 
                 #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
                 my $string_result           = $obj_generico->getTableName.'@'.$dato;
 
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
+                 #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
+                 #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
+                 #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
+                 #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
+                 #C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
 
                 $dato = $string_result;
             };
@@ -2138,12 +2146,11 @@ sub _getEstructuraFromCampoSubCampo{
 
                                         );
 
-
-
 #elimino configuraciones duplicadas (configuracion para un mismo campo, subcampo, nivel pero para dos itemtypes distintos como puede ser ALL y LIB) si es que existen, dejando
 #la configuracion mas especifica
     if(scalar(@$cat_estruct_info_array) > 1){
     #hay dos configuraciones para campo, subcampo, nivel, tipo_ejemplar
+
 
 #         for (my $i=0;$i <= scalar(@$cat_estruct_info_array);$i++){
         for (my $i=0;$i < scalar(@$cat_estruct_info_array);$i++){
@@ -2152,8 +2159,8 @@ sub _getEstructuraFromCampoSubCampo{
                 return $cat_estruct_info_array->[$i];
             } elsif ($cat_estruct_info_array->[$i]->getItemType() eq "ALL") {
                 $index_all = $i;
-            }
-#             C4::AR::Debug::debug("C4::AR::Catalocagion::_getEstructuraFromCampoSubCampo => campo, subcampo, itemtype, nivel ".$cat_estruct_info_array->[$i]->getId().", ".$cat_estruct_info_array->[$i]->getCampo().", ".$cat_estruct_info_array->[$i]->getSubcampo().", ".$cat_estruct_info_array->[$i]->getItemType().", ".$cat_estruct_info_array->[$i]->getNivel());
+            } 
+            
         }
 
     } else {

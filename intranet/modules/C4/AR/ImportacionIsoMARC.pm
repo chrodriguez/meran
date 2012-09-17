@@ -1649,7 +1649,16 @@ sub getEstadoEjemplar {
                     $resultado = "STATE000";
                     }
             }
+
+        
+        #Si viene una fecha de baja??
+        
+        my @esFecha = split(" ", $dato);
+        if(scalar(@esFecha) == 3){
+            $resultado = "STATE000";
+            }
         }
+        
     return $resultado;
 }
 
@@ -1679,10 +1688,15 @@ sub getEjemplarFromMarcRecord {
     $hash_nivel3{'generar_barcode'}=1;
     }
     
-    $hash_nivel3{'ui_origen'} = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
-    $hash_nivel3{'ui_duenio'} = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
+    $hash_nivel3{'ui_origen'}               = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
+    $hash_nivel3{'ui_duenio'}               = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
     $hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
-    $hash_nivel3{'inventario'}   =  $nivel3->subfield('995','s');
+    $hash_nivel3{'inventario'}              =  $nivel3->subfield('995','s');
+    
+    $hash_nivel3{'abm'}                     =  $nivel3->subfield('995','m');
+    $hash_nivel3{'valor_doc'}               =  $nivel3->subfield('995','p');
+    $hash_nivel3{'operador'}                =  $nivel3->subfield('900','g');
+    
     $hash_nivel3{'disponibilidad'}          =  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
     $hash_nivel3{'estado'}                  =  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
     
@@ -1951,6 +1965,8 @@ sub procesarReferencia {
 
             my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($tabla);
             
+            C4::AR::Debug::debug("procesarReferencia =>  TABLA!!".$tabla);
+            
             use Switch;
             switch ($tabla) {
                 case 'tema' { 
@@ -1960,25 +1976,32 @@ sub procesarReferencia {
                     }
                 case 'autor' {
                     my $autor = $dato;
-                    $tabla_referer_involved->setCompleto($autor);
+                   
                     
+                    C4::AR::Debug::debug("procesarReferencia => AUTOR!!".$dato);
+                     $tabla_referer_involved->setApellido("");
+                     $tabla_referer_involved->setNombre("");
+                          
                     my @autor = split(', ', $dato);
                     if ($autor[0]){
                         $tabla_referer_involved->setApellido($autor[0]);
-                        if ($autor[1]){                 
+                        if ($autor[1]){
                           $tabla_referer_involved->setNombre($autor[1]);
                         } 
                         else{
                           $tabla_referer_involved->setNombre($autor[0]);
                           }
-                        
-                                } else {
+                     } else {
                         if ($autor[1]){
                           $tabla_referer_involved->setApellido($autor[1]);
                           $tabla_referer_involved->setNombre($autor[1]);
                         }
                       }
+                    
+                    $tabla_referer_involved->setCompleto($dato);
                     $tabla_referer_involved->save();
+                    
+                    
                     C4::AR::Debug::debug("NUEVO AUTOR: ".$dato." => ".$tabla_referer_involved->getId());
                     return $tabla_referer_involved->getId();
                     }
