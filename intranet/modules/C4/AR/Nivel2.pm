@@ -35,6 +35,7 @@ use vars qw(@EXPORT_OK @ISA);
         unPromoteGrupo
         checkPromotion
         eliminarReviewsDeNivel2
+        getDestacados
         
 );
 
@@ -713,6 +714,53 @@ sub getRating{
     } 
     
     return $rating_count;
+}
+
+
+sub getDestacados{
+    my($db) = @_;
+
+    my @filtros;
+
+    my $db = $db || C4::Modelo::CatRating->new()->db;
+    
+    my $rating = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros, db => $db,);
+    my $rating_count = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros, db => $db,);
+
+    my @array_rating;
+
+    foreach my $r (@$rating){
+        my $n2 = getNivel2FromId2($r->getId2);
+        push(@array_rating, $n2);
+    }
+
+
+    $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db;
+
+    push (@filtros, (promoted => {eq => "1"}));
+
+    my $promoted = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(query => \@filtros, db => $db,);
+    my $promoted_count = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2_count(query => \@filtros, db => $db,);
+
+    foreach my $r (@$promoted){
+        $r->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'S');
+
+        $r->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'M');
+        $r->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'L');
+        $r->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($r->getId2);
+
+
+        C4::AR::Debug::debug("portada: ".$r->{'portada_registro'});
+
+        C4::AR::Debug::debug("portada: ".$r->{'portada_registro_medium'});
+        C4::AR::Debug::debug("portada: ".$r->{'portada_registro_big'});
+        C4::AR::Debug::debug("portada: ".$r->{'portada_edicion_local'});
+
+
+    }
+
+    return (\@array_rating, $rating_count, $promoted, $promoted_count);
+
 }
 
 
