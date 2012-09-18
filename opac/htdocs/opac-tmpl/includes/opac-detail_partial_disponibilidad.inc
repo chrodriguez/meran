@@ -1,4 +1,4 @@
-<div class="alert alert-success">
+<div id="divDisponivilidadOpac" class="alert alert-success">
 		<blockquote>
 			[% IF cantParaPrestamoActual && cantParaSalaActual %]
 	        	<p>[% "Se cuenta con disponibilidad inmediata para domicilio o la sala de lectura" | i18n %].</p>
