@@ -29,6 +29,7 @@ if ($external_search_enabled){
 	$obj->{'ini'} = $ini;
 	$obj->{'cantR'} = $cantR;
 	$obj->{'type'}          = 'OPAC';
+	$obj->{'isOAI_search'}  = 1;
 	
 	my $keyword                     = $obj->{'keyword'};        
 	my $search;

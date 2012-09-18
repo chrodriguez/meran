@@ -1,8 +1,7 @@
 package C4::Modelo::DB::Object::AutoBase2;
 
-use base 'Rose::DB::Object';
-# use base 'Rose::DB::Object::Cached';
-# our @ISA = qw(Rose::DB::Cache);
+#use base 'Rose::DB::Object';
+use base 'Rose::DB::Object::Cached';
 
 
 use C4::Modelo::DB::AutoBase1;
@@ -27,7 +26,7 @@ sub load{
 
     eval {
     
-         unless( $self->SUPER::load(speculative => 1) ){
+         unless( $self->SUPER::load(speculative => 1, nonlazy => 1) ){
 #                  C4::AR::Debug::debug("AutoBase2 =>  dentro del unless, no existe el objeto SUPER load");
                 $error = 0;
          }
@@ -65,7 +64,8 @@ sub getByPk{
     my $self_like = $self->meta->class->new($pk => $value_id);
   
 #     SI NO SE TRABAJA CON CACHE, COMENTAR LA SIGUIENTE LINEA
-#     $self_like->forget;
+
+    $self_like->forget;
     
     $self_like->load();
 

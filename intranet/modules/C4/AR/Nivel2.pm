@@ -330,9 +330,11 @@ sub getNivel2FromId1{
 }
 
 sub getFirstItemTypeFromN1{
-    my ($id1) = @_;
+    my ($id1,$nivel2) = @_;
     
-    my $nivel2 = getNivel2FromId1($id1);
+    if (!$nivel2){
+        $nivel2 = getNivel2FromId1($id1);
+    }
     
     if (scalar(@$nivel2)){
         return ($nivel2->[0]->getTipoDocumento);

@@ -182,11 +182,13 @@ sub getAllPreferencias {
 
 sub getMenuPreferences{
 
-    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
-                                    query => [ variable=> { like => '%showMenuItem_%' }],
-                            );
+    my @preferencias_array_ref;
+
+    push (@preferencias_array_ref, C4::AR::Preferencias::getValorPreferencia('showMenuItem_circ_devolucion_renovacion'));
+    push (@preferencias_array_ref, C4::AR::Preferencias::getValorPreferencia('showMenuItem_circ_prestamos'));
+    
     my %hash;
-    foreach my $pref (@$preferencias_array_ref){
+    foreach my $pref (@preferencias_array_ref){
         $hash{$pref->getVariable} = $pref->getValue();
     }
 

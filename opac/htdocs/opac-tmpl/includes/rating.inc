@@ -53,6 +53,14 @@ $(document).ready(function() {
 
     <span class="label label-success" id="ajax_response[% id2 %]" style="display:none;"></span>
 
-    
-    
+	[% PERL %]
+	    print C4::AR::Filtros::action_link_button(
+	                                    url     => "reviews.pl", 
+	                                    button	=> "btn btn-info",
+	                                    params  => ["id2=[% id2 %]"],
+	                                    title   => " [% 'Comentarios' | i18n %] ([% cant_reviews %])",
+	                                    icon	=> "icon-white icon-comment",
+	                                ) ;
+	[% END %]
+
 </div>
