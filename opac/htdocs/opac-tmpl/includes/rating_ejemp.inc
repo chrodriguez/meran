@@ -1,0 +1,57 @@
+
+
+[% IF rating_count %]		
+		<fieldset> 
+              <legend class="titulo_legend_resaltado">
+                  [% "Ejemplares mas votados" | i18n %]
+             </legend>
+                     [% IF rating_count %]
+                          [% PERL %]
+                                print C4::AR::Filtros::tableHeader(   
+                                            id              => "table_tablaPrestamos",
+                                            class           => "",
+                                            selectAll_id    => "",
+                                            columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                 				'[% "Edici&oacute;n" | i18n %]'
+                                                              ]
+                                                                            
+                                                  ) ;
+                          [% END %]
+        
+                        
+                        <tbody>
+                        [% FOREACH elem IN rating %]
+                            <tr>
+                                <td>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to(	text => "[% HTML.escape(elem.nivel1.getTitulo) %]",
+                                                            url=>"[% url_prefix %]/opac-detail.pl", 
+                                                            params =>	["id1=[% elem.nivel1.getId1 %]"],
+                                                          ) ;
+                                [% END %]
+                                </td>
+                                <td>
+                                [% IF elem.nivel1.getAutor %]
+                                    [% elem.nivel1.getAutor %]
+                                [% ELSE %]
+                                    &nbsp;
+                                [% END %]
+                                </td>
+                                <td>  
+                                [% IF elem.getEdicion %] [% elem.getEdicion %] [% ELSE %] - [% END %]
+                                </td>
+
+                                <td>
+                                    [% IF prestamo.tipo.id_tipo_prestamo %]
+                                            [% prestamo.tipo.getDescripcion %]
+                                    [% END %]
+                                </td>
+                          </tr>
+                      [% END %] <!-- FOREACH prestamos -->
+                    </tbody>  
+                      [% END %]
+			</table> 
+		</fieldset>
+[% ELSE %]
+     <div class="alert alert-info"> [% 'No hay ejemplares para mostrar.' | i18n %] </div>
+[% END %]
