@@ -731,6 +731,7 @@ sub getDestacados{
 
     foreach my $r (@$rating){
         my $n2 = getNivel2FromId2($r->getId2);
+        $n2->{"rating"}= C4::AR::Nivel2::getRating($r->getId2);
         push(@array_rating, $n2);
     }
 
@@ -748,14 +749,6 @@ sub getDestacados{
         $r->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'M');
         $r->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'L');
         $r->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($r->getId2);
-
-
-        C4::AR::Debug::debug("portada: ".$r->{'portada_registro'});
-
-        C4::AR::Debug::debug("portada: ".$r->{'portada_registro_medium'});
-        C4::AR::Debug::debug("portada: ".$r->{'portada_registro_big'});
-        C4::AR::Debug::debug("portada: ".$r->{'portada_edicion_local'});
-
 
     }
 
