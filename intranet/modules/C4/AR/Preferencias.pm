@@ -13,7 +13,7 @@ use C4::Modelo::PrefPreferenciaSistema::Manager;
 use C4::Modelo::PrefAbout;
 use C4::Modelo::PrefAbout::Manager;
 
-use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
+use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES $CACHE_MERAN);
 
 @ISA=qw(Exporter);
 
@@ -188,9 +188,11 @@ sub getMenuPreferences{
     push (@preferencias_array_ref, C4::AR::Preferencias::getValorPreferencia('showMenuItem_circ_prestamos'));
     
     my %hash;
-    foreach my $pref (@preferencias_array_ref){
-        $hash{$pref->getVariable} = $pref->getValue();
-    }
+    
+    $hash{'showMenuItem_circ_devolucion_renovacion'} = C4::AR::Preferencias::getValorPreferencia('showMenuItem_circ_devolucion_renovacion');
+    $hash{'showMenuItem_circ_prestamos'}             = C4::AR::Preferencias::getValorPreferencia('showMenuItem_circ_prestamos');
+
+      
 
     return (\%hash);
 }
@@ -464,8 +466,6 @@ sub getConfigVisualizacionOPAC{
 
     my %hash_config = {};
     $hash_config{'resumido'}            = C4::AR::Preferencias::getValorPreferencia("detalle_resumido") || 0;
-    $hash_config{'nivel1_repetible'}    = C4::AR::Preferencias::getValorPreferencia("nivel1_repetible") || 0;
-    $hash_config{'perfil_visual'}       = C4::AR::Preferencias::getValorPreferencia("perfil_visual") || 0;
 
     return (\%hash_config);
 }
@@ -501,6 +501,9 @@ sub getMetodosAuthAll{
 
 BEGIN{
       C4::AR::Preferencias::reloadAllPreferences();
+
+      #TESTING CACHE_MERAN
+      $CACHE_MERAN = undef;
 };
 
 

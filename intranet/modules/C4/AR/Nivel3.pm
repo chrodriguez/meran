@@ -810,7 +810,6 @@ sub detalleCompletoOPAC{
     my ($id1, $t_params) = @_;
     #recupero el nivel1 segun el id1 pasado por parametro
     my $nivel1= C4::AR::Nivel1::getNivel1FromId1OPAC($id1);
-    my $config_visualizacion= C4::AR::Preferencias::getConfigVisualizacionOPAC();
     #recupero todos los nivel2 segun el id1 pasado por parametro
 
 # YA NO SE USA MAS LA PAGINACION ON-DEMAND POR LOS ANCLAS
