@@ -725,15 +725,21 @@ sub getDestacados{
     my $db = $db || C4::Modelo::CatRating->new()->db;
     
     my $rating = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros, db => $db,);
-    my $rating_count = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros, db => $db,);
+    my $rating_count;
 
     my @array_rating;
 
     foreach my $r (@$rating){
-        my $n2 = getNivel2FromId2($r->getId2);
+        my $n1= getNivel1FromId2($r->getId2);
+
+
         $n2->{"rating"}= C4::AR::Nivel2::getRating($r->getId2);
-        push(@array_rating, $n2);
+        if ( $n2->{"rating"} != '0'){
+            push(@array_rating, $n2);
+        }
     }
+
+    $rating_count= scalar(@array_rating);
 
 
     $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db;

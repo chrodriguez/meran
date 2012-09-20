@@ -1,45 +1,3 @@
-
-  <script type="text/javascript">
-  $(document).ready(function() {
-
-    $('#rating_[% elem.id %]').raty({
-        cancel    : true,
-        cancelOff : 'cancel-off-big.png',
-        cancelOn  : 'cancel-on-big.png',
-        half      : true,
-        size      : 24,
-        starHalf  : 'star-half-big.png',
-        starOff   : 'star-off-big.png',
-        starOn    : 'star-on-big.png',
-        score   : '[% elem.rating %]',
-        readOnly: true,
-
-      click       : function(score, evt) {
-
-          $.ajax({
-              url: '[% url_prefix %]/rating.pl',
-              data: {rate: score, id2: "[% id2 %]"}, 
-              type: 'POST',
-              success: function (data) {
-                    $("#ajax_response[% elem.id %]").html(data);
-                    $("#ajax_response[% elem.id %]").show();
-      
-              },
-              error: function (jxhr, msg, err) {
-                  $('#response').append('<li style="color:red">' + msg + '</li>');
-              }
-          });
-
-
-        }
-    });
-
-      
-
-
-  });
-  </script>
-
 [% IF rating_count %]		
 		<fieldset> 
               <legend class="titulo_legend_resaltado">
@@ -82,30 +40,29 @@
                                 [% IF elem.getEdicion %] [% elem.getEdicion %] [% ELSE %] - [% END %]
                                 </td>
                                 <td>
-                                      <div id="rating_[% elem.id %]"></div>
+                                      <div id="rating_[% elem.nivel1.getId1 %]"></div>
+                                      <script type="text/javascript">
+                                          $('#rating_[% elem.nivel1.getId1 %]').raty({
+                                              cancel    : true,
+                                              cancelOff : 'cancel-off-big.png',
+                                              cancelOn  : 'cancel-on-big.png',
+                                              half      : true,
 
-                                  
+                                              score     : '[% elem.rating %]',
+                                              readOnly: true,
+                                          });
+
+                                     </script>
                                 </td>
-                                <script type="text/javascript">
-                  
-                                    $('#rating_[% elem.id %]').raty({
-                                        cancel    : true,
-                                        cancelOff : 'cancel-off-big.png',
-                                        cancelOn  : 'cancel-on-big.png',
-                                        half      : true,
 
-                                        score     : '[% elem.rating %]',
-                                        readOnly: true,
-                                    });
+                              </tr>
 
-                               </script>
-
-                      [% END %] <!-- FOREACH prestamos -->
-                    </tbody>  
+                             
                       [% END %]
-
-			</table> 
-       </tr>
+                    </tbody>  
+			     </table> 
+      [% END %]
+       
                          
 		</fieldset>
 [% ELSE %]
