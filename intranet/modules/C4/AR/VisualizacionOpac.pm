@@ -20,23 +20,23 @@ $VERSION = 0.01;
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-    &addConfiguracion
-    &updateNewOrder
-    &getConfiguracionByOrder
-	&getConfiguracion
-    &deleteConfiguracion
-    &editConfiguracion
-    &getSubCamposLike
-    &getCamposXLike
-    &getVisualizacionFromCampoSubCampo
-    &updateNewOrder
-    &getItemsByCampo
-    &updateNewOrderGroup
-    &getConfiguracionByOrderGroupCampo
-    &editVistaGrupo
-    &getSubCamposByCampo
-    &updateNewOrderSubCampos
-    &eliminarTodoElCampo
+    addConfiguracion
+    updateNewOrder
+    getConfiguracionByOrder
+	getConfiguracion
+    deleteConfiguracion
+    editConfiguracion
+    getSubCamposLike
+    getCamposXLike
+    getVisualizacionFromCampoSubCampo
+    updateNewOrder
+    getItemsByCampo
+    updateNewOrderGroup
+    getConfiguracionByOrderGroupCampo
+    editVistaGrupo
+    getSubCamposByCampo
+    updateNewOrderSubCampos
+    eliminarTodoElCampo
 );
 
 =item
@@ -414,7 +414,8 @@ sub addConfiguracion {
     my $configuracion = C4::Modelo::CatVisualizacionOpac->new( db => $db );
 
     $configuracion->agregar($params);
-    
+    C4::AR::Preferencias::unsetCacheMeran();
+
     return ($configuracion);
 }
 
@@ -433,12 +434,11 @@ sub deleteConfiguracion{
         $configuracion->[0]->delete();
         $msg_object->{'error'} = 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U608'} ) ;
-
+        C4::AR::Preferencias::unsetCacheMeran();
     }else{
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U609'} ) ;
 
-        
     }
     return($msg_object);
 }
@@ -471,6 +471,7 @@ sub editConfiguracion{
             $configuracion->[0]->modificar($value);
             return ($configuracion->[0]->getVistaOpac());
         }
+        C4::AR::Preferencias::unsetCacheMeran();
     }else{
         return(0);
     }

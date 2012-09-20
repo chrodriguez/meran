@@ -32,6 +32,7 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES $CACHE_MERAN);
     getPreferenciasLikeCategoria
     getMetodosAuth
     getPreferenciasBooleanas
+    unsetCacheMeran
 );
 
 
@@ -492,6 +493,10 @@ sub getMetodosAuthAll{
                                                                               );
 
 	return ($metodos_auth);
+}
+
+sub unsetCacheMeran{
+    $CACHE_MERAN = undef;
 }
 
 BEGIN{

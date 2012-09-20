@@ -109,7 +109,7 @@
                         </a>
                     </td>
             
-                    <td style="width: 120px;"> 
+                    <td style="[% IF estadoDeColeccion %] width: 200px;[% ELSE %] width: 120px; [% END %]"> 
               						[% IF estadoDeColeccion %]
               							<span id="coleccion_[% id1 %]">
               							<ul class="listado_sin_margen estado_coleccion">
