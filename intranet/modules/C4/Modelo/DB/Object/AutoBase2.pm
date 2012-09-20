@@ -11,6 +11,7 @@ use base qw(Rose::DB::Object::Helpers);
 sub init_db { 
     if (!$DB){
        $DB = C4::Modelo::DB::AutoBase1->new_or_cached;
+       $DB->dbh->do("set names 'utf8'");
     }
     return $DB;
  }

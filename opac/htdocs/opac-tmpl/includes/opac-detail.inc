@@ -83,7 +83,7 @@
                     <div class="main-subcontent" style="width:100%; float:left;">
 						 <legend class="trigger trigger_estado_coleccion_[% id1 %] click" ><h1>[% "Estado de Colecci&oacute;n" | i18n %]</h1></legend>
 						         <div id="estado_coleccion[% id1 %]" class="detalle_total estado_coleccion[% id1 %]">
-									<ul class="listado_sin_margen estado_coleccion">
+									<ul class="listado_sin_margen estado_coleccion unstyled">
 										[% FOREACH anio IN estadoDeColeccion.keys.sort %]
 										[% IF estadoDeColeccion.$anio.keys %]
 										<li>

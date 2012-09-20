@@ -537,12 +537,16 @@ sub estaEnFavoritos{
     my @filtros;
     my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 
-    push (@filtros, (nro_socio => {eq => $nro_socio}) );
-    push (@filtros, (id1 => {eq => $id1}) );
+    if ($nro_socio){
+        push (@filtros, (nro_socio => {eq => $nro_socio}) );
+        push (@filtros, (id1 => {eq => $id1}) );
 
-    my $favoritos_count = C4::Modelo::CatFavoritosOpac::Manager->get_cat_favoritos_opac_count(query => \@filtros,);
+        my $favoritos_count = C4::Modelo::CatFavoritosOpac::Manager->get_cat_favoritos_opac_count(query => \@filtros,);
 
-    return ($favoritos_count);
+        return ($favoritos_count);
+    }else{
+        return undef;           
+    }
 
 }
 

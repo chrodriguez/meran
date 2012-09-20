@@ -70,10 +70,13 @@ sub setMarcRecord{
 
 sub getSignaturas{
     my ($self)          = shift;
+    my ($array_nivel2)        = @_;
 
     use C4::Modelo::CatRegistroMarcN2;
 
-    my $array_nivel2 = C4::AR::Nivel2::getNivel2FromId1($self->getId1,$self->db);
+    if (!$array_nivel2){
+        $array_nivel2 = C4::AR::Nivel2::getNivel2FromId1($self->getId1,$self->db);
+    }
 
     my @signaturas;
 

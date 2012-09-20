@@ -55,7 +55,6 @@ use vars qw(@EXPORT_OK @ISA);
     buscarCamposMARC
     buscarSubCamposMARC
     buscarDatoDeCampoRepetible
-    buscarTema
     busquedaSignaturaBetween
     busquedaPorEstante
     busquedaEstanteDeGrupo
@@ -832,44 +831,6 @@ sub getTema{
         $sth->finish();
 	return($tema);
 }
-
-
-sub buscarTema{
-	my ($search)=@_;
-
-	my $dbh = C4::Context->dbh;
-	my $query = '';
-	my @bind = ();
-	my @results;
-	my @key=split(' ',$search->{'tema'});
-	my $count=@key;
-	my $i=1;
-
-	$query="Select distinct cat_tema.id, cat_tema.nombre from cat_nivel1_repetible inner join 
-			cat_tema on cat_tema.id= cat_nivel1_repetible.dato  where (campo='650' and subcampo='a') and
-			((cat_tema.nombre like ? or cat_tema.nombre like ?)";
-	@bind=("$key[0]%","% $key[0]%");
-	while ($i < $count){
-		$query .= " and (cat_tema.nombre like ? or cat_tema.nombre like ?)";
-		push(@bind,"$key[$i]%","% $key[$i]%");
-		$i++;
-	}
-	$query .= ")";
-
-	my $sth=$dbh->prepare($query);
-	$sth->execute(@bind);
-
-	my $i=0;
-  	while (my $data=$sth->fetchrow_hashref){
-    		push @results, $data;
-    		$i++;
-  	}
-	my $count=$i;
-	$sth->finish;
-
-	return($count,@results);
-}
-
 
 =item
 getNombreLocalidad
@@ -1687,11 +1648,14 @@ sub armarInfoNivel1{
             @result_array_paginado[$i]->{'nomCompleto'}         = $autor_object->getCompleto();
             @result_array_paginado[$i]->{'idAutor'}             = $autor_object->getId();
             @result_array_paginado[$i]->{'esta_en_favoritos'}   = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
-            @result_array_paginado[$i]->{'signaturas'}          = $nivel1->getSignaturas();
+
             #aca se procesan solo los ids de nivel 1 que se van a mostrar
             #se generan los grupos para mostrar en el resultado de la consulta
 
             my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+            @result_array_paginado[$i]->{'signaturas'}          = $nivel1->getSignaturas($nivel2_array_ref);
+
+
 
 
 
