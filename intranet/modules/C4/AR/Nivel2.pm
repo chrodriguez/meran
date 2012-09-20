@@ -730,9 +730,7 @@ sub getDestacados{
     my @array_rating;
 
     foreach my $r (@$rating){
-        my $n1= getNivel1FromId2($r->getId2);
-
-
+        my $n2 = getNivel2FromId2($r->getId2);
         $n2->{"rating"}= C4::AR::Nivel2::getRating($r->getId2);
         if ( $n2->{"rating"} != '0'){
             push(@array_rating, $n2);
