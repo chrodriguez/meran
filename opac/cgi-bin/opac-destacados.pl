@@ -22,10 +22,9 @@ my ($template, $session, $t_params) = get_template_and_user ({
 
 
 
-my ($rating, $rating_count, $promoted, $promoted_count)= C4::AR::Nivel2::getDestacados();
+my ($rating, $promoted, $promoted_count)= C4::AR::Nivel2::getDestacados();
 
 $t_params->{'rating'} = $rating;
-$t_params->{'rating_count'} = $rating_count;
 
 $t_params->{'promoted'} = $promoted;
 $t_params->{'promoted_count'} = $promoted_count;

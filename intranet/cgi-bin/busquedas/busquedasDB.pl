@@ -92,8 +92,6 @@ if($@){
             $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
             $t_params->{'suggested'}        = $suggested;
 
-            C4::AR::Debug::debug("aksjdksajdkasjdkasjdklasjdkljaskl".scalar(@$resultId1));
-
             $t_params->{'SEARCH_RESULTS'}   = $resultId1;
             $t_params->{'cantidad'}         = $cantidad;
             if($outside) {
