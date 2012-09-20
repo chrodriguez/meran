@@ -182,11 +182,6 @@ sub getAllPreferencias {
 
 sub getMenuPreferences{
 
-    my @preferencias_array_ref;
-
-    push (@preferencias_array_ref, C4::AR::Preferencias::getValorPreferencia('showMenuItem_circ_devolucion_renovacion'));
-    push (@preferencias_array_ref, C4::AR::Preferencias::getValorPreferencia('showMenuItem_circ_prestamos'));
-    
     my %hash;
     
     $hash{'showMenuItem_circ_devolucion_renovacion'} = C4::AR::Preferencias::getValorPreferencia('showMenuItem_circ_devolucion_renovacion');

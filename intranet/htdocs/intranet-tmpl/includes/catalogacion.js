@@ -1328,7 +1328,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "</div></div>";
 
         //header CENTER
-        strComp = strComp + "<div id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "' style='width:80%;float:left'>";
+        strComp = strComp + "<div id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "' style='width:80%;float:left; margin-left: 10px;'>";
         strComp = strComp + "<a class='fancy_extern_link' href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " +  "<h5 class='inline'>" + campo_marc_conf_obj.getNombre() + "</h5>";
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  

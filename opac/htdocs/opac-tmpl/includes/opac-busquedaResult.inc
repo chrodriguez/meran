@@ -351,13 +351,17 @@
 
                         <td>	
                             [% IF NIVEL.titulo %]
-                                [% PERL %]
-                                    print C4::AR::Filtros::link_to( text 		=>     "[% HTML.escape(NIVEL.titulo) %]",
-                                                                    url 		=>      "[% url_prefix %]/opac-detail.pl", 
-                                                                    params 		=>   ["id1=[% NIVEL.id1 %]"],
-                                                                    title 		=>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]",
-		                                                            on_click 	=> "startOverlay();"
-                                                                ) ;
+                                [% IF !NIVEL.estadoDeColeccion %]
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text 		=>     "[% HTML.escape(NIVEL.titulo) %]",
+                                                                        url 		=>     "[% url_prefix %]/opac-detail.pl", 
+                                                                        params 		=>   ["id1=[% NIVEL.id1 %]"],
+                                                                        title 		=>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]",
+    		                                                            on_click 	=> "startOverlay();"
+                                                                    ) ;
+                                    [% END %]
+                                [% ELSE %]
+                                    <p> [% HTML.escape(NIVEL.titulo) %] </p>
                                 [% END %]
                             [% ELSE %]
                                 &nbsp;
@@ -381,40 +385,41 @@
                         <td>
                         [% IF NIVEL.estadoDeColeccion %]
 							<span id="coleccion_[% NIVEL.id1 %]">
-							<ul class="listado_sin_margen estado_coleccion">
-							[% FOREACH anio IN NIVEL.estadoDeColeccion.keys.sort %]
-							[% IF NIVEL.estadoDeColeccion.$anio.keys %]
-							<li>
-								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
-								[% FOREACH volumen IN NIVEL.estadoDeColeccion.$anio.keys.sort %]
-									[% IF volumen != '#' %][% volumen  %][% END %]
-									(
-									[% FOREACH fasciculo IN NIVEL.estadoDeColeccion.$anio.$volumen.keys.sort %]
+    							<ul class="listado_sin_margen estado_coleccion unstyled">
+        							[% FOREACH anio IN NIVEL.estadoDeColeccion.keys.sort %]
+            							[% IF NIVEL.estadoDeColeccion.$anio.keys %]
+            							<li>
+            								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+            								[% FOREACH volumen IN NIVEL.estadoDeColeccion.$anio.keys.sort %]
+            									[% IF volumen != '#' %][% volumen  %][% END %]
+            									(
+            									[% FOREACH fasciculo IN NIVEL.estadoDeColeccion.$anio.$volumen.keys.sort %]
 
-										 [% PERL %]
-											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
-																			url=>"[% url_prefix %]/opac-detail.pl", 
-																			params =>   ["id1=[% NIVEL.id1 %]","id2=[% NIVEL.estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
-																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-																			class => 	"link_to_detail"
-																		) ;
-										 [% END %]
-                        
-									[% END %]
-									)
-								[% END %]
-							   </li>
-							[% END %]
-							[% END %]
-							</ul>
+            										 [% PERL %]
+            											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
+            																			url=>"[% url_prefix %]/opac-detail.pl", 
+            																			params =>   ["id1=[% NIVEL.id1 %]","id2=[% NIVEL.estadoDeColeccion.$anio.$volumen.$fasciculo %]#detalle_grupo_[% NIVEL.estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+            																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+            																			class => 	"link_to_detail"
+            																		) ;
+            										 [% END %]
+                                    
+            									[% END %]
+            									)
+            								[% END %]
+            							   </li>
+            							[% END %]
+        							[% END %]
+    							</ul>
 							</span>
 							
 						  <script type="text/javascript">$("#coleccion_[% NIVEL.id1 %]").expander({
 							  slicePoint: 2000, 
 							  widow: 10,
 							  expandEffect: 'fadeIn', 
-							  expandText: "<br />[% 'M&aacute;s Revistas' | i18n %]",
-							  userCollapseText: '[^]'
+							  expandText: '<i class="icon-arrow-down"></i>',
+							  userCollapseText: '<i class="icon-arrow-up"></i>',
+                              expandPrefix: '',
 							});
 						 </script>
 						 
@@ -434,11 +439,12 @@
 									[% END %]
 								</span>
 						  <script type="text/javascript">$("#grupos_[% NIVEL.id1 %]").expander({
-							  slicePoint: 2000, 
+							  slicePoint: 20º00, 
 							  widow: 10,
 							  expandEffect: 'fadeIn', 
-							  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
-							  userCollapseText: '[^]'
+							  expandText: '<i class="icon-arrow-down"></i>',
+							  userCollapseText: '<i class="icon-arrow-up"></i>',
+                              expandPrefix: '',
 							});
 						 </script>
 							[% END %]
