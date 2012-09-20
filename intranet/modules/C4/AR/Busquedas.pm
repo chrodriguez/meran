@@ -938,6 +938,7 @@ sub getSuggestion{
         }
         
         $suggestion = Encode::encode_utf8($suggestion);
+        $obj_for_log->{'no_log_search'} = 1;
         ($total_found) = C4::AR::Busquedas::busquedaCombinada_newTemp($suggestion,$session,$obj_for_log,$sphinx_options);
         $cont++;
     }
@@ -1526,7 +1527,9 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
     
-    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+    if (!$obj_for_log->{'no_log_search'}){
+        C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+    }
 
     if ( (!$from_suggested) && ($total_found == 0) && ($tipo ne 'SPH_MATCH_PHRASE') ){
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
@@ -1941,7 +1944,7 @@ sub logBusqueda{
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
 										$session->param('nro_socio'),
 										$params->{'type'},
-                                                         			$session->param('browser'),
+                                        $session->param('browser'),
 										\@search_array
 										);
 }

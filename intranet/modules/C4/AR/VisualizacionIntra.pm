@@ -12,7 +12,7 @@ use C4::Modelo::CatVisualizacionIntra;
 use C4::Modelo::CatVisualizacionIntra::Manager;
 use C4::Modelo::CatEstructuraCatalogacion;
 use C4::Modelo::CatEstructuraCatalogacion::Manager;
-use vars qw($VERSION @EXPORT_OK @ISA);
+use vars qw($VERSION @EXPORT_OK @ISA $CACHE_MERAN);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -20,19 +20,19 @@ $VERSION = 0.01;
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-    &updateNewOrder
-    &getConfiguracionByOrder
-	&getConfiguracion
-    &deleteConfiguracion
-    &updateNewOrderGroup
-    &getItemsByCampo
-    &updateNewOrder
-    &getConfiguracionByOrderGroupCampo
-    &getCampos
-    &getSubCamposByCampo
-    &updateNewOrderSubCampos
-    &editVistaGrupo
-    &eliminarTodoElCampo
+    updateNewOrder
+    getConfiguracionByOrder
+	getConfiguracion
+    deleteConfiguracion
+    updateNewOrderGroup
+    getItemsByCampo
+    updateNewOrder
+    getConfiguracionByOrderGroupCampo
+    getCampos
+    getSubCamposByCampo
+    updateNewOrderSubCampos
+    editVistaGrupo
+    eliminarTodoElCampo
 );
 
 =item
@@ -51,6 +51,9 @@ sub editVistaGrupo{
     foreach my $conf (@$configuracion){
         $conf->setVistaCampo($value);    
     }
+
+    C4::AR::Preferencias::unsetCacheMeran();
+
     return ($configuracion->[0]->getVistaCampo());
     
 }
@@ -90,6 +93,8 @@ sub updateNewOrderSubCampos{
     
         $i++;
     }
+    
+    C4::AR::Preferencias::unsetCacheMeran();
     
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
 
@@ -135,6 +140,8 @@ sub updateNewOrderGroup{
             $i++;   
         }
     }
+
+    C4::AR::Preferencias::unsetCacheMeran();
     
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
 
@@ -174,6 +181,8 @@ sub updateNewOrder{
         $i++;
     }
     
+    C4::AR::Preferencias::unsetCacheMeran();
+
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
 
     return ($msg_object);
@@ -307,44 +316,72 @@ sub getConfiguracion{
 sub getVistaCampo{
     my ($campo, $template, $nivel, $db) = @_;
 
-    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
 
-    my @filtros;
+    #TESTING CACHE MERAN
+    # my $key = C4::AR::Utilidades::joinArrayOfString(@filtros);
+    my $key = $nivel.$campo.$template;
 
-    push ( @filtros, ( nivel   => { eq => $nivel } ));
-    push ( @filtros, ( campo   => { eq => $campo } ));
-    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $template }, 
-                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
-                );
-
-    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, db => $db,);
-
-    if(scalar(@$configuracion) > 0){
-        return $configuracion->[0]->getVistaCampo;
+    if (defined $CACHE_MERAN->{$key}){
+        C4::AR::Debug::debug("VisualizacionOpac::getVistaCampo => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
+        return $CACHE_MERAN->{$key};
     } else {
-        return 0;
+
+        $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+
+        my @filtros;
+
+        push ( @filtros, ( nivel   => { eq => $nivel } ));
+        push ( @filtros, ( campo   => { eq => $campo } ));
+        push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $template }, 
+                                        tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+                    );
+
+        my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, db => $db,);
+
+        if(scalar(@$configuracion) > 0){
+            $CACHE_MERAN->{$key} = $configuracion->[0]->getVistaCampo;
+            return $CACHE_MERAN->{$key};
+        } else {
+            $CACHE_MERAN->{$key} = 0;
+            return 0;
+        }
     }
 }
 
 sub getVistaIntra{
     my ($campo, $template, $nivel, $db) = @_;
 
-    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
 
-    my @filtros;
+    #TESTING CACHE MERAN
+    # my $key = C4::AR::Utilidades::joinArrayOfString(@filtros);
+    my $key = $nivel.$campo.$template;
 
-    push ( @filtros, ( nivel   => { eq => $nivel } ));
-    push ( @filtros, ( campo   => { eq => $campo } ));
-    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $template }, 
-                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
-                );
-
-    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, db => $db,);
-
-    if(scalar(@$configuracion) > 0){
-        return $configuracion->[0]->getVistaIntra;
+    if (defined $CACHE_MERAN->{$key}){
+        C4::AR::Debug::debug("VisualizacionOpac::getVistaOpac => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
+        return $CACHE_MERAN->{$key};
     } else {
-        return 0;
+
+
+        $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+
+        my @filtros;
+
+        push ( @filtros, ( nivel   => { eq => $nivel } ));
+        push ( @filtros, ( campo   => { eq => $campo } ));
+        push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $template }, 
+                                        tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+                    );
+
+        my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, db => $db,);
+
+        if(scalar(@$configuracion) > 0){
+            $CACHE_MERAN->{$key} = $configuracion->[0]->getVistaOpac;
+            # return $configuracion->[0]->getVistaOpac;
+            return $CACHE_MERAN->{$key};
+        } else {
+            $CACHE_MERAN->{$key} = 0;
+            return 0;
+        }
     }
 }
 
@@ -355,7 +392,8 @@ sub addConfiguracion{
     my $configuracion = C4::Modelo::CatVisualizacionIntra->new( db => $db);
 
     $configuracion->agregar($params);
-    
+    C4::AR::Preferencias::unsetCacheMeran();
+
     return ($configuracion);
 }
 
@@ -369,6 +407,7 @@ sub deleteConfiguracion{
     my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(db => $db, query => \@filtros,);
 
     if ($configuracion->[0]){
+        C4::AR::Preferencias::unsetCacheMeran();
         return ( $configuracion->[0]->delete() );
     }else{
         return(0);
@@ -403,7 +442,7 @@ sub editConfiguracion{
             $configuracion->[0]->modificar($value);
             return ($configuracion->[0]->getVistaIntra());
         }
-
+        C4::AR::Preferencias::unsetCacheMeran();
     }else{
         return(0);
     }
@@ -453,28 +492,44 @@ sub getCamposXLike{
 sub getVisualizacionFromCampoSubCampo{
     my ($campo, $subcampo, $tipo_ejemplar, $nivel, $db) = @_;
 
-    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
-    my @filtros;
 
-    push(@filtros, ( campo          => { eq => $campo } ) );
-    push(@filtros, ( subcampo       => { eq => $subcampo } ) );
-    push(@filtros, ( nivel          => { eq => $nivel } ) );
-#     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
-    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar }, 
-                                    tipo_ejemplar   => { eq => 'ALL'     } ])
-                     );
+#TESTING CACHE MERAN
+    # my $key = C4::AR::Utilidades::joinArrayOfString(@filtros);
+    # FIXME esta clave no esta bien armada, faltan los operadores logicos
+    my $key = $campo.$subcampo.$nivel.$tipo_ejemplar;
+    my $cat_estruct_info_array;
+
+    if (defined $CACHE_MERAN->{$key}){
+        C4::AR::Debug::debug("VisualizacionOpac::getVisualizacionFromCampoSubCampo => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
+        $cat_estruct_info_array = $CACHE_MERAN->{$key};
+
+    } else { 
+
+        $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+        my @filtros;
+
+        push(@filtros, ( campo          => { eq => $campo } ) );
+        push(@filtros, ( subcampo       => { eq => $subcampo } ) );
+        push(@filtros, ( nivel          => { eq => $nivel } ) );
+    #     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
+        push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar }, 
+                                        tipo_ejemplar   => { eq => 'ALL'     } ])
+                         );
 
 
-    my $cat_estruct_info_array = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(  
-                                                                                query           =>  \@filtros,
-                                                                                db              => $db, 
+        my $cat_estruct_info_array = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(  
+                                                                                    query           =>  \@filtros,
+                                                                                    db              => $db, 
 
-                                        );  
+                                            );  
 
-    if(scalar(@$cat_estruct_info_array) > 0){
-      return $cat_estruct_info_array->[0];
-    }else{
-      return 0;
+        if(scalar(@$cat_estruct_info_array) > 0){
+            $CACHE_MERAN->{$key} = $cat_estruct_info_array->[0];
+            return $CACHE_MERAN->{$key};
+        }else{
+            $CACHE_MERAN->{$key} = 0;
+            return 0;
+        }
     }
 }
 
@@ -484,27 +539,43 @@ sub getVisualizacionFromCampoSubCampo{
 =cut
 sub getVisualizacionFromCampoAndNivel{
     my ($campo, $nivel, $itemtype, $db) = @_;
-    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
-    my @filtros;
+    
 
-    push(@filtros, ( campo 	=> { eq => $campo } ) );
-    push(@filtros, ( nivel 	=> { eq => $nivel } ) );
-    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
-                                    tipo_ejemplar   => { eq => 'ALL'     } ])
-                     );
+#TESTING CACHE MERAN
+    # my $key = C4::AR::Utilidades::joinArrayOfString(@filtros);
+    # FIXME esta clave no esta bien armada, faltan los operadores logicos
+    my $key = $campo.$nivel.$itemtype;
+    my $cat_estruct_info_array;
+
+    if (defined $CACHE_MERAN->{$key}){
+        C4::AR::Debug::debug("VisualizacionOpac::getVisualizacionFromCampoAndNivel => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
+        $cat_estruct_info_array = $CACHE_MERAN->{$key};
+
+    } else {
+
+        $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+        my @filtros;
+
+        push(@filtros, ( campo 	=> { eq => $campo } ) );
+        push(@filtros, ( nivel 	=> { eq => $nivel } ) );
+        push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
+                                        tipo_ejemplar   => { eq => 'ALL'     } ])
+                         );
 
 
-    my $cat_estruct_info_array = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(  
-                                                                                query           =>  \@filtros,
-                                                                                db              => $db, 
+        my $cat_estruct_info_array = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(  
+                                                                                    query           =>  \@filtros,
+                                                                                    db              => $db, 
 
-                                        );  
+                                            );  
 
-    if(scalar(@$cat_estruct_info_array) > 0){
-#       C4::AR::Debug::debug("VisualizacionIntra => getVisualizacionFromCampoSubCampo => lo encontre!!!");
-      return $cat_estruct_info_array->[0];
-    }else{
-      return 0;
+        if(scalar(@$cat_estruct_info_array) > 0){
+          $CACHE_MERAN->{$key} = $cat_estruct_info_array->[0];
+          return $CACHE_MERAN->{$key};
+        }else{
+            $CACHE_MERAN->{$key} = 0;
+            return 0;
+        }
     }
 }
 
@@ -576,7 +647,8 @@ sub t_agregar_configuracion {
             }else{
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U606', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
             } 
-            
+        }else{
+            C4::AR::Preferencias::unsetCacheMeran();
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
@@ -613,6 +685,7 @@ sub t_delete_configuracion {
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U608', 'params' => [$campo, $subcampo, $ejemplar]} ) ;
 
             $db->commit;
+            C4::AR::Preferencias::unsetCacheMeran();
         };
 
         if ($@){
@@ -652,6 +725,7 @@ sub eliminarTodoElCampo{
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M001', 'params' => [$campo, $nivel, $ejemplar]} ) ;
 
         $db->commit;
+        C4::AR::Preferencias::unsetCacheMeran();
     };
 
     if ($@){
@@ -694,6 +768,7 @@ sub _eliminarTodoElCampo{
     foreach my $conf (@$configuracion){
         $conf->delete();    
     }
+    C4::AR::Preferencias::unsetCacheMeran();
 }
 
 

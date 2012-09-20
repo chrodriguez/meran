@@ -62,6 +62,7 @@
   <script type="text/javascript" src="/includes/jquery/fancybox/fancybox.js"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.raty.min.js"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>
+  <script type="text/javascript" src="/includes/modernizr.js"></script>
   
 
   [% INCLUDE 'localized_messages.inc' %]
