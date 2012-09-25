@@ -106,7 +106,9 @@ sub t_guardarNivel3 {
             $field->update('f' => uc($barcode));
             $params->{'marc_record'} = $marc_record->as_usmarc;
             $catRegistroMarcN3->agregar($db, $params, $msg_object);
-        
+             
+            C4::AR::Debug::debug("\n\n\n SE GUARDO!!! NIVEL 3 ".$marc_record->as_formatted."\n\n\n");
+            
             #recupero el id3 recien agregado
             $id3 = $catRegistroMarcN3->getId3;
             C4::AR::Debug::debug("t_guardarNivel3 => ID 3 => ".$id3);

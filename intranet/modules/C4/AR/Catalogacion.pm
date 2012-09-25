@@ -70,7 +70,7 @@ sub _meran_to_marc{
        push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubcampo());
     }
 
-     # C4::AR::Debug::debug("Cant ".$cant_campos." ?????????????????????????");
+      C4::AR::Debug::debug("Cant ".$cant_campos." ?????????????????????????");
 
     my $field;
     for (my $i=0;$i<$cant_campos;$i++){
@@ -83,9 +83,9 @@ sub _meran_to_marc{
         my $cant_subcampos          = $infoArrayNivel->[$i]->{'cant_subcampos'};
 
 
-         # C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
-         # C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
-         # C4::AR::Debug::debug("_meran_to_marc => subcampos_hash => ".$infoArrayNivel->[$i]->{'subcampos_hash'});
+        C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
+        C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
+        C4::AR::Debug::debug("_meran_to_marc => subcampos_hash => ".$infoArrayNivel->[$i]->{'subcampos_hash'});
          
         my @subcampos_array;
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
@@ -2144,7 +2144,7 @@ sub _getEstructuraFromCampoSubCampo{
     my $cat_estruct_info_array;
 
     if (defined $CACHE_MERAN->{$key}){
-        C4::AR::Debug::debug("Catalogacion::_getEstructuraFromCampoSubCampo => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
+        #C4::AR::Debug::debug("Catalogacion::_getEstructuraFromCampoSubCampo => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
         $cat_estruct_info_array = $CACHE_MERAN->{$key};
     } else {
 

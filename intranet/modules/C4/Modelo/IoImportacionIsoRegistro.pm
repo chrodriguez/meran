@@ -81,7 +81,9 @@ sub getRegistroMARCResultado{
     my ($params) = @_;
     
     my $marc_record = MARC::Record->new();
-    my $detalle_destino = $self->ref_importacion->esquema->getDetalleDestino();
+    
+    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($self->getIdImportacionIso());
+    my $detalle_destino = $importacion->esquema->getDetalleDestino();
 
     foreach my $detalle (@$detalle_destino){
         my $new_field=0;
@@ -231,7 +233,8 @@ sub getCampoSubcampoJoined{
 
     my $marc = $self->getRegistroMARCOriginal;
 
-    my $detalle_completo = $self->ref_importacion->esquema->getDetalleByCampoSubcampoDestino($campo,$subcampo);
+    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($self->getIdImportacionIso());
+    my $detalle_completo = $importacion->esquema->getDetalleByCampoSubcampoDestino($campo,$subcampo);
 
     my @resultado=();
     foreach my $detalle (@$detalle_completo){
@@ -735,7 +738,7 @@ sub guardarNivel3DeImportacion{
     
     #ABM
     my $hash;
-    $hash->{'m'}= $nivel3->{'abm'};
+    $hash->{'m'}= $nivel3->{'fecha_alta'};
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
     
@@ -764,7 +767,13 @@ sub guardarNivel3DeImportacion{
     
     #Operador
     my $hash;
-    $hash->{'g'}= $params_n3->{'operador'};
+    $hash->{'g'}= $nivel3->{'operador'};
+    $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
+    $hash_temp2{'cant_subcampos'}++;
+    
+    #baja/modificacion
+    my $hash;
+    $hash->{'h'}= $nivel3->{'fecha_baja_modificacion'};
     $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
     $hash_temp2{'cant_subcampos'}++;
     
