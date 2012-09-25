@@ -1400,6 +1400,25 @@ sub reporteEstantesVirtuales{
         my $cantR  = $params->{'cantR'} || 1;
 
         my $subEstantes = C4::AR::Estantes::getSubEstantes($estante);
+
+        # my %hash_temp;
+
+        # my $hash_n1;
+
+        # foreach my $estante ($subEstantes){
+        #     my $contenido = $estante->contenido;
+            
+
+        #     foreach my $c (@$contenido){
+   
+        #         $hash_temp{'n2'}= C4::AR::Nivel2::getNivel2FromId2($c->id2);
+        #         $hash_temp{'n1'}= C4::AR::Nivel1::getNivel1FromId2($c->id2);
+        #         $hash_temp{'n3'}= C4::AR::Nivel3::getNivel3FromId2($c->id2);
+        #     } 
+
+        # }
+
+
         
         return ($subEstantes, scalar(@$subEstantes));
 
