@@ -81,7 +81,9 @@ sub getRegistroMARCResultado{
     my ($params) = @_;
     
     my $marc_record = MARC::Record->new();
-    my $detalle_destino = $self->ref_importacion->esquema->getDetalleDestino();
+    
+    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($self->getIdImportacionIso());
+    my $detalle_destino = $importacion->esquema->getDetalleDestino();
 
     foreach my $detalle (@$detalle_destino){
         my $new_field=0;
@@ -99,7 +101,6 @@ sub getRegistroMARCResultado{
                 else {
                     my $field = $marc_record->field($detalle->getCampoDestino);
                     my $subfield = $marc_record->subfield($detalle->getCampoDestino,$detalle->getSubcampoDestino);
-												
                     #Hay que ver si es repetible
                     if((($field)&&(!$subfield)) || (($subfield)&&($estructura->getRepetible))){
                         #Existe el campo pero no el subcampo o existe el subcampo pero es repetible, agrego otro subcampo
@@ -118,7 +119,7 @@ sub getRegistroMARCResultado{
                         my $ind1='#';
                         my $ind2='#';
                         $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
-					}
+                    }
                 }
                 
                 if($new_field){
@@ -232,7 +233,8 @@ sub getCampoSubcampoJoined{
 
     my $marc = $self->getRegistroMARCOriginal;
 
-    my $detalle_completo = $self->ref_importacion->esquema->getDetalleByCampoSubcampoDestino($campo,$subcampo);
+    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($self->getIdImportacionIso());
+    my $detalle_completo = $importacion->esquema->getDetalleByCampoSubcampoDestino($campo,$subcampo);
 
     my @resultado=();
     foreach my $detalle (@$detalle_completo){
@@ -674,6 +676,10 @@ sub guardarNivel3DeImportacion{
     $params_n3->{'id2'}=$id2;
     $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
     $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
+    
+    $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
+    $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
+
     $params_n3->{'cantEjemplares'} = 1;
     
     #Hay que autogenerar el barcode o no???
@@ -705,11 +711,13 @@ sub guardarNivel3DeImportacion{
     $hash->{'c'}= $params_n3->{'ui_duenio'};
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
+    
     #Estado
     my $hash;
     $hash->{'e'}= $nivel3->{'estado'}->getCodigo();
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
+    
     #Disponibilidad
     my $hash;
     $hash->{'o'}= $nivel3->{'disponibilidad'}->getCodigo();
@@ -728,9 +736,50 @@ sub guardarNivel3DeImportacion{
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
     
+    #ABM
+    my $hash;
+    $hash->{'m'}= $nivel3->{'fecha_alta'};
+    $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+    $hash_temp{'cant_subcampos'}++;
+    
+    #Valor_doc
+    my $hash;
+    $hash->{'p'}= $nivel3->{'valor_doc'};
+    $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+    $hash_temp{'cant_subcampos'}++;
+
+    
+    
     $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
     if ($hash_temp{'cant_subcampos'}){
       push (@infoArrayNivel,\%hash_temp)
+    }
+    
+    
+    my %hash_temp2 = {};
+    $hash_temp2{'indicador_primario'}  = '#';
+    $hash_temp2{'indicador_secundario'}  = '#';
+    $hash_temp2{'campo'}   = '900';
+    $hash_temp2{'subcampos_array'}   =();
+    $hash_temp2{'cant_subcampos'}   = 0;
+
+    my %hash_sub_temp2 = {};
+    
+    #Operador
+    my $hash;
+    $hash->{'g'}= $nivel3->{'operador'};
+    $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
+    $hash_temp2{'cant_subcampos'}++;
+    
+    #baja/modificacion
+    my $hash;
+    $hash->{'h'}= $nivel3->{'fecha_baja_modificacion'};
+    $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
+    $hash_temp2{'cant_subcampos'}++;
+    
+    $hash_temp2{'subcampos_hash'} =\%hash_sub_temp2;
+    if ($hash_temp2{'cant_subcampos'}){
+      push (@infoArrayNivel,\%hash_temp2)
     }
     
     $params_n3->{'infoArrayNivel3'} = \@infoArrayNivel;
@@ -745,7 +794,7 @@ sub prepararNivelParaImportar{
 
 
    my @infoArrayNivel=();
-   
+       $self->debug($marc_record->as_formatted);
        foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
             
@@ -763,8 +812,15 @@ sub prepararNivelParaImportar{
             foreach my $subfield ($field->subfields()) {
                 my $subcampo          = $subfield->[0];
                 my $dato              = $subfield->[1];
-                my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo( $hash_temp{'campo'}, $subcampo, $itemtype, $nivel);
-                if(($estructura)&&($estructura->infoReferencia)){
+                
+                
+                C4::AR::Debug::debug("REFERENCIA!!!  ".$hash_temp{'campo'}."  ". $subcampo);
+                
+                my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($hash_temp{'campo'} , $subcampo , $itemtype , $nivel);
+                
+                if(($estructura)&&($estructura->getReferencia)&&($estructura->infoReferencia)){
+                    
+                    C4::AR::Debug::debug("REFERENCIA!!!  ".$estructura->infoReferencia);
                     #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
                     my $tabla = $estructura->infoReferencia->getReferencia;
                     my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($tabla);

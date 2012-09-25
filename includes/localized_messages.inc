@@ -1,7 +1,6 @@
 <script type="text/javascript">
 
 //VARIABLES PARA ui.datepicker.js
-
 CLOSE_TEXT = "[% 'Cerar' | i18n %]";
 CLOSE_STATUS = "[% 'Close without change'| i18n %]";
 CLEAR_TEXT = "[% 'Limpiar' | i18n %]";

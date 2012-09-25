@@ -103,82 +103,84 @@
                         [% END %]
                     </td>
             
-                    <td>
+                    <td style="width: 200px;">
                         <a class="click" onClick="buscarPorAutor('[% nomCompleto %]')" title="[% 'Filtrar por Autor' | i18n %]">
                             [% nomCompleto %]
                         </a>
                     </td>
             
-                    <td> 
-						[% IF estadoDeColeccion %]
-							<span id="coleccion_[% id1 %]">
-							<ul class="listado_sin_margen estado_coleccion">
-							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
-							[% IF estadoDeColeccion.$anio.keys %]
-							<li>
-								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
-								[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
-									[% IF volumen != '#' %][% volumen  %][% END %]
-									(
-									[% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+                    <td style="[% IF estadoDeColeccion %] width: 200px;[% ELSE %] width: 120px; [% END %]"> 
+              						[% IF estadoDeColeccion %]
+              							<span id="coleccion_[% id1 %]">
+              							<ul class="listado_sin_margen estado_coleccion">
+              							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
+              							[% IF estadoDeColeccion.$anio.keys %]
+              							<li>
+              								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+              								[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+              									[% IF volumen != '#' %][% volumen  %][% END %]
+              									(
+              									[% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
 
-										 [% PERL %]
-											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
-																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-																			params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
-																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-																			class => 	"link_to_detail"
-																		) ;
-										 [% END %]
-                        
-									[% END %]
-									)
-								[% END %]
-							   </li>
-							[% END %]
-							[% END %]
-							</ul>
-							</span>
-							
-						  <script type="text/javascript">$("#coleccion_[% id1 %]").expander({
-							  slicePoint: 2000, 
-							  widow: 10,
-							  expandEffect: 'fadeIn', 
-							  expandText: "<br />[% 'M&aacute;s Revistas' | i18n %]",
-							  userCollapseText: '[^]'
-							});
-						 </script>
-						 
-						[% ELSE %]
-							[% IF grupos %]
-								<span id="grupos_[% id1 %]">
-                                    <ul class="listado_sin_margen">
-									[% FOREACH grupos %]
-                                        [% valor = '' %]
-										
-                                        [% IF edicion %]
-											[% valor = "<b>" _  edicion  _  "</b>" %]
-										[% END %]
-                                        
-                                        [% IF anio_publicacion %]
-                                            [% IF valor %] [% valor = valor _ " " %] [% END %]
-											[% valor = valor  _  "(" _  anio_publicacion  _  ")" %]
-										[% END %]
-                                        
-                                        [% IF valor %]<li> [% valor %] </li>[% END %]
-									[% END %]
-                                    </ul>
-								</span>
-						  <script type="text/javascript">$("#grupos_[% id1 %]").expander({
-							  slicePoint: 2000, 
-							  widow: 10,
-							  expandEffect: 'fadeIn', 
-							  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
-							  userCollapseText: '[^]'
-							});
-						 </script>
-							[% END %]
-						[% END %]
+              										 [% PERL %]
+              											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
+              																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+              																			params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+              																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+              																			class => 	"link_to_detail"
+              																		) ;
+              										 [% END %]
+                                      
+              									[% END %]
+              									)
+              								[% END %]
+              							   </li>
+              							[% END %]
+              							[% END %]
+              							</ul>
+              							</span>
+              							
+              						  <script type="text/javascript">$("#coleccion_[% id1 %]").expander({
+              							  slicePoint: 2000, 
+              							  widow: 10,
+              							  expandEffect: 'fadeIn', 
+                              expandText: '<i class="icon-arrow-down"></i>',
+                              userCollapseText: '<i class="icon-arrow-up"></i>',
+                              expandPrefix: '',
+              							});
+              						 </script>
+              						 
+              						[% ELSE %]
+              							[% IF grupos %]
+              								<span id="grupos_[% id1 %]">
+                                                  <ul class="listado_sin_margen">
+              									[% FOREACH grupos %]
+                                                      [% valor = '' %]
+              										
+                                                      [% IF edicion %]
+              											[% valor = "<b>" _  edicion  _  "</b>" %]
+              										[% END %]
+                                                      
+                                                      [% IF anio_publicacion %]
+                                                          [% IF valor %] [% valor = valor _ " " %] [% END %]
+              											[% valor = valor  _  "(" _  anio_publicacion  _  ")" %]
+              										[% END %]
+                                                      
+                                                      [% IF valor %]<li> [% valor %] </li>[% END %]
+              									[% END %]
+                                                  </ul>
+              								</span>
+              						  <script type="text/javascript">$("#grupos_[% id1 %]").expander({
+              							  slicePoint: 2000, 
+              							  widow: 10,
+              							  expandEffect: 'fadeIn', 
+                              expandText: '<i class="icon-arrow-down"></i>',
+                              userCollapseText: '<i class="icon-arrow-up"></i>',
+                              expandPrefix: '',
+              							});
+              						 </script>
+              							[% END %]
+              						[% END %]
                     </td>
             
                     <td>

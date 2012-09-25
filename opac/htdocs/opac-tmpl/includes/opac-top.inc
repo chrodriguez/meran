@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
   <link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/[% user_theme %]/includes/opac-FF_fix.css" />  
   <link rel="stylesheet" href="/includes/jquery/fancybox/fancybox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/includes/css/print-opac.css" type="text/css" media="print" />
 
   <script type="text/javascript">
     var token               = '[% token %]';
@@ -61,6 +62,7 @@
   <script type="text/javascript" src="/includes/jquery/fancybox/fancybox.js"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.raty.min.js"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>
+  <script type="text/javascript" src="/includes/modernizr.js"></script>
   
 
   [% INCLUDE 'localized_messages.inc' %]
@@ -83,7 +85,7 @@
     <script type="text/javascript">    
 
       $(document).ready(function() {
-			$('.popover_button').popover({delay: { show: 300, hide: 100 },});
+			$('.popover_button').popover({delay: { show: 600, hide: 100 }, trigger: 'hover'});
 			$(".alert").alert();
           
                     $(function () {

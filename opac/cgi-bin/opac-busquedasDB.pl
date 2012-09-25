@@ -30,6 +30,7 @@ my ($template, $session, $t_params);
 #Guardo los parametros q vienen por URL
 my $obj; 
 $obj->{'string'}            = $string;
+$obj->{'keyword'}           = $obj->{'string'};
 $obj->{'tipoAccion'}        = CGI::escapeHTML($input->param('tipoAccion'));
 $obj->{'titulo'}            = ($input->param('titulo'));
 $obj->{'autor'}             = ($input->param('autor'));

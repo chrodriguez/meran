@@ -1,7 +1,7 @@
 <div class="main-content" id="main_content">
    <!-- Pagetitle -->
         [% IF content_title %]
-            <h1 class="pagetitle">ghfhgfhfgh
+            <h1 class="pagetitle">
                 [% content_title %]
             </h1>
             <hr class="clear-contentunit" />

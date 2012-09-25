@@ -65,7 +65,8 @@ sub reporteCatalogo{
     $self->setPais(C4::AR::Filtros::i18n("Sacar del socio"));
     $self->setTelefono($socio_reporte->persona->getTelefono);
     $self->setEmail($socio_reporte->persona->getEmail);
-    $self->setAsunto(C4::AR::Filtros::i18n('OPAC - Error en detalle de').' '.(Encode::decode_utf8(Encode::decode_utf8($nivel1->getTitulo))).' (Ed. '.$data_hash->{'id2'}.')');
+    $self->setAsunto(C4::AR::Filtros::i18n('OPAC - Error en detalle de').' '.(Encode::decode_utf8(Encode::decode_utf8($nivel1->getTitulo))).', '.
+        Encode::decode_utf8(Encode::decode_utf8($nivel1->getAutor)).' (Ed. '.$data_hash->{'id2'}.')');
     $self->setMensaje($data_hash->{'informe'});
     $self->setHora();
     $self->setFecha();

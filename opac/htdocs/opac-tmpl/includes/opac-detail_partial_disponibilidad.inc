@@ -1,4 +1,4 @@
-<div class="alert alert-success">
+<div id="divDisponivilidadOpac" class="alert alert-success">
 		<blockquote>
 			[% IF cantParaPrestamoActual && cantParaSalaActual %]
 	        	<p>[% "Se cuenta con disponibilidad inmediata para domicilio o la sala de lectura" | i18n %].</p>
@@ -76,17 +76,4 @@
 
 </div>
 
-          [% INCLUDE 'rating.inc' %]
-
-          <h3>
-            [% PERL %]
-                print C4::AR::Filtros::action_link_button(
-                                                url     => "reviews.pl", 
-                                                button	=> "btn btn-info",
-                                                params  => ["id2=[% id2 %]"],
-                                                title   => " [% 'Comentarios' | i18n %] ([% cant_reviews %])",
-                                                icon	=> "icon-white icon-comment",
-                                            ) ;
-            [% END %]
-          </h3>
-
+  [% INCLUDE 'rating.inc' %]

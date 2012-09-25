@@ -40,7 +40,7 @@ sub agregarSimple{
    $self->setValor($valor);
    $self->setTipo($desde);
    $self->setAgent($user_agent);
-   $self->save;
+   $self->save();
 
 }
 

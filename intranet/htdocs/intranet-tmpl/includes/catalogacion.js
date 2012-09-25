@@ -1315,20 +1315,20 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
-        strComp = strComp + "<div style='width:120px;float:left'>";
-        strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo());
-        if(campo_marc_conf_obj.getIndicadoresPrimarios() != 0){
-            strComp = strComp + "<a id='indicador_primario_" + i + "' class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'>" + campo_marc_conf_obj.getIndicadorPrimarioDato() + "</a>" + "|";
-        }    
+        strComp = strComp + "<div style='width:120px;float:left'><div class='btn-group inline'>";
+            strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo());
+            if(campo_marc_conf_obj.getIndicadoresPrimarios() != 0){
+                strComp = strComp + "<a id='indicador_primario_" + i + "' class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'>" + campo_marc_conf_obj.getIndicadorPrimarioDato() + "</a>" + "|";
+            }    
+            
+            if(campo_marc_conf_obj.getIndicadoresSecundarios() != 0){
+                strComp = strComp + "<a id='indicador_secundario_" + i + "' class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'>" + campo_marc_conf_obj.getIndicadorSecundarioDato(); 
+            }
         
-        if(campo_marc_conf_obj.getIndicadoresSecundarios() != 0){
-            strComp = strComp + "<a id='indicador_secundario_" + i + "' class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'>" + campo_marc_conf_obj.getIndicadorSecundarioDato(); 
-        }
-        
-        strComp = strComp + "</div>";
+        strComp = strComp + "</div></div>";
 
         //header CENTER
-        strComp = strComp + "<div id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "' style='width:80%;float:left'>";
+        strComp = strComp + "<div id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "' style='width:80%;float:left; margin-left: 10px;'>";
         strComp = strComp + "<a class='fancy_extern_link' href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " +  "<h5 class='inline'>" + campo_marc_conf_obj.getNombre() + "</h5>";
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  
@@ -1432,10 +1432,6 @@ function crearBotonAyudaCampo(campo, funcion){
     
     var html = "<div class='btn-group inline'>"+"<a class='btn click' onclick=" + funcion + " title='Info'><i class='icon-info-sign'></i></a>";
     
-//     if (indicadores != '0'){
-//         html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a>";
-//     }
-
     html += "</div>";
     
     return html;

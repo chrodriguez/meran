@@ -287,7 +287,7 @@
 		$(document).ready(function(){
 			checkTr();
 			$('.tooltip_link').tooltip({delay: { show: 1000, hide: 100 },});
-			$('.popover_button').popover({delay: {show: 200,  hide: 100 },});
+			$('.popover_button').popover({delay: {show: 200,  hide: 100 }, trigger: 'hover'});
 			$(".alert").alert();
 			$(".collapse").collapse({toggle: false,});
 	        $('.dropdown-toggle').dropdown();

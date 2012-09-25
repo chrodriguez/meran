@@ -47,11 +47,6 @@ printable string.
 sub gettemplate {
     my ($tmplbase, $opac, $loging_out, $socio) = @_;
 
-
-#     my $preferencias_hash_ref = C4::AR::Preferencias::getPreferenciasByArray(['CirculationEnabled', 'LibraryName', 'defaultUI', 'titulo_nombre_ui','timeInterval','enable_localization_flags']);
-
-# C4::AR::Debug::debug("tema_opac ".$preferencias_hash_ref->{'defaultUI'});
-
     my $htdocs;
     my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac_default') || C4::AR::Preferencias::getValorPreferencia('defaultUI');
     my $tema_intra  = "default"; #para volver a tener temas, poner la linea de arriba 

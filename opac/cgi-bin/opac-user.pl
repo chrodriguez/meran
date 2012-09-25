@@ -54,20 +54,6 @@ $t_params->{'mensaje_error_foto'} = $msgFoto;
 
 $t_params->{'UploadPictureFromOPAC'}= C4::AR::Preferencias::getValorPreferencia("UploadPictureFromOPAC");
 
-# FIXME falta 
-=item
-my $sanc= C4::AR::Sanciones::hasSanctions($session->param('userid'));
-
-foreach my $san (@$sanc) {
-if ($san->{'id3'}) {
-	my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
-	$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; }
-	$san->{'fecha_final'}=format_date($san->{'fecha_final'},$dateformat);
-	$san->{'fecha_comienzo'}=format_date($san->{'fecha_comienzo'},$dateformat);
-}
-if (scalar(@$sanc) > 0){$t_params->{'sanciones_loop'}= $sanc;}
-=cut
-#$t_params->{'LibraryName'}= C4::AR::Preferencias::getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
 
 

@@ -55,7 +55,6 @@ use vars qw(@EXPORT_OK @ISA);
     buscarCamposMARC
     buscarSubCamposMARC
     buscarDatoDeCampoRepetible
-    buscarTema
     busquedaSignaturaBetween
     busquedaPorEstante
     busquedaEstanteDeGrupo
@@ -442,10 +441,12 @@ obtenerGrupos
 Esta funcion devuelve los datos de los grupos a mostrar en una busaqueda dado un id1. Se puede filtrar por tipo de documento.
 =cut
 sub obtenerGrupos {
-	my ($id1,$itemtype,$type)=@_;
+	my ($id1,$itemtype,$type,$niveles2)=@_;
 	
 	#Obtenemos los niveles 2
-	my $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
+	if (!$niveles2){
+        $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
+    }
 	
 	my @result;
 	my $res=0;
@@ -464,11 +465,14 @@ obtenerEstadoDeColeccion
 Esta funcion devuelve los datos de los fasciculos agrupados para años .
 =cut
 sub obtenerEstadoDeColeccion {
-	my ($id1,$itemtype,$type)=@_;
+	my ($id1,$itemtype,$type, $niveles2)=@_;
 	
 	my $cant_revistas=0;
 	#Obtenemos los niveles 2
-	my $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
+
+    if (!$niveles2){
+	   $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
+    }
 	
 	my %HoH = {}; 
 	foreach my $nivel2 (@$niveles2){
@@ -828,44 +832,6 @@ sub getTema{
 	return($tema);
 }
 
-
-sub buscarTema{
-	my ($search)=@_;
-
-	my $dbh = C4::Context->dbh;
-	my $query = '';
-	my @bind = ();
-	my @results;
-	my @key=split(' ',$search->{'tema'});
-	my $count=@key;
-	my $i=1;
-
-	$query="Select distinct cat_tema.id, cat_tema.nombre from cat_nivel1_repetible inner join 
-			cat_tema on cat_tema.id= cat_nivel1_repetible.dato  where (campo='650' and subcampo='a') and
-			((cat_tema.nombre like ? or cat_tema.nombre like ?)";
-	@bind=("$key[0]%","% $key[0]%");
-	while ($i < $count){
-		$query .= " and (cat_tema.nombre like ? or cat_tema.nombre like ?)";
-		push(@bind,"$key[$i]%","% $key[$i]%");
-		$i++;
-	}
-	$query .= ")";
-
-	my $sth=$dbh->prepare($query);
-	$sth->execute(@bind);
-
-	my $i=0;
-  	while (my $data=$sth->fetchrow_hashref){
-    		push @results, $data;
-    		$i++;
-  	}
-	my $count=$i;
-	$sth->finish;
-
-	return($count,@results);
-}
-
-
 =item
 getNombreLocalidad
 Devuelve el nombre de la localidad que se pasa por parametro.
@@ -972,6 +938,7 @@ sub getSuggestion{
         }
         
         $suggestion = Encode::encode_utf8($suggestion);
+        $obj_for_log->{'no_log_search'} = 1;
         ($total_found) = C4::AR::Busquedas::busquedaCombinada_newTemp($suggestion,$session,$obj_for_log,$sphinx_options);
         $cont++;
     }
@@ -1560,7 +1527,9 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
     
-    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+    if (!$obj_for_log->{'no_log_search'}){
+        C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+    }
 
     if ( (!$from_suggested) && ($total_found == 0) && ($tipo ne 'SPH_MATCH_PHRASE') ){
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
@@ -1668,22 +1637,32 @@ sub armarInfoNivel1{
         my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
 
         if($nivel1){
-#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".@result_array_paginado[$i]->{'id1'});
-#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".($nivel1->toMARC)->as_formatted);
+
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
             @result_array_paginado[$i]->{'titulo'}              = $nivel1->getTitulo();
-            @result_array_paginado[$i]->{'marc_record'}         = $nivel1->toMARC_OAI();
+            
+            if ($params->{'isOAI_search'}){
+                @result_array_paginado[$i]->{'marc_record'}         = $nivel1->toMARC_OAI();
+            }
+
             @result_array_paginado[$i]->{'titulo'}              .= ($nivel1->getRestoDelTitulo() ne "")?": ".$nivel1->getRestoDelTitulo():"";
-            my $autor_object                                    = $nivel1->getAutorObject();
-#             @result_array_paginado[$i]->{'nomCompleto'}         = $nivel1->getAutorObject->getCompleto();
-#             @result_array_paginado[$i]->{'idAutor'}             = $nivel1->getAutorObject->getId();
+            my $autor_object                                     = $nivel1->getAutorObject();
+
             @result_array_paginado[$i]->{'nomCompleto'}         = $autor_object->getCompleto();
             @result_array_paginado[$i]->{'idAutor'}             = $autor_object->getId();
             @result_array_paginado[$i]->{'esta_en_favoritos'}   = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
-            @result_array_paginado[$i]->{'signaturas'}          = $nivel1->getSignaturas();
+
             #aca se procesan solo los ids de nivel 1 que se van a mostrar
             #se generan los grupos para mostrar en el resultado de la consulta
-            my $ediciones           = C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");
+
+            my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+            @result_array_paginado[$i]->{'signaturas'}          = $nivel1->getSignaturas($nivel2_array_ref);
+
+
+
+
+
+            my $ediciones           = C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA",$nivel2_array_ref);
             @result_array_paginado[$i]->{'grupos'} = 0;
             if(scalar(@$ediciones) > 0){
                 @result_array_paginado[$i]->{'grupos'}  = $ediciones;
@@ -1691,15 +1670,14 @@ sub armarInfoNivel1{
 
             #se genera el estado de coleccion si se trata de revistas
 				  C4::AR::Debug::debug("REVISTA: se genera el estado de coleccion");
-				my ($cant_revistas ,$estadoDeColeccion)           = C4::AR::Busquedas::obtenerEstadoDeColeccion(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");
+				my ($cant_revistas ,$estadoDeColeccion)           = C4::AR::Busquedas::obtenerEstadoDeColeccion(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA",$nivel2_array_ref);
 				@result_array_paginado[$i]->{'estadoDeColeccion'} = 0;
 				if($cant_revistas > 0){
 					@result_array_paginado[$i]->{'estadoDeColeccion'}  = $estadoDeColeccion;
 				}
 			
-            my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
                         
-            @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1);
+            @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1,$nivel2_array_ref);
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3(@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'});
             my @nivel2_portadas = ();
 
@@ -1966,7 +1944,7 @@ sub logBusqueda{
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
 										$session->param('nro_socio'),
 										$params->{'type'},
-                                                         			$session->param('browser'),
+                                        $session->param('browser'),
 										\@search_array
 										);
 }
