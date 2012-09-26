@@ -37,7 +37,7 @@ eval{
 
     print $query->header(
                           -type           => 'application/xml', 
-                          -attachment     => 'output.xml',
+                          -attachment     => 'estructuraCatalogacion.xml',
                           -expires        => '0',
                       );
     my $buffer;
