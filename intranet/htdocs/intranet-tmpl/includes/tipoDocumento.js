@@ -72,9 +72,13 @@ function updateEliminarTipoDocumento(responseText){
 }
 
 function guardarModificacion(){
+    $('#accionesTipoDocumento').modal('hide');
     $('#modTipoDocumento').submit();
+    startOverlay();
 }
 
 function guardarTipoDoc(){
+    $('#addTipoDocumento').modal('hide');
     $('#addTipoDocumentoForm').submit();
+    startOverlay();
 }
