@@ -1401,33 +1401,32 @@ sub reporteEstantesVirtuales{
 
         my $subEstantes = C4::AR::Estantes::getSubEstantes($estante);
 
-        my %hash_temp;
+        # my %estantes;
+        # my %ids1;
+        # my %ids2;
+        # my %ids3;
 
-        my $hash_n1;
+        # foreach my $estante (@$subEstantes){
 
-        foreach my $estante (@$subEstantes){
-
-
-            # C4::AR::Debug::debug($estante);
-            my $contenido = $estante->contenido;
+        #     my $contenido = $estante->contenido;
             
-            if ($contenido){
-                foreach my $c (@$contenido){
-   
-                $hash_temp{'n2'}= C4::AR::Nivel2::getNivel2FromId2($c->id2);
-                # $hash_temp{'n1'}= C4::AR::Nivel1::getNivel1FromId2($c->id2);
+        #     if ($contenido){
+        #         foreach my $c (@$contenido){
 
-                my $niv1= C4::AR::Nivel1::getNivel1FromId2($c->id2);
+        #             $ids2{$c->id2}= "";
+        #             $ids2{"cantNiveles2"}= scalar keys %n2;
+                    
+        #             my $niv1= C4::AR::Nivel1::getNivel1FromId2($c->id2);   
 
-                # C4::AR::Debug::debug($niv1->id);
+        #             $ids1{$niv1->id}= "";
 
-
-                # my $hash_n1{}=
-
-                $hash_temp{'n3'}= C4::AR::Nivel3::getNivel3FromId2($c->id2);
-                } 
-            }
-        }
+        #             foreach my $n3(C4::AR::Nivel3::getNivel3FromId2($c->id2)){
+        #                 $ids3{$n3->id}= "";
+        #             }
+        #         } 
+        #     }
+        #     $estantes{$estante->id} =
+        # }
 
 
         
