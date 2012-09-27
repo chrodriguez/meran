@@ -54,6 +54,7 @@ if($tipoAccion eq "LISTAR"){
     my ($tipoDocumento)             = C4::AR::TipoDocumento::getTipoDocumentoByTipo($obj->{'idTipoDoc'});
 
     $t_params->{'tipoDocumento'}    = $tipoDocumento;
+    $t_params->{'idTipoDoc'}        = $obj->{'idTipoDoc'};
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

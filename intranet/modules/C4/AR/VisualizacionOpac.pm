@@ -37,6 +37,8 @@ $VERSION = 0.01;
     getSubCamposByCampo
     updateNewOrderSubCampos
     eliminarTodoElCampo
+    updateCacheOPAC
+    __updateCacheOPAC
 );
 
 =item
@@ -740,6 +742,31 @@ sub getCamposParaOAI{
 
     return ($result);
     
+}
+
+sub __updateCacheOPAC{
+
+    use HTTP::Request;
+    use LWP::UserAgent;
+
+    my $ua = LWP::UserAgent->new;
+
+    my $req = HTTP::Request->new(GET => "http://".C4::AR::Utilidades::getUrlOpac()."/clean_opac_cache.pl");
+
+    $ua->request($req);    
+
+}
+
+sub updateCacheOPAC{
+
+    use C4::AR::BackgroundJob;
+    use Proc::Simple;
+
+    my $job = "ACTUALIZAR_CACHE_OPAC";
+    my $proc = Proc::Simple->new();
+
+    $proc->start(\&C4::AR::VisualizacionOpac::__updateCacheOPAC,1,$job);    
+
 }
 
 END { }       # module clean-up code here (global destructor)

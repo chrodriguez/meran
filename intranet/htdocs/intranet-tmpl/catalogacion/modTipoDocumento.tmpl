@@ -15,9 +15,10 @@
         <div class="control-group">
             <label class="control-label" for="liblibrarian"> [% "Foto" | i18n %]: </label>
             <div class="controls tipoDocImage">
-                <img border="0" src="https://163.10.10.116/uploads/covers/[% tipoDocumento.getId_tipo_doc %].png" alt="" style="">
+                <img border="0" src="/uploads/covers/[% tipoDocumento.getId_tipo_doc %].png" alt="" style="">
                 <input class="input-file" id="imagen" name="imagen" required type="file">
                 <input type="hidden" id="tipoAccion" name="tipoAccion" value="MOD">
+                <input type="hidden" id="tipoDoc" name="tipoDoc" value="[% idTipoDoc %]">
                 <input type="hidden" id="id" name="id" value="[% tipoDocumento.getId %]">
             </div>
         </div>
