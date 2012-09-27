@@ -1403,34 +1403,54 @@ sub reporteEstantesVirtuales{
 
         # my %estantes;
         # my %ids1;
-        # my %ids2;
         # my %ids3;
+
+        # my %info_estante;
 
         # foreach my $estante (@$subEstantes){
 
+        #     my $cantNiv1 = 0;
+        #     my $cantNiv2 = 0;
+        #     my $cantNiv3 = 0;
+
         #     my $contenido = $estante->contenido;
-            
+
         #     if ($contenido){
         #         foreach my $c (@$contenido){
 
-        #             $ids2{$c->id2}= "";
-        #             $ids2{"cantNiveles2"}= scalar keys %n2;
-                    
-        #             my $niv1= C4::AR::Nivel1::getNivel1FromId2($c->id2);   
+        #             $cantNiv2 =  $cantNiv2 + 1;
+
+        #             my $niv1= C4::AR::Nivel1::getNivel1FromId2($c->id2); 
 
         #             $ids1{$niv1->id}= "";
+         
+                   
 
-        #             foreach my $n3(C4::AR::Nivel3::getNivel3FromId2($c->id2)){
+        #             C4::AR::Utilidades::printARRAY(C4::AR::Nivel3::getNivel3FromId2($c->id2));
+
+        #             foreach my $n3 (C4::AR::Nivel3::getNivel3FromId2($c->id2)){
         #                 $ids3{$n3->id}= "";
         #             }
+
+        #             $cantNiv3 = $cantNiv3 + scalar keys %ids3;
+
         #         } 
+
+        #         my $cantNiv1 = scalar keys %ids1;
+
         #     }
-        #     $estantes{$estante->id} =
+
+        #     $info_estante{"nombreEstante"} = $estante->estante;
+        #     $info_estante{"niveles1"} = $cantNiv1;
+        #     $info_estante{"niveles2"} = $cantNiv2;
+        #     $info_estante{"niveles3"} = $cantNiv3;
+        #     $estantes{$estante->id} = \%info_estante;
         # }
-
-
+        
+        # return (\%estantes, scalar keys %estantes );
         
         return ($subEstantes, scalar(@$subEstantes));
+
 
 }
 
