@@ -343,6 +343,7 @@ Se elimina el usuario
             $t_params->{'comboDeCategorias'}    = $comboDeCategorias;
             $t_params->{'comboDeUI'}            = $comboDeUI;
             $t_params->{'addBorrower'}          = 0;
+            $t_params->{'cumple_requisito_on'}  = C4::AR::Preferencias::getValorPreferencia("requisito_necesario")||0;
             
             if ($socio->getNro_socio eq C4::AR::Auth::getSessionNroSocio() ){
                 C4::AR::Auth::updateLoggedUserTemplateParams($session,$t_params,$socio);

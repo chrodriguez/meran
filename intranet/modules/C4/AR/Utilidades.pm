@@ -125,6 +125,7 @@ use vars qw(@EXPORT_OK @ISA);
     isValidFile
     escapeURL
     getUrlPrefix
+    getUrlOpac
     addParamToUrl
     escapeHashData
     armarIniciales
@@ -4599,6 +4600,22 @@ sub escapeURL{
 sub getUrlPrefix{
     return ("".C4::Context->config('url_prefix'));
 
+}
+
+sub getUrlOpac{
+
+
+    my $url_server      = C4::AR::Preferencias::getValorPreferencia('serverName');
+    my $opac_port       = ":".(C4::Context->config('opac_port')||'80');
+    my $server_port     = ":".$ENV{'SERVER_PORT'};
+
+    if ( ($server_port == 80) || ($server_port == 443) ){
+            $server_port = "";
+    }
+
+    my $SERVER_URL_OPAC  =(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$opac_port;
+
+    return $SERVER_URL_OPAC.getUrlPrefix();
 }
 
 sub addParamToUrl{
