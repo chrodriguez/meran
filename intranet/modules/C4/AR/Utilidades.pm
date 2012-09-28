@@ -1599,12 +1599,12 @@ sub quitarduplicados{
 }
 
 #pasa de codificacion UTF8 a ISO-8859-1,
+#Se usa $_[0] para no copiar el string a una var local
 sub UTF8toISO {
 
-    my ($data)=@_;
 #TODO: POR QUE ROMPE LOS ACENTOS???? VERRRRRRRRRRRRRRRRRRRRRRR
-    return $data= Encode::decode('utf8', $data);
-    return ($data);
+    return $_[0] = Encode::decode('utf8', $_[0]);
+    return ($_[0]);
 }
 
 =head2
