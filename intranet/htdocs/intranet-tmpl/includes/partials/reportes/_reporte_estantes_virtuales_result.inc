@@ -13,15 +13,39 @@ function changePageBusquedas(ini){
 <div>
         <fieldset>
             <legend class="titulo_legend">[% nombre_estante | i18n %]</legend>
-                <ul class="unstyled">
+              
 
-      [% IF cant %]
-   
-    
-              		[% FOREACH res IN data %]
-              				<li>[% res.estante %]</li>
-              		[% END %]
-                </ul>
+                  [% IF cant %]
+                      [% PERL %]
+                              print C4::AR::Filtros::tableHeader(   
+                                              id              => "tablaResult",
+                                              selectAll_id    => "",
+                                              columns         => ['[% "Estante" | i18n %]','[% "Cant. de t&iacute;tulos" | i18n %]',
+                                                                  '[% "Cant. de Ejemplares" | i18n %]'
+                                                                ],
+                                             
+                                                                              
+                                                ) ;
+                      
+                      [% END %]  
+                      <tbody>
+                              [% FOREACH res IN data %]
+                                  <tr>
+                                    
+                                      <td class="titulo_result">
+                                            [% res.value.nombreEstante %]
+                                      </td>
+                                      <td class="autor_result">
+                                            [% res.value.niveles1 %]
+                                      </td>
+                                      <td class="autor_result">
+                                            [% res.value.niveles3 %]
+                                      </td>
+                                  </tr>
+                              [% END %]  
+                      </tbody>
+                  </table>
+
         </fieldset>
     </div>
     <div class="well">
