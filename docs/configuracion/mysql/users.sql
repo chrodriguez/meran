@@ -35,7 +35,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE on  cat_rating             to userOPAC@loca
 GRANT SELECT, INSERT, UPDATE, DELETE on  cat_favoritos_opac     to userOPAC@localhost;
 GRANT SELECT, INSERT, UPDATE, DELETE on  usr_persona            to userOPAC@localhost;
 GRANT SELECT, INSERT, UPDATE, DELETE on  usr_socio              to userOPAC@localhost;
-
+GRANT SELECT, INSERT, UPDATE, DELETE on  usr_login_attempts     to userOPAC@localhost;
 
 
 -- Permisos de la intra
