@@ -11,6 +11,7 @@
             print C4::AR::Filtros::tableHeader(   
                                 id              => "tablaResultCirculacion",
                                 columns         => ['[% "T&iacute;tulo" | i18n %]',
+                                                    '[% "C&oacute;digo de barras" | i18n %]',
                                                     '[% "Cantidad de Usuarios" | i18n %]',
                                                     '[% "Cantidad de Renovaciones" | i18n %]',
                                                     '[% "Cantidad de Devoluciones" | i18n %]',
@@ -32,6 +33,9 @@
                                                           params    =>  ["id1=[% res.objeto.getId1 %]"], 
                                                       ) ;
                         [% END %]
+                    </td>
+                    <td>
+                        [% res.nivel3.nivel3.getCodigoBarra %]
                     </td>
                     <td>
                         [% res.cantidad_usuarios %]
