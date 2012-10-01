@@ -48,10 +48,6 @@ $t_params->{'cantR'}= $obj->{'cantR'}   = $cantR;
 
 my ($data, $cant)         = C4::AR::Reportes::reporteEstantesVirtuales($obj);
 
-    C4::AR::Utilidades::printHASH($data->{"6"});
-     C4::AR::Utilidades::printHASH($data->{"34"});
-    C4::AR::Debug::debug("sddfjjsdkljklsdjklsdfjklsdfjklsdfjkljklsdfjklsdfjkldfjkl");
-
     $t_params->{'data'} = $data;
     $t_params->{'cant'} = $cant;
     $t_params->{'estante'}= $estante;

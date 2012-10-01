@@ -1408,15 +1408,15 @@ sub reporteEstantesVirtuales{
        
         my %ids3;
 
-      
-
+        
         foreach my $estante (@$subEstantes){
-          
-            my %info_estante;
+        
+
             my $cantNiv1 = 0;
             my $cantNiv2 = 0;
             my $cantNiv3 = 0;
-
+          
+            my %info_estante;
             my %ids1;
             my $contenido = $estante->contenido;
 
@@ -1429,20 +1429,16 @@ sub reporteEstantesVirtuales{
 
                     $ids1{$niv1->id}= "";
 
-                    C4::AR::Utilidades::printHASH(\%ids1);
-         
-                    my $niveles3 = C4::AR::Nivel3::getNivel3FromId2($c->id2);
+                    my $niveles3 = C4::AR::Nivel3::getNivel3FromId($c->id2);
                     
                     foreach my $n3 (@$niveles3){
-                    
                         $ids3{$n3->id}= "";
                     }
 
                     $cantNiv3 = $cantNiv3 + scalar keys %ids3;
+                    $cantNiv1 = $cantNiv1 + scalar keys %ids1;
 
                 } 
-
-                my $cantNiv1 = scalar keys %ids1;
 
             }
 
@@ -1456,7 +1452,6 @@ sub reporteEstantesVirtuales{
         return (\%estantes, scalar keys %estantes);
         
         
-
 }
 
 
