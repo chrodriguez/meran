@@ -2120,78 +2120,55 @@ sub _existeConfiguracionEnCatalogo{
     Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
 =cut
 sub _getEstructuraFromCampoSubCampo{
-    my ($campo, $subcampo, $itemtype, $nivel, $db) = @_;
+	my ($campo, $subcampo, $itemtype, $nivel, $db) = @_;
+	#TESTING CACHE MERAN
+	my $cacheKey = $campo.$subcampo.$nivel.$itemtype;
+	if (! defined $CACHE_MERAN->{$cacheKey}){
+		#Si no esta en la cache entonces lo busco en la base y lo cacheo
+		$db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;
+		my @filtros;
+		push(@filtros, ( campo      => { eq => $campo } ) );
+		push(@filtros, ( subcampo   => { eq => $subcampo } ) );
 
-    $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;
-    my @filtros;
-    my $index_all = 0;
+		if ($nivel != 0){
+			push(@filtros, ( nivel      => { eq => $nivel } ) );
+		}
 
-    push(@filtros, ( campo      => { eq => $campo } ) );
-    push(@filtros, ( subcampo   => { eq => $subcampo } ) );
-    
-    if ($nivel != 0){
-        push(@filtros, ( nivel      => { eq => $nivel } ) );
-    }
+		push (  @filtros, ( or   => [   itemtype   => { eq => $itemtype },
+					itemtype   => { eq => 'ALL'     }
+					])
+		     );
 
-    push (  @filtros, ( or   => [   itemtype   => { eq => $itemtype },
-                                    itemtype   => { eq => 'ALL'     }
-                                ])
-                     );
+		my $cat_estruct_info_array= C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(
+				db              => $db,
+				query           =>  \@filtros,
+#                                                                 FIXME es necesario????????????
+				with_objects    => ['infoReferencia'],#LEFT JOIN
+				require_objects => [ 'subCamposBase' ] #INNER JOIN
+				);
+		#elimino configuraciones duplicadas (configuracion para un mismo campo, subcampo, nivel pero para dos itemtypes distintos como puede ser ALL y LIB) si es que existen, dejando la configuracion mas especifica
+		if(scalar(@$cat_estruct_info_array) > 1){
+        		#hay dos configuraciones para campo, subcampo, nivel, tipo_ejemplar
+			for (my $i=0;$i < scalar(@$cat_estruct_info_array);$i++){
+				if($cat_estruct_info_array->[$i]->getItemType() eq $itemtype){
+					$CACHE_MERAN->{$cacheKey} = $cat_estruct_info_array->[$i];
+					return $CACHE_MERAN->{$cacheKey};
+				} elsif ($cat_estruct_info_array->[$i]->getItemType() eq "ALL") {
+					$CACHE_MERAN->{$cacheKey} = $cat_estruct_info_array->[$i];
+				} 
 
-#TESTING CACHE MERAN
-    # my $key = C4::AR::Utilidades::joinArrayOfString(@filtros);
-    my $key = $campo.$subcampo.$nivel.$itemtype;
-    my $cat_estruct_info_array;
+			}
+		} else {
+			if(scalar(@$cat_estruct_info_array) > 0){
+				#Hay solo un resultado
+				$CACHE_MERAN->{$cacheKey} = $cat_estruct_info_array->[0];
+			} else {
+				$CACHE_MERAN->{$cacheKey} = 0;
+			}
+		}
+	}
 
-    if (defined $CACHE_MERAN->{$key}){
-        #C4::AR::Debug::debug("Catalogacion::_getEstructuraFromCampoSubCampo => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
-        $cat_estruct_info_array = $CACHE_MERAN->{$key};
-    } else {
-
-        $cat_estruct_info_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(
-                                                                                    db              => $db,
-                                                                                    query           =>  \@filtros,
-    #                                                                 FIXME es necesario????????????
-                                                                                    with_objects    => ['infoReferencia'],#LEFT JOIN
-                                                                                    require_objects => [ 'subCamposBase' ] #INNER JOIN
-                                            );
-
-#elimino configuraciones duplicadas (configuracion para un mismo campo, subcampo, nivel pero para dos itemtypes distintos como puede ser ALL y LIB) si es que existen, dejando
-#la configuracion mas especifica
-
-#Miguel: ESTO ES UNA NEGRADA!!!!!!!!!!!!!
-        if(scalar(@$cat_estruct_info_array) > 1){
-        #hay dos configuraciones para campo, subcampo, nivel, tipo_ejemplar
-
-
-    #         for (my $i=0;$i <= scalar(@$cat_estruct_info_array);$i++){
-            for (my $i=0;$i < scalar(@$cat_estruct_info_array);$i++){
-    # C4::AR::Debug::debug("Catalocagion => _getEstructuraFromCampoSubCampo => ".$cat_estruct_info_array->[$i]." i => ".$i);
-                if($cat_estruct_info_array->[$i]->getItemType() eq $itemtype){
-                    $CACHE_MERAN->{$key} = $cat_estruct_info_array->[$i];
-                    # return $cat_estruct_info_array->[$i];
-                    return $CACHE_MERAN->{$key};
-                } elsif ($cat_estruct_info_array->[$i]->getItemType() eq "ALL") {
-                    $index_all = $i;
-                } 
-                
-            }
-
-        } else {
-            if(scalar(@$cat_estruct_info_array) > 0){
-                $CACHE_MERAN->{$key} = $cat_estruct_info_array->[0];
-                # return $cat_estruct_info_array->[0];
-                return $CACHE_MERAN->{$key};
-            } else {
-                $CACHE_MERAN->{$key} = 0;
-                return 0;
-            }
-        }
-    }
-
-    return $CACHE_MERAN->{$key};
-    # return $cat_estruct_info_array->[$index_all];
-
+	return $CACHE_MERAN->{$cacheKey};
 }
 
 =item sub getEstructuraCatalogacionById
