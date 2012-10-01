@@ -12,8 +12,9 @@
                                 id              => "tablaResultCirculacion",
                                 columns         => ['[% "T&iacute;tulo" | i18n %]',
                                                     '[% "C&oacute;digo de barras" | i18n %]',
-                                                    '[% "Cantidad de Usuarios" | i18n %]',
+                                                    '[% "Ultimo responsable" | i18n %]',
                                                     '[% "Cantidad de Renovaciones" | i18n %]',
+                                                    '[% "Cantidad de Usuarios" | i18n %]',
                                                     '[% "Cantidad de Devoluciones" | i18n %]',
                                                     '[% "Cantidad de Prestamos Domiciliario" | i18n %]',
 
@@ -38,10 +39,19 @@
                         [% res.nivel3.nivel3.getCodigoBarra %]
                     </td>
                     <td>
-                        [% res.cantidad_usuarios %]
+                        [% PERL %]
+                          print C4::AR::Filtros::link_to(   text    =>  "[% res.responsable %]",
+                                                          url       =>  "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
+                                                          params    =>  ["nro_socio=[% res.responsable %]"], 
+                                                          blank     =>  1, 
+                                                      ) ;
+                        [% END %]
                     </td>
                     <td>
                         [% res.cantidad_renovaciones %]
+                    </td>
+                    <td>
+                        [% res.cantidad_usuarios %]
                     </td>
                     <td>
                         [% res.cantidad_devoluciones %]
