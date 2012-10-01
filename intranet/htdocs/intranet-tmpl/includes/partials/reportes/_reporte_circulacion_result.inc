@@ -11,7 +11,10 @@
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResultCirculacion",
                               columns         => ['[% "Autor" | i18n %]','[% 'T&iacute;tulo' | i18n %]',
-                                                  '[% 'Cantidad de reservas' | i18n %]', '[% "Usuario" | i18n %]',
+                                                  '[% 'Cantidad de reservas' | i18n %]',
+                                                  '[% "C&oacute;digo de barras" | i18n %]',
+                                                  '[% "Responsable" | i18n %]', 
+                                                  '[% "Usuario" | i18n %]',
                                                   
                                                   ],
                               order           => {  'Autor'                 => 'autor', 
@@ -34,6 +37,18 @@
                   </td>
                   <td>
                       [% res.reservas %]
+                  </td>
+                  <td>
+                      [% res.nivel3.nivel3.getCodigoBarra %]
+                  </td>
+                  <td>
+                      [% PERL %]
+                        print C4::AR::Filtros::link_to(   text    =>  "[% res.responsable %]",
+                                                        url       =>  "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
+                                                        params    =>  ["nro_socio=[% res.responsable %]"], 
+                                                        blank     =>  1, 
+                                                    ) ;
+                      [% END %]
                   </td>
                   <td>
                       [% IF nro_socio %] 
