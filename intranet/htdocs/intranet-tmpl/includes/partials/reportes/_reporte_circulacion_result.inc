@@ -41,7 +41,8 @@
                                       print C4::AR::Filtros::link_to(   text =>     "[% res.socio %]",
                                                             url=>"      [% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                             params =>   ["nro_socio=[% res.socio %]"],
-                                                            title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                            title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                            blank =>    1
                                                       );
                                 [% END %]             
                       [% ELSE %]
