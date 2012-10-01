@@ -6,7 +6,8 @@ ErrorLog /var/log/meran/opac-error.log
 TransferLog /var/log/meran/opac-access.log
 SetEnv MERAN_CONF "/etc/meran/meran.conf"
 Header set Access-Control-Allow-Origin *
-#SetEnv PERL5LIB "/usr/share/meran/intranet/modules"
+
+SetEnv PERL5LIB "/usr/share/meran/intranet/modules"
 
 Alias /meran/ /usr/share/meran/opac/cgi-bin/
 
@@ -19,12 +20,12 @@ ErrorDocument 404 /meran/informacion/404notfound.pl
       PerlOptions +ParseHeaders  
       Options +ExecCGI
 </Location>
-#<Perl>
-PerlPostConfigRequire /etc/meran/iniciando.pl
-#use Carp;
-#push(@INC,"/usr/share/meran/intranet/modules");
-#use utf8;
-#</Perl>
+<Perl>
+#PerlPostConfigRequire /etc/meran/iniciando.pl
+	use Carp;
+	push(@INC,"/usr/share/meran/intranet/modules");
+	use utf8;
+</Perl>
 
 ServerSignature Off
 

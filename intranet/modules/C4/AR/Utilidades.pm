@@ -1599,26 +1599,26 @@ sub quitarduplicados{
 }
 
 #pasa de codificacion UTF8 a ISO-8859-1,
+#Se usa $_[0] para no copiar el string a una var local
 sub UTF8toISO {
 
-    my ($data)=@_;
 #TODO: POR QUE ROMPE LOS ACENTOS???? VERRRRRRRRRRRRRRRRRRRRRRR
-    return $data= Encode::decode('utf8', $data);
-    return ($data);
+    return $_[0] = Encode::decode('utf8', $_[0]);
+    return ($_[0]);
 }
 
 =head2
     sub from_json_ISO
+    Se usa $_[0] para no copiar el string a una var local
 =cut
 sub from_json_ISO {
-    my ($data) = @_;
     eval {
         #C4::AR::Debug::debug("JSON => Utilidades.pm => " . $data);
         #quita el caracter tab en todo el string $data
-        $data =~ s/\t//g;
-        $data = UTF8toISO($data);
+        $_[0] =~ s/\t//g;
+        $_[0] = UTF8toISO($_[0]);
         #C4::AR::Debug::debug("Data JSON ===> ".$data);
-        return from_json($data, {latin1 => 1});
+        return from_json($_[0], {latin1 => 1});
     }
     or do{
         #FIXME falta generar un codigo de error para error de sistema

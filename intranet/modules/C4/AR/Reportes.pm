@@ -1913,6 +1913,7 @@ sub getReporteCirculacionGeneral{
         $dataHash{'cantidad_sala'}          = $cantidadSala->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_especial'}      = $cantidadEspecial->[0]->{'agregacion_temp'};
         $dataHash{'objeto'}                 = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId1());
+        $dataHash{'nivel3'}                 = $objetoRepCirculacion;
         
         push(@resultArray, \%dataHash);
 

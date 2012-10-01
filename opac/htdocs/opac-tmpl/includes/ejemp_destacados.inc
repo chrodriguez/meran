@@ -99,6 +99,4 @@
                       [% END %]
             </table> 
         </fieldset>
-[% ELSE %]
-     <div class="alert alert-info"> [% 'No hay ejemplares destacados por la biblioteca.' | i18n %] </div>
 [% END %]

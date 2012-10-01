@@ -592,3 +592,7 @@ function uploadCanceled(evt) {
 	clearInterval(intervalTimer);
 	alert("The upload has been canceled by the user or the browser dropped the connection.");
 }
+
+function historyBack(){
+	window.history.back();
+}

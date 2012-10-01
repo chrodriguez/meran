@@ -61,5 +61,21 @@
                          
 		</fieldset>
 [% ELSE %]
-     <div class="alert alert-info"> [% 'No hay ejemplares para mostrar.' | i18n %] </div>
+    [% IF !promoted_count %]
+        <div class="hero-unit">
+              <h1>[% 'Todav&iacute;a nada!'|i18n %]</h1>
+              <p>[% 'Volv&eacute; en unos d&iacute;as para ver si la Biblioteca tiene algo para vos.' | i18n %]</p>
+              <p>
+                  [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button         => "btn btn-primary",
+                                                          action       => "historyBack()", 
+                                                          icon         => "icon-white icon-arrow-left ",
+                                                          title        => "[% 'Volver' | i18n %]",
+                                                      ) ;
+
+                  [% END %]
+                </p>
+        </div>    
+    [% END %]
 [% END %]
