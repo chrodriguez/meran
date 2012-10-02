@@ -1899,6 +1899,20 @@ sub getReporteCirculacionGeneral{
 
         #######################################################################################
 
+        #responsable
+        @filtro = ();
+
+        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+        push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
+
+        my $responsable = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtro,
+                                                                      select  => ['responsable'],
+                                                                );
+
+
+        #######################################################################################
+
         my %dataHash;
 
         $dataHash{'cantidad_usuarios'}      = $cantidadUsuarios->[0]->{'agregacion_temp'};
@@ -1909,6 +1923,7 @@ sub getReporteCirculacionGeneral{
         $dataHash{'cantidad_especial'}      = $cantidadEspecial->[0]->{'agregacion_temp'};
         $dataHash{'objeto'}                 = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId1());
         $dataHash{'nivel3'}                 = $objetoRepCirculacion;
+        $dataHash{'responsable'}            = $responsable->[0]->{'responsable'};
         
         push(@resultArray, \%dataHash);
 
@@ -2153,13 +2168,32 @@ sub getReservasCirculacion {
                                                                       query   => \@filtro,
                                                                       select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
                                                                 );
+
+
+        #######################################################################################
+
+        #responsable
+        @filtro = ();
+
+        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+        push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
+
+        my $responsable = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtro,
+                                                                      select  => ['responsable'],
+                                                                );
+
+
+        #######################################################################################
                                                                             
 
         my %dataHash;
 
-        $dataHash{'reservas'}   = $cantidadReservas->[0]->{'agregacion_temp'};
-        $dataHash{'objeto'}     = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId1());
-        $dataHash{'socio'}      = $objetoRepCirculacion->getNro_socio();
+        $dataHash{'reservas'}       = $cantidadReservas->[0]->{'agregacion_temp'};
+        $dataHash{'objeto'}         = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId1());
+        $dataHash{'socio'}          = $objetoRepCirculacion->getNro_socio();
+        $dataHash{'responsable'}    = $responsable->[0]->{'responsable'};
+        $dataHash{'nivel3'}         = $objetoRepCirculacion;
         
         push(@resultArray, \%dataHash);
     }
