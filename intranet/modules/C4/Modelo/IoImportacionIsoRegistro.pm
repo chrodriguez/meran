@@ -330,6 +330,9 @@ sub getIdentificacionFromRecord{
     my $marc = $self->getRegistroMARCOriginal();
 
     my $campo =$self->ref_importacion->getCampoFromCampoIdentificacion;
+    if(!$campo){
+            $campo='001';
+                }
     if ($campo){
         my $field = $marc->field($campo);
         if ($field){
@@ -364,6 +367,11 @@ sub getRelacionFromRecord{
     my $marc = $self->getRegistroMARCOriginal();
 
     my $campo =$self->ref_importacion->getCampoFromCampoRelacion;
+    
+        if(!$campo){
+            $campo='005';
+                }
+                
     if ($campo){
         my $field = $marc->field($campo);
         if ($field->is_control_field()){
@@ -382,6 +390,11 @@ sub getRelacionFromRecord{
         if ($relacion){
             #Para identificar si es un campo de realcion debe comenzar con este string
             my $pre =$self->ref_importacion->getPreambuloFromCampoRelacion;
+            
+            if(!$pre){
+                    $pre='x';
+                }
+                
             if($pre){
                 #todo a  minuscula
                 $relacion=lc($relacion);
