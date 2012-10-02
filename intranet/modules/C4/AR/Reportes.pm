@@ -1416,36 +1416,77 @@ sub reporteEstantesVirtuales{
             my $cantNiv2 = 0;
             my $cantNiv3 = 0;
           
+            my $noDisponibles = 0;
+            my $cantSala = 0;
+            my $cantPrestamo = 0;
+            
+          
             my %info_estante;
             my %ids1;
             my $contenido = $estante->contenido;
-
+			   $cantNiv2 = scalar(@$contenido);
             if ($contenido){
                 foreach my $c (@$contenido){
 
-                    $cantNiv2 =  $cantNiv2 + 1;
-
-                    my $niv1= C4::AR::Nivel1::getNivel1FromId2($c->id2); 
-
-                    $ids1{$niv1->id}= "";
-
-                    my $niveles3 = C4::AR::Nivel3::getNivel3FromId($c->id2);
+                    my $niv1= $c->nivel2->nivel1;
                     
-                    foreach my $n3 (@$niveles3){
-                        $ids3{$n3->id}= "";
-                    }
+                    if($c->nivel2 && $c->nivel2->nivel1){
+						C4::AR::Debug::debug(" $c->nivel2->nivel1->id1  ". $niv1->id);
+						
+						
+						# C4::AR::Nivel1::getNivel1FromId2($c->id2); 
+						if (!$ids1{$niv1->id}){
+							$ids1{$niv1->id}= 1;
+							my $niveles3 = C4::AR::Nivel3::getNivel3FromId1($niv1->id);
 
-                    $cantNiv3 = $cantNiv3 + scalar keys %ids3;
-                    $cantNiv1 = $cantNiv1 + scalar keys %ids1;
-
+							$cantNiv3 = $cantNiv3 + scalar(@$niveles3); #C4::AR::Nivel3::cantNiveles3FromId1($niv1->id);
+							
+							foreach my $n3 (@$niveles3){
+								
+								my $prestado  = 0;
+								if($n3->estaPrestado()){
+									$prestado=1;
+								}
+								my $reservado = 0;
+								if($n3->estaReservado()){
+									$reservado=1;
+								}
+								C4::AR::Debug::debug(" estaPrestado?????  ". $prestado);
+								C4::AR::Debug::debug(" estaReservado?????  ". $reservado);
+							  
+								if ( ($prestado + $reservado) ==  0 ) {
+								
+								
+								C4::AR::Debug::debug(" CONTA LA PUTA MADRE");
+								
+									if ($n3->esParaSala()) {
+										$cantSala = $cantSala ++;
+									} else {
+										$cantPrestamo = $cantPrestamo ++;
+									}
+									
+								} else {
+									$noDisponibles ++;
+								}
+							}						
+						}
+                    
+					}
+                    # my ($detalle_disp,$arreglo) = C4::AR::Nivel3::detalleDisponibilidadNivel3($c->id2);
+                    # # $noDisponibles = $noDisponibles + $detalle_disp->{""};
+                    # $cantSala = $cantSala + $detalle_disp->{"cantParaSala"};
+                    # $cantPrestamo = $cantPrestamo + $detalle_disp->{"cantParaPrestamo"};
+                     $cantNiv1 = $cantNiv1 + scalar keys %ids1;
                 } 
-
             }
 
             $info_estante{"nombreEstante"} = $estante->estante;
             $info_estante{"niveles1"} = $cantNiv1;
             $info_estante{"niveles2"} = $cantNiv2;
             $info_estante{"niveles3"} = $cantNiv3;
+            $info_estante{"cantPrestamo"} = $cantPrestamo;
+            $info_estante{"cantSala"} = $cantSala;
+            $info_estante{"noDisponibles"} = $noDisponibles;
             $estantes{$estante->id} = \%info_estante;
         }
         

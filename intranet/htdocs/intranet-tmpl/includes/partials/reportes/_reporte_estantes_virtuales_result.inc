@@ -20,11 +20,13 @@ function changePageBusquedas(ini){
                               print C4::AR::Filtros::tableHeader(   
                                               id              => "tablaResult",
                                               selectAll_id    => "",
-                                              columns         => ['[% "Estante" | i18n %]','[% "Cant. de t&iacute;tulos" | i18n %]',
-                                                                  '[% "Cant. de Ejemplares" | i18n %]'
-                                                                ],
-                                             
-                                                                              
+                                              columns         => ['[% "Estante" | i18n %]',
+                                                                  '[% "Cant. de t&iacute;tulos" | i18n %]',
+                                                                  '[% "Cant. de Ejemplares" | i18n %]',
+                                                                  '[% "Para Sala" | i18n %]',
+                                                                  '[% "Para Prestamo" | i18n %]',
+                                                                  '[% "No disponible" | i18n %]'
+                                                                ],                              
                                                 ) ;
                       
                       [% END %]  
@@ -40,6 +42,15 @@ function changePageBusquedas(ini){
                                       </td>
                                       <td class="autor_result">
                                             [% res.value.niveles3 %]
+                                      </td>
+                                       <td class="autor_result">
+                                            [% res.value.cantSala %]
+                                      </td>
+                                       <td class="autor_result">
+                                            [% res.value.cantPrestamo %]
+                                      </td>
+                                       <td class="autor_result">
+                                            [% res.value.noDisponibles %]
                                       </td>
                                   </tr>
                               [% END %]  
