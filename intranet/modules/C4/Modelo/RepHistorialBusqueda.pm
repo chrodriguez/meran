@@ -61,54 +61,27 @@ sub agregar{
   $rep_busqueda->agregar($nro_socio);
 # FIXME ver si se puede mejorar esta muy largo, se puede hacer generico???
 # parace q lo unico q es variable seria  'keyword', $search->{'keyword'}
-
    foreach my $search (@$search_array){
-	
 		if (!C4::AR::Utilidades::isBrowser($http_user_agent)) { 
 				$http_user_agent =  'ROBOT';
 		}
 	
 		my $historial_temp = C4::Modelo::RepHistorialBusqueda->new(db => $db);
+
 		if (C4::AR::Utilidades::validateString($search->{'keyword'}) ){
 	#EN CADA IF HAY QUE CREAR DE NUEVO SINO SOLAMENTE SE ACTUALIZA
 			$historial_temp = C4::Modelo::RepHistorialBusqueda->new(db => $db);
 			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'keyword', $search->{'keyword'}, $desde,$http_user_agent);
 		}
-	
-		if (C4::AR::Utilidades::validateString($search->{'dictionary'}) ){
-			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'dictionary', $search->{'dictionary'}, $desde, $http_user_agent);
-		}
-	
-		if (C4::AR::Utilidades::validateString($search->{'virtual'}) ){
-			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'virtual', $search->{'virtual'}, $desde,$http_user_agent);
-		}
+
 	
 		if (C4::AR::Utilidades::validateString($search->{'signature'}) ){
 			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'signature', $search->{'signature'}, $desde, $http_user_agent);
 		}  
-	
-		if (C4::AR::Utilidades::validateString($search->{'analytical'}) ){
-			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'analytical', $search->{'analytical'}, $desde,$http_user_agent);
-		}
-	
-		if (C4::AR::Utilidades::validateString($search->{'id3'}) ){
-			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'id3', $search->{'id3'}, $desde, $http_user_agent);
-		}
-	
-		if (C4::AR::Utilidades::validateString($search->{'class'}) ){
-			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'class', $search->{'class'}, $desde, $http_user_agent);
-		}
-	
-		if (C4::AR::Utilidades::validateString($search->{'subjectitems'}) ){
-			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'subjectitems', $search->{'subjectitems'}, $desde, $http_user_agent);
-		}
+
 	
 		if (C4::AR::Utilidades::validateString($search->{'isbn'}) ){
 			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'isbn', $search->{'isbn'}, $desde, $http_user_agent);
-		}
-	
-		if (C4::AR::Utilidades::validateString($search->{'subjectid'}) ){
-			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'subjectid', $search->{'subjectid'}, $desde, $http_user_agent);
 		}
 	
 		if (C4::AR::Utilidades::validateString($search->{'autor'}) ){

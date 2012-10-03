@@ -13,7 +13,7 @@ use C4::Modelo::PrefPreferenciaSistema::Manager;
 use C4::Modelo::PrefAbout;
 use C4::Modelo::PrefAbout::Manager;
 
-use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES $CACHE_MERAN);
+use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 
 @ISA=qw(Exporter);
 
@@ -32,7 +32,6 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES $CACHE_MERAN);
     getPreferenciasLikeCategoria
     getMetodosAuth
     getPreferenciasBooleanas
-    unsetCacheMeran
 );
 
 
@@ -495,15 +494,11 @@ sub getMetodosAuthAll{
 	return ($metodos_auth);
 }
 
-sub unsetCacheMeran{
-    $CACHE_MERAN = undef;
-}
 
 BEGIN{
       C4::AR::Preferencias::reloadAllPreferences();
-
       #TESTING CACHE_MERAN
-      $CACHE_MERAN = undef;
+      #$JUAN = "pruebw";#C4::AR::CacheMeran->new();
 };
 
 
