@@ -48,11 +48,11 @@ $t_params->{'cantR'}= $obj->{'cantR'}   = $cantR;
 
 my ($data, $cant)         = C4::AR::Reportes::reporteEstantesVirtuales($obj);
 
-    $t_params->{'data'} = $data;
-    $t_params->{'cant'} = $cant;
-    $t_params->{'estante'}= $estante;
-    $t_params->{'nombre_estante'}=$estante->{"estante"};
-    $t_params->{'contenido'}= $estante->getContenido();
+$t_params->{'data'} = $data;
+$t_params->{'cant'} = $cant;
+$t_params->{'estante'}= $estante;
+$t_params->{'nombre_estante'}=$estante->{"estante"};
+$t_params->{'contenido'}= $estante->getContenido();
 
 if ($obj->{'exportar'}) {
 
@@ -68,7 +68,6 @@ if ($obj->{'exportar'}) {
 } else {
 
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
-   
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

@@ -1424,22 +1424,22 @@ sub reporteEstantesVirtuales{
             my %info_estante;
             my %ids1;
             my $contenido = $estante->contenido;
-			   $cantNiv2 = scalar(@$contenido);
+
+			$cantNiv2 = scalar(@$contenido);
             if ($contenido){
                 foreach my $c (@$contenido){
 
                     my $niv1= $c->nivel2->nivel1;
                     
                     if($c->nivel2 && $c->nivel2->nivel1){
-						C4::AR::Debug::debug(" $c->nivel2->nivel1->id1  ". $niv1->id);
-						
 						
 						# C4::AR::Nivel1::getNivel1FromId2($c->id2); 
 						if (!$ids1{$niv1->id}){
 							$ids1{$niv1->id}= 1;
 							my $niveles3 = C4::AR::Nivel3::getNivel3FromId1($niv1->id);
 
-							$cantNiv3 = $cantNiv3 + scalar(@$niveles3); #C4::AR::Nivel3::cantNiveles3FromId1($niv1->id);
+							$cantNiv3 = $cantNiv3 + scalar(@$niveles3); 
+                            #C4::AR::Nivel3::cantNiveles3FromId1($niv1->id);
 							
 							foreach my $n3 (@$niveles3){
 								
@@ -1448,21 +1448,20 @@ sub reporteEstantesVirtuales{
 									$prestado=1;
 								}
 								my $reservado = 0;
+
 								if($n3->estaReservado()){
 									$reservado=1;
 								}
-								C4::AR::Debug::debug(" estaPrestado?????  ". $prestado);
-								C4::AR::Debug::debug(" estaReservado?????  ". $reservado);
-							  
+
 								if ( ($prestado + $reservado) ==  0 ) {
-								
-								
-								C4::AR::Debug::debug(" CONTA LA PUTA MADRE");
+									
+								   
 								
 									if ($n3->esParaSala()) {
-										$cantSala = $cantSala ++;
+										$cantSala = $cantSala + 1;
+
 									} else {
-										$cantPrestamo = $cantPrestamo ++;
+										$cantPrestamo = $cantPrestamo + 1;
 									}
 									
 								} else {
