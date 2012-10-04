@@ -238,8 +238,6 @@ sub sortByString{
     my ($campo) = @_;
 
     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
-# 	C4::AR::Debug::debug("UsrPersona=> sortByString => fieldsString: ".$fieldsString);
-# 	C4::AR::Debug::debug("UsrPersona=> campo: ".$campo);
     my $index = rindex $fieldsString,$campo;
 
     if ($index != -1){
