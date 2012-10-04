@@ -7,6 +7,9 @@ use C4::AR::Auth;
 use C4::AR::Novedades;
 use CGI;
 
+
+# my $t = $C4::AR::CacheMeran::CACHE_MERAN2;
+
 my $query =  CGI->new;
 
 my ($template, $session, $t_params)= get_template_and_user({
