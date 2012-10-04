@@ -12,18 +12,18 @@ use C4::AR::PdfGenerator;
 my $input = new CGI;
 my $obj=$input->param('obj');
 my $estante;
-
+my $msg_object = C4::AR::Mensajes::create();
 
 if ($obj){
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
     
 }else{ 
     $obj = $input->Vars;
-    $obj->{'estante'} = $obj->{"estante_name"};
-        
+    $obj->{'estante'} = $obj->{"estante_name"};     
 }
 
 $estante= C4::AR::Estantes::getEstante($obj->{'estante'}); 
+
 my ($template, $session, $t_params, $data_url);
 
 ($template, $session, $t_params) = get_template_and_user({
@@ -52,7 +52,9 @@ $t_params->{'data'} = $data;
 $t_params->{'cant'} = $cant;
 $t_params->{'estante'}= $estante;
 $t_params->{'nombre_estante'}=$estante->{"estante"};
-$t_params->{'contenido'}= $estante->getContenido();
+
+$t_params->{'mensajes'} = $msg_object;
+
 
 if ($obj->{'exportar'}) {
 
