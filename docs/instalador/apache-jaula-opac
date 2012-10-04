@@ -30,14 +30,7 @@ push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl5/");
 </Perl>
 
-#<Perl>
-#PerlPostConfigRequire /etc/meran/iniciando.pl
-#use Carp;
-#push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules");
-#use utf8;
-#</Perl>
-
-ServerSignature Off
+PerlPostConfigRequire /etc/meran/iniciandoreemplazarID.pl
 
 Alias /includes/ "reemplazarPATHBASE/reemplazarID/includes/"
 <Directory reemplazarPATHBASE/reemplazarID/includes/ >

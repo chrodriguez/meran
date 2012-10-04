@@ -137,6 +137,7 @@ sub getNovedad{
     push (@filtros, (id => {eq => $id_novedad}) );
     
     my $novedades_array_ref = C4::Modelo::SysNovedadIntra::Manager->get_sys_novedad_intra( query => \@filtros,
+                                                                                         require_objects => ['socio','socio.persona',],
                                                                               );
 
     #Obtengo la cant total de sys_novedads para el paginador

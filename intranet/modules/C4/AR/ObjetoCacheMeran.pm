@@ -12,7 +12,7 @@ sub new{
 sub get{
     my ($self,$parent,$key)= @_;
 
-    (defined $self->{$parent}->{$key})?C4::AR::Debug::warn("ObjetoCacheMeran => get => CACHED!!!!!!! key => ".$key." => valor ".$self->{$parent}->{$key}):C4::AR::Debug::warn("ObjetoCacheMeran => get => NOOOOOOT CACHED!!!!!!! key => ".$key);
+    (defined $self->{$parent}->{$key})?C4::AR::Debug::debug("ObjetoCacheMeran => get => CACHED!!!!!!! key => ".$key." => valor ".$self->{$parent}->{$key}):C4::AR::Debug::debug("ObjetoCacheMeran => get => NOOOOOOT CACHED!!!!!!! key => ".$key);
 
     return ($self->{$parent}->{$key}||undef);
 }

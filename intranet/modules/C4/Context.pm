@@ -285,22 +285,10 @@ sub _new_dbh
 	use CGI::Session;
 	
 	my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
-		# FIXME - It should be possible to use "MySQL" instead
-		# of "mysql", "PostgreSQL" instead of "Pg", and so
-		# forth.
-=item
-	my $session = CGI::Session->load();
-	my $db_name   = $context->{"config"}{"database"};
-	my $db_host   = $context->{"config"}{"hostname"};
-	my $db_user   = $context->{"config"}{"user"};
-	my $db_passwd = $context->{"config"}{"pass"};
-=cut
 
 
 	my $session = CGI::Session->load();
 
-# 	$user = $context->config('userOPAC');
-# 	$pass = $context->config('passOPAC');
 	my $db_name   = $context->{"config"}{"database"};
 	my $db_host   = $context->{"config"}{"hostname"};
 	my $db_user   = $context->{"config"}{"userOPAC"};
@@ -309,8 +297,6 @@ sub _new_dbh
 	if($session->param('type') eq 'intranet'){
 	C4::AR::Debug::debug("_new_dbh => type: ".$session->param('type'));
 	C4::AR::Debug::debug("_new_dbh => userINTRA");
-# 		$user = $context->config('userINTRA');
-# 		$pass = $context->config('passINTRA');
 		$db_user   = $context->{"config"}{"userINTRA"};
 		$db_passwd = $context->{"config"}{"passINTRA"};
 	}

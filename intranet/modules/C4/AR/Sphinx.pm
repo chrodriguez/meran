@@ -4,9 +4,6 @@ use strict;
 
 require Exporter;
 
-use C4::AR::Catalogacion;
-use MARC::Record;
-
 use C4::Modelo::RefEstado;
 use C4::Modelo::RefEstado::Manager;
 
@@ -187,7 +184,6 @@ sub generar_indice {
             eval{
                 $nivel1->generarIndice();
             }; #END eval
-
             if ($@){
                 C4::AR::Debug::debug("ERROR AL GENERAR EL INDICE EN EL REGISTRO: ". $nivel1->getId1." !!! ( ".$@." )");
                 next;
@@ -203,6 +199,9 @@ sub generar_indice {
 
 =cut
 
+
+
+END { }
 1;
 
 __END__

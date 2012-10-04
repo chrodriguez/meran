@@ -37,15 +37,15 @@ Deny from all
 #CON MODPERL
 
 <Perl>
-push(@INC,"/usr/share/meran/intranet/modules");
 push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/");
 push(@INC,"/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/");
 push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10/");
 push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/");
 push(@INC,"usr/share/meran/intranet/intranet/modules/C4/Share/lib/perl5/");
 </Perl>
+PerlPostConfigRequire /etc/meran/iniciando.pl
 
-
+ServerSignature Off
 
 Alias /meran/ /usr/share/meran/intranet/cgi-bin/
 <Location /meran/ >
@@ -61,8 +61,6 @@ Alias /includes/ /usr/share/meran/includes/
   Order allow,deny
   Allow from all
 </Directory>
-
-ServerSignature Off
 
 Alias /uploads/ "/usr/share/meran/intranet/htdocs/uploads/"
 <Directory /usr/share/meran/intranet/htdocs/uploads/ >
