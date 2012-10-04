@@ -27,7 +27,7 @@ sub load{
 
     eval {
     
-         unless( $self->SUPER::load(speculative => 1, nonlazy => 1) ){
+         unless( $self->SUPER::load(speculative => 1, refresh => 1, ) ){
 #                  C4::AR::Debug::debug("AutoBase2 =>  dentro del unless, no existe el objeto SUPER load");
                 $error = 0;
          }
