@@ -18,7 +18,7 @@ my ($template, $session, $t_params, $socio)  = get_template_and_user({
                             debug               => 1,
                  });
 
-my $preferenciasCirculacion = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
+my ($contPreferenciasCatalogo,$preferenciasCirculacion) = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
 
 #trae las preferencias que son renderizadas como un radio button de bootstrap
 my $preferenciasBooleanas   = C4::AR::Preferencias::getPreferenciasBooleanas('circulacion');
@@ -42,7 +42,7 @@ if($input->param('editando')){
 }
 
 #hay que recargarlas de nuevo para mostrar los valores actualizados
-$preferenciasCirculacion = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
+($contPreferenciasCatalogo,$preferenciasCirculacion) = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
 
 my @arrayPreferencias;
 my $campo       = "";

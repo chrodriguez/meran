@@ -968,6 +968,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #historico_prestamos_usuario{min-width:900px !important;}
 .block{display:block;}
 #ellipsis{height:1.3em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+body{padding-top:50px !important;}
 #logo a{background:url("images/logo_horizontal.png") no-repeat scroll -10px 5px transparent;color:#FFFFFF;}
 #logo{float:left;}
 #logo a{display:block;height:40px;margin-right:5px;outline:medium none;text-indent:-9999px;width:140px;}

@@ -5,7 +5,6 @@ require Exporter;
 
 use C4::Output;  # contains gettemplate
 use C4::AR::Auth;
-use C4::Context;
 use C4::AR::Preferencias;
 use CGI;
 use CGI::Session;
