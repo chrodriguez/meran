@@ -152,6 +152,9 @@ sub convertirEnSocio{
     my ($data_hash,$vienePassword)=@_;
 
     $self->log($data_hash,'convertirEnSocio');
+
+    $self->forget();
+
     my $db = $self->db;
     my $socio = C4::Modelo::UsrSocio->new(db => $db);
         $data_hash->{'id_persona'} = $self->getId_persona;
@@ -249,6 +252,9 @@ sub sortByString{
 
 sub activar{
     my ($self) = shift;
+
+    $self->forget();
+
     $self->setEs_socio(1);
     $self->save();
 }
