@@ -247,26 +247,6 @@
 
 
 [% IF show_search_details %]
-        <section class="center-section-form" style="margin-top: 20px" >
-            <div id="datos_busqueda">
-                <form id="ordenar_tabla" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
-                    <input type="hidden" id="string" name="string" value="[% keyword %]"/>
-                    <input type="hidden" id="titulo" name="titulo" value="[% titulo %]"/>
-                    <input type="hidden" id="autor" name="autor" value="[% autor %]"/>
-                    <input type="hidden" id="isbn" name="isbn" value="[% isbn %]"/>
-                    <input type="hidden" id="tipo" name="tipo" value="[% tipo %]"/>
-                    <input type="hidden" id="tema" name="tema" value="[% tema %]"/>
-                    <input type="hidden" id="estante" name="estante" value="[% estante %]"/>
-                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="[% tipoAccion %]" />
-                    <input type="hidden" id="token" name="token" value="[% token %]" />
-                    <input type="hidden" id="orden" name="orden" value="" />
-                    <input type="hidden" id="export" name="export" value="" />
-                    <input type="hidden" id="sentido_orden" name="sentido_orden" value="" />
-                    <input type="hidden" id="primera_vez" name="primera_vez" value="" />
-                </form>
-            </div>
-        </section>    
-
           [% IF only_available %]
                 <div class="alert alert-info"> [% 'Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></div>
           [% END %]
@@ -528,18 +508,18 @@
 	         </div>       
   	[% END %]
   [% ELSE %]
-    
+    [% IF cantidad > 0%]
 	    [% IF no_content_message %]
 	        <div class="alert alert-info"> [% no_content_message %] </div>  
 	    [% ELSE %]
 	        <div class="alert alert-info"> [% 'Nada que mostrar.' | i18n %] </div>
 	    [% END %]
 	    	<br />
+    [% END %]
 
 		<div class="page-header">
 		    <h1>Meran <small>[% 'Repetir la b&uacute;squeda con otros criterios' | i18n %]</small></h1>
 		</div> 
-  
     
     [% INCLUDE 'opac-advanced_search.inc' %]
 [% END %]
