@@ -253,8 +253,6 @@ sub sortByString{
 sub activar{
     my ($self) = shift;
 
-    $self->forget();
-
     $self->setEs_socio(1);
     $self->save();
 }

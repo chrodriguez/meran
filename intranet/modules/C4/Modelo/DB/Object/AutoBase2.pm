@@ -44,16 +44,6 @@ sub load{
     return $error;
 }
 
-#COMENTAR SI NO SE TRABAJA CON CACHE
-sub save{
-    my $self = $_[0]; # Copy, not shift
-
-    $self->forget();
-    $self->SUPER::save();
-
-    return $self;
-}
-
 
 =item
 
