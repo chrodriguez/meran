@@ -77,18 +77,20 @@
 	            <dd>[% socio_data.usr_email %]</dd>
 	    </dl>
 	      
-	    <div id="footerDatosUsuario">
-	        <dl>
-	            <dt>
-	                <div id="file-uploader">
-	                    <noscript>          
-	                        <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
-	                        <!-- or put a simple form for upload here -->
-	                    </noscript>                          
-	                </div>
-	            </dt>
-	        </dl>
-	    </div>
+	    [% IF uploadPictureFromOpac %]
+		    <div id="footerDatosUsuario">
+		        <dl>
+		            <dt>
+		                <div id="file-uploader">
+		                    <noscript>          
+		                        <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
+		                        <!-- or put a simple form for upload here -->
+		                    </noscript>                          
+		                </div>
+		            </dt>
+		        </dl>
+		    </div>
+	    [% END %]
 	    
 	    <div class="form-actions">
 	        [% PERL %]
