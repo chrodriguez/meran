@@ -178,7 +178,7 @@ sub generar_clave_unicidad {
     my $titulo_h = $marc_record->subfield("245","h");
     my $titulo_k = $marc_record->subfield("245","k");
     my $titulo_n = $marc_record->subfield("245","n");
-    my $titulo_p = $marc_record->subfield("245","n");
+    my $titulo_p = $marc_record->subfield("245","p");
 
 
     $clave = $clave.$titulo_b.$titulo_c.$titulo_f.$titulo_g.$titulo_h.$titulo_k.$titulo_n.$titulo_p;
