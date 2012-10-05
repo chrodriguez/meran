@@ -1,4 +1,4 @@
-[% IF rating %]		
+[% IF count_rating %]		
 		<fieldset> 
               <legend class="titulo_legend_resaltado">
                   [% "Ejemplares mas votados" | i18n %]

@@ -728,7 +728,7 @@ sub getDestacados{
     my @array_n2;
 
     my %hash_n1;
-
+    my $count_rating = 0;
     foreach my $r (@$rating){
         my $n1 = C4::AR::Nivel1::getNivel1FromId2($r->getId2);
         @array_n2= getNivel2FromId1($n1->id);
@@ -738,6 +738,7 @@ sub getDestacados{
 
         if ( $n1->{"rating"} != '0'){
             $hash_n1{$n1->id}= $n1;
+            $count_rating++;
         }
     }
 
@@ -757,7 +758,7 @@ sub getDestacados{
 
     }
 
-    return (\%hash_n1, $promoted, $promoted_count);
+    return (\%hash_n1, $promoted, $promoted_count,$count_rating);
 
 }
 
