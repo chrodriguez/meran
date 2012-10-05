@@ -169,7 +169,21 @@ sub generar_clave_unicidad {
         # C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => id => ".$id);   
         # push (@ids_700, $campo->subfield("a"));
     }
+
     
+    my $titulo_b = $marc_record->subfield("245","b");
+    my $titulo_c = $marc_record->subfield("245","c");
+    my $titulo_f = $marc_record->subfield("245","f");
+    my $titulo_g = $marc_record->subfield("245","g");
+    my $titulo_h = $marc_record->subfield("245","h");
+    my $titulo_k = $marc_record->subfield("245","k");
+    my $titulo_n = $marc_record->subfield("245","n");
+    my $titulo_p = $marc_record->subfield("245","n");
+
+
+    $clave = $clave.$titulo_b.$titulo_c.$titulo_f.$titulo_g.$titulo_h.$titulo_k.$titulo_n.$titulo_p;
+
+
 
     # C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => clave antes de hashear => ".$clave); 
     $clave = C4::AR::Auth::hashear_password($clave, C4::AR::Auth::getMetodoEncriptacion());
