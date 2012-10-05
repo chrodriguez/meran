@@ -1,5 +1,5 @@
 use utf8;
-use lib "/usr/share/meran/intranet/modules/";
+use lib "reemplazarPATHBASE/reemplazarID/intranet/modules/";
 #use C4::Output;  
 #use C4::AR::Auth;
 use C4::Context;
