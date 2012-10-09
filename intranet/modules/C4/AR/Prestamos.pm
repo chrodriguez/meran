@@ -489,8 +489,8 @@ sub estaPrestado {
     my $nivel3_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
                                                                 query => [  fecha_devolucion  => { eq => undef }, 
                                                                             id3  => { eq => $id3 },
-                                                                            require_objects => ['tipo'],
-                                                                ]
+                                                                ],
+                                                                require_objects => ['tipo'],
                                 ); 
 
     return (scalar(@$nivel3_array_ref) > 0);
