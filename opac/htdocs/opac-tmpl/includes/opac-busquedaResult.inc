@@ -419,7 +419,7 @@
 									[% END %]
 								</span>
 						  <script type="text/javascript">$("#grupos_[% NIVEL.id1 %]").expander({
-							  slicePoint: 20º00, 
+							  slicePoint: 2000, 
 							  widow: 10,
 							  expandEffect: 'fadeIn', 
 							  expandText: '<i class="icon-arrow-down"></i>',
