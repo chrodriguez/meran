@@ -49,10 +49,10 @@
                     $('.form-actions').hide();
                     $('#mensajePreferenciasNoEncontradas').show();
                 } 
-                // else {
-                //     $('.form-actions').show();
-                //     $('#mensajePreferenciasNoEncontradas').hide();
-                // }
+                else {
+                    $('.form-actions').show();
+                    $('#mensajePreferenciasNoEncontradas').hide();
+                }
 
             } else {
 
