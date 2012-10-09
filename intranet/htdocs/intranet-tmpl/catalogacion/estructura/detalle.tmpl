@@ -178,7 +178,17 @@
             uploadResponse.style.display 	= 'block';
             setTimeout(closeModalIndice, 2000)
         }
-        
+     
+         function uploadCompleteIndice(evt) {
+            clearInterval(intervalTimer);
+            $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('active');
+            $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('progress-striped');
+            var uploadResponse              = document.getElementById('uploadResponseIndice' + '_' + ID2_file);
+            uploadResponse.innerHTML        = evt.target.responseText;
+            uploadResponse.style.display    = 'block';
+            setTimeout(closeModalIndice, 2000)
+        }
+
         function uploadIndice(id2,url) {
             previousBytesLoaded = 0;
             ID2_file = id2;
@@ -201,7 +211,7 @@
             // var fd = document.getElementById('form1').getFormData();
             xhr = new XMLHttpRequest();
             xhr.upload.addEventListener("progress", uploadProgressIndice, false);
-            xhr.addEventListener("load", uploadCompleteCloseModal, false);
+            xhr.addEventListener("load", uploadCompleteIndice, false);
             xhr.addEventListener("error", uploadFailed, false);
             xhr.addEventListener("abort", uploadCanceled, false);
             xhr.open("POST", url);

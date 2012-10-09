@@ -214,6 +214,8 @@ sub agregar {
     my $hoy = Date::Manip::ParseDate("today");
 
 	#Asignando data...
+
+
 	$self->setId3( $data_hash->{'id3'} );
 	$self->setNro_socio( $data_hash->{'nro_socio'} );
     $self->setFecha_prestamo(C4::Date::format_date_in_iso($hoy, $dateformat));

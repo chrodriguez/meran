@@ -479,7 +479,7 @@ sub historicoPrestamos{
 
    my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                         query => \@filtros,
-                                                                        require_objects => ['nivel3','socio','ui','ui_prestamo'],
+                                                                        require_objects => ['nivel3','socio','ui','ui_prestamo','tipo'],
                                                                         limit   => $params_obj->{'cantR'},
                                                                         offset  => $params_obj->{'ini'},
                                                                      ); 
@@ -507,7 +507,7 @@ sub prestamosAnual{
                                                                                 query => \@filtros,
                                                                                 group_by => ['month(fecha_prestamo)'],
                                                                                 select => ['*','COUNT(*) AS agregacion_temp'],
-                                                                                require_objects => ['nivel3','socio','tipo','ui','ui_prestamo'],
+                                                                                require_objects => ['nivel3','socio','tipo','ui','ui_prestamo','tipo'],
                                                                                );
 
     push ( @filtros, ('fecha_devolucion' => {ne => undef} ));
@@ -516,7 +516,7 @@ sub prestamosAnual{
                                                                                 query => \@filtros,
                                                                                 group_by => ['month(fecha_prestamo)'],
                                                                                 select => ['*','COUNT(*) AS agregacion_temp'],
-                                                                                require_objects => ['nivel3','socio','tipo','ui','ui_prestamo'],
+                                                                                require_objects => ['nivel3','socio','tipo','ui','ui_prestamo','tipo'],
                                                                                );
 
     return ($prestamos_anual_count,$prestamos_anual);

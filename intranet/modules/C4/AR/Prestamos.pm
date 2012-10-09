@@ -70,7 +70,7 @@ sub getInfoPrestamo{
     $db = $db || $db_temp;
     my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( query => \@filtros,
                                                                           db => $db,
-                                                                          require_objects => ['nivel3','socio','ui'],
+                                                                          require_objects => ['nivel3','socio','ui','tipo'],
                                                                         );
 
     if (scalar(@$prestamos)){
@@ -100,7 +100,7 @@ sub _verificarMaxTipoPrestamo{
         push(@filtros, ( nro_socio          => { eq => $nro_socio}) );
         push(@filtros, ( tipo_prestamo      => { eq => $tipo_prestamo}) );
 
-        my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros);
+        my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros, require_objects => ['tipo']);
 
         
         if ($cantidad_prestamos >= $prestamos_maximos) {$error=1}
@@ -287,7 +287,7 @@ sub getPrestamoDeId3 {
 
         my $prestamos__array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                         query => \@filtros,
-                                                                        require_objects => ['nivel3','socio','ui'],
+                                                                        require_objects => ['nivel3','socio','ui','tipo'],
                                                                                         );
 
 
@@ -311,11 +311,11 @@ sub getPrestamosDeSocio {
         my $prestamos__array_ref;
         if($db){ #Si viene $db es porque forma parte de una transaccion
             $prestamos__array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(db => $db,query => \@filtros,
-                                                                        require_objects => ['nivel3','socio','ui'],
+                                                                        require_objects => ['nivel3','socio','ui','tipo'],
                                                                         );
         }else{
             $prestamos__array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(query => \@filtros,
-                                                                        require_objects => ['nivel3','socio','ui'],
+                                                                        require_objects => ['nivel3','socio','ui','tipo'],
                                                                       );
         }
 
@@ -446,7 +446,7 @@ sub obtenerPrestamosDeSocio {
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
                                           query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
-                                          require_objects => ['nivel3','socio','ui', 'nivel3.nivel2.nivel1'],
+                                          require_objects => ['nivel3','socio','ui', 'nivel3.nivel2.nivel1','tipo'],
 
                                 ); 
     my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( 
@@ -488,7 +488,8 @@ sub estaPrestado {
 
     my $nivel3_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
                                                                 query => [  fecha_devolucion  => { eq => undef }, 
-                                                                            id3  => { eq => $id3 }
+                                                                            id3  => { eq => $id3 },
+                                                                            require_objects => ['tipo'],
                                                                 ]
                                 ); 
 
@@ -756,7 +757,7 @@ sub getPrestamoPorBarcode {
 
     my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
                                                                 query => \@filtros,
-                                                                require_objects => [ 'nivel3' ] #INNER JOIN
+                                                                require_objects => [ 'nivel3','tipo' ] #INNER JOIN
                                 ); 
 
     if(scalar(@$prestamo_array_ref) > 0){
@@ -806,7 +807,7 @@ sub getSocioFromID_Prestamo {
 
     my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
                                                                 query => \@filtros,
-                                                                require_objects => [ 'socio' ] #INNER JOIN
+                                                                require_objects => [ 'socio','tipo' ] #INNER JOIN
                                 ); 
 
     if(scalar(@$prestamo_array_ref) > 0){
@@ -886,7 +887,7 @@ sub getSocioFromPrestamo {
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                                     query => \@filtros,
-                                                                                    require_objects => ['socio', 'socio.persona'],
+                                                                                    require_objects => ['socio', 'socio.persona','tipo'],
                                                                                     select          => ['socio.*','usr_persona.*']
                                                                                 );
 
@@ -1374,7 +1375,8 @@ sub _enviarRecordatorio{
 sub getAllPrestamosVencidosParaMail{
 
     my $prestamos_array_ref               = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
-                                                                                                    sort_by => ['nro_socio DESC']
+                                                                                                    sort_by => ['nro_socio DESC'],
+                                                                                                    require_objects => ['socio','socio.persona','tipo']
                                                                                                  );
     use C4::Modelo::CircPrestamoVencidoTemp::Manager;
     my $prestamos_vencidos_temp_array_ref = C4::Modelo::CircPrestamoVencidoTemp::Manager->get_circ_prestamo_vencido_temp();
@@ -1422,7 +1424,7 @@ sub getAllPrestamosVencidosParaMail{
 =cut
 sub getAllPrestamosVencidos{
 
-    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo();
+    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(require_objects => ['socio','nivel3','socio.persona','tipo']);
      
     my @arrayPrestamos;
 

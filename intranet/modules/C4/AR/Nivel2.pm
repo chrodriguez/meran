@@ -424,7 +424,7 @@ sub getCantPrestados{
                                                                 query => [  't2.id2' => { eq => $id2 },
                                                                             fecha_devolucion => { eq => undef }  
                                                                          ],
-                                                                require_objects     => ['nivel3.nivel2'],
+                                                                require_objects     => ['nivel3.nivel2','tipo'],
                                                                 with_objects        => ['nivel3'],
                                         );
 

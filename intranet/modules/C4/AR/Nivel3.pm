@@ -416,7 +416,7 @@ sub getBarcodesPrestadoLike {
     push(@filtros, ( fecha_devolucion => { eq => undef }) );
     
     $barcodes_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(   query => \@filtros, 
-                                                                                  require_objects => [ 'nivel3' ], #INNER JOIN
+                                                                                  require_objects => [ 'nivel3','tipo' ], #INNER JOIN
                                                                                   select => ['*'],
                                         ); 
     my $cant= scalar(@$barcodes_array_ref);
