@@ -1,6 +1,5 @@
 [% INCLUDE "intranet-top.inc" %]
 
-
 <script type="text/javascript">
 
     var prefBooleanas = new Array();
@@ -31,6 +30,15 @@
 
 </script>
 
+<script type="text/javascript" src="/intranet-tmpl/includes/busquedaPreferencias.js"></script>
+   
+<style type="text/css"> 
+    .buscadorPreferenciasClass{
+        float: right;
+        margin-top: -51px;
+    }
+</style> 
+
 [% INCLUDE 'editorHTML.inc' %]
 
 <form id="formPreferencias" class="form-horizontal" 
@@ -40,10 +48,13 @@
     <fieldset class="resultados_busqueda">
     <legend>[% "Administraci&oacute;n de preferencias de sistema" | i18n %]</legend>
 
-    
+        <div class="buscadorPreferenciasClass">
+            <input name="buscador" id="buscadorPreferencias" type="text" placeholder="Ingrese la preferencia a buscar">
+        </div>
+
             [% FOREACH preferencia IN preferencias %]
             
-                <div class="control-group">
+                <div class="control-group" id="[% preferencia.preferencia.getLabel %]">
                     <label class="control-label">[% preferencia.preferencia.getLabel | i18n %]</label>
                     <div class="controls">
                     
@@ -84,6 +95,8 @@
                             ) ;
         [% END %]
     </div>
+
+    <div class="alert alert-info" id="mensajePreferenciasNoEncontradas">[% 'No se encontraron preferencias' | i18n %]</div>
 </form>
 
 [% INCLUDE "intranet-bottom.inc" %]

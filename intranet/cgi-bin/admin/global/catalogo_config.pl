@@ -20,9 +20,6 @@ my ($template, $session, $t_params, $socio)  = get_template_and_user({
 
 my ($contPreferenciasCatalogo,$preferenciasCatalogo) = C4::AR::Preferencias::getPreferenciasByCategoria('catalogo');
 
-C4::AR::Debug::error("ROOOOOOOOOOOOOOOOOOOOOOCK DE PREFERENCIAS ".$contPreferenciasCatalogo);
-
-
 #trae las preferencias que son renderizadas como un radio button de bootstrap
 my $preferenciasBooleanas   = C4::AR::Preferencias::getPreferenciasBooleanas('catalogo');
 
