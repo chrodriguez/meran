@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use C4::AR::Sphinx;
+use C4::AR::CacheMeran;
 
 	my $id1 = $ARGV[0] || '0'; #id1 del registro
 	my $flag = $ARGV[1] || 'R_FULL'; #id1 del registro
