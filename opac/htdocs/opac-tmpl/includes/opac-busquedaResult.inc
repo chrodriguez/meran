@@ -492,6 +492,23 @@
              </tbody>
         </table>
         <div class="contenedor_paginador">[% paginador %]</div>
+     <div id="datos_busqueda">
+          <form id="ordenar_tabla" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
+                <input type="hidden" id="string" name="string" value="[% keyword %]"/>
+                <input type="hidden" id="titulo" name="titulo" value="[% titulo %]"/>
+                <input type="hidden" id="autor" name="autor" value="[% autor %]"/>
+                <input type="hidden" id="isbn" name="isbn" value="[% isbn %]"/>
+                <input type="hidden" id="tipo" name="tipo" value="[% tipo %]"/>
+                <input type="hidden" id="tema" name="tema" value="[% tema %]"/>
+                <input type="hidden" id="estante" name="estante" value="[% estante %]"/>
+                <input type="hidden" id="tipoAccion" name="tipoAccion" value="[% tipoAccion %]" />
+                <input type="hidden" id="token" name="token" value="[% token %]" />
+                <input type="hidden" id="orden" name="orden" value="" />
+                <input type="hidden" id="export" name="export" value="" />
+                <input type="hidden" id="sentido_orden" name="sentido_orden" value="" />
+                <input type="hidden" id="primera_vez" name="primera_vez" value="" />
+        </form>
+    </div>        
          <div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
                <td>
                   [% PERL %]
