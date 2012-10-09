@@ -15,7 +15,7 @@ use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
 use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
-use vars qw(@EXPORT_OK @ISA $CACHE_MERAN);
+use vars qw(@EXPORT_OK @ISA );
 
 @ISA=qw(Exporter);
 
@@ -708,8 +708,12 @@ sub as_stringReloaded {
         if($hash_temp{'dato_link'} ne "NO_LINK"){
             $dato                           = $hash_temp{'dato_link'};
         }
-
-        $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $nivel, $db);
+        if($params->{'tipo'} eq 'OPAC'){
+            $cat_estruct_info_array          = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $nivel, $db);
+            }
+        else{
+            $cat_estruct_info_array       = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $nivel, $db);
+            }
         my $text                            = "";
         if($cat_estruct_info_array){
 
@@ -1029,6 +1033,7 @@ sub getRefFromStringConArrobasByCampoSubcampo{
     my ($campo, $subcampo, $dato, $itemtype, $nivel, $db) = @_;
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype, $nivel, $db);
+    # C4::AR::Debug::error("Catalogacion => getRefFromStringConArrobasByCampoSubcampo => campo ".$campo." subcampo ".$subcampo." itemtype ".$itemtype." nivel ".$nivel);
 
     if($estructura){
         if($estructura->getReferencia){
@@ -2123,7 +2128,7 @@ sub _getEstructuraFromCampoSubCampo{
 	my ($campo, $subcampo, $itemtype, $nivel, $db) = @_;
 	#TESTING CACHE MERAN
 	my $cacheKey = $campo.$subcampo.$nivel.$itemtype;
-	if (! defined $CACHE_MERAN->{$cacheKey}){
+	if (! defined C4::AR::CacheMeran::obtener($cacheKey)){
 		#Si no esta en la cache entonces lo busco en la base y lo cacheo
 		$db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;
 		my @filtros;
@@ -2151,24 +2156,25 @@ sub _getEstructuraFromCampoSubCampo{
         		#hay dos configuraciones para campo, subcampo, nivel, tipo_ejemplar
 			for (my $i=0;$i < scalar(@$cat_estruct_info_array);$i++){
 				if($cat_estruct_info_array->[$i]->getItemType() eq $itemtype){
-					$CACHE_MERAN->{$cacheKey} = $cat_estruct_info_array->[$i];
-					return $CACHE_MERAN->{$cacheKey};
+					C4::AR::CacheMeran::setear($cacheKey, $cat_estruct_info_array->[$i]);
+					return C4::AR::CacheMeran::obtener($cacheKey);
 				} elsif ($cat_estruct_info_array->[$i]->getItemType() eq "ALL") {
-					$CACHE_MERAN->{$cacheKey} = $cat_estruct_info_array->[$i];
+					C4::AR::CacheMeran::setear($cacheKey, $cat_estruct_info_array->[$i]);
 				} 
 
 			}
 		} else {
 			if(scalar(@$cat_estruct_info_array) > 0){
 				#Hay solo un resultado
-				$CACHE_MERAN->{$cacheKey} = $cat_estruct_info_array->[0];
-			} else {
-				$CACHE_MERAN->{$cacheKey} = 0;
+                C4::AR::CacheMeran::setear($cacheKey, $cat_estruct_info_array->[0]);
+                }
+                else {
+				C4::AR::CacheMeran::setear($cacheKey, 0);
 			}
 		}
 	}
 
-	return $CACHE_MERAN->{$cacheKey};
+	return C4::AR::CacheMeran::obtener($cacheKey)
 }
 
 =item sub getEstructuraCatalogacionById

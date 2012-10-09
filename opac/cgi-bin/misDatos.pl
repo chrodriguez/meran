@@ -21,11 +21,13 @@ my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                                     entorno         => 'undefined'},
     });
 
-my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionNroSocio());
+my $socio 					= C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionNroSocio());
+my $uploadPictureFromOpac 	= C4::AR::Preferencias::getValorPreferencia('UploadPictureFromOPAC');
 
 C4::AR::Auth::buildSocioData($session,$socio);
 
 $t_params->{'socio'}                    = $socio;
 $t_params->{'partial_template'}         = "opac-mis_datos.inc";
+$t_params->{'uploadPictureFromOpac'}    = $uploadPictureFromOpac;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

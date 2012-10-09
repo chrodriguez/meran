@@ -20,20 +20,13 @@ ErrorDocument 404 /meran/informacion/404notfound.pl
 </Location>
 
 <Perl>
-push(@INC,"/usr/share/meran/intranet/modules");
 push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/");
 push(@INC,"/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/");
 push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10/");
 push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/");
 push(@INC,"usr/share/meran/intranet/intranet/modules/C4/Share/lib/perl5/");
 </Perl>
-
-#<Perl>
-#PerlPostConfigRequire /etc/meran/iniciando.pl
-#use Carp;
-#push(@INC,"/usr/share/meran/intranet/modules");
-#use utf8;
-#</Perl>
+PerlPostConfigRequire /etc/meran/iniciando.pl
 
 ServerSignature Off
 

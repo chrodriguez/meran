@@ -292,6 +292,7 @@
 			$(".collapse").collapse({toggle: false,});
 	        $('.dropdown-toggle').dropdown();
 	        $('.fancy_link').fancybox();
+	        
 			if (UNLOAD == 1)
 				enableAlert();
 			else

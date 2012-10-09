@@ -1,16 +1,17 @@
 <script type="text/javascript">
   $(window).load(function() {
-  $('.flexslider').flexslider({
-    animation: "slide",
-    animationLoop: false,
-    itemWidth: 160,
-    itemMargin: 10
-  });
+    $('.flexslider').flexslider({
+      animation: "slide",
+      animationLoop: false,
+      itemWidth: 160,
+      itemMargin: 10
+    });
 });
+  $(document).ready(function(){
+    $('.fancy_link').fancybox();
+  });
 
 </script>
-
-
 
 
 <script type="text/javascript" src="/includes/flexSlider/jquery.flexslider.js"></script>

@@ -5,7 +5,18 @@
 
 <fieldset class="">
     <div class="encabezado">
-        <div width="400px"><img src="[% escudo %]" alt="escudo" width="80px" height="100px" /><img src="[% escudoUI %]" alt="escudoUI" width="120px" height="90px" align="right" /></div><br>
+        <div width="400px">
+         
+            [% IF print_format == "1" %] 
+                <img src="[% escudo %]" alt="escudo" width="80px" height="100px" />
+                <img src="[% escudoUI %]" alt="escudoUI" width="120px" height="90px" align="right" />
+            [% ELSE %]
+                <img src="[% escudo %]" alt="escudo" width="60px" height="80px" />
+                <img src="[% escudoUI %]" alt="escudoUI" width="100px" height="70px" align="right" />
+            [% END %]
+        </div>
+
+        <br>
         [% biblio.titulo_formal %]<br>
         [% "BIBLIOTECA" | i18n  %]<br>
         [% biblio.getNombrePDF %]<br><br>

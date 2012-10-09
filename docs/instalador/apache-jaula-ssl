@@ -7,6 +7,8 @@ PerlSwitches -wT
 DirectoryIndex /meran/mainpage.pl 
 DocumentRoot reemplazarPATHBASE/reemplazarID/intranet/htdocs
 
+PerlPostConfigRequire /etc/meran/iniciandoreemplazarID.pl
+
 #Enabling Compression
 SetOutputFilter DEFLATE
 
@@ -36,8 +38,6 @@ push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl/5.
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.10/");
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.10.1/");
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl5/");
-
-
 </Perl>
 
 

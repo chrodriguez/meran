@@ -213,9 +213,7 @@
 </script>
 
 <fieldset>
-    <legend class="titulos">[% "Pr&oacute;ximos Feriados" | i18n %]</legend>
-
-    <div id="proximosFeriados"></div><br />
+    <legend class="titulos">[% "Feriados" | i18n %]</legend>  
 
     <div id="calendarioFeriados"></div><br />
 
@@ -226,8 +224,12 @@
         <button type="submit" id="agregarFeriadoBoton" class="btn btn-primary"><i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> [% 'Agregar feriado' | i18n %]</button>
         <button type="submit" id="eliminarFeriadoBoton" class="btn btn-danger" style="display:none;" onclick="eliminarFeriado();"><i id="eliminarFeriadoIcon" class="icon-white icon-trash"></i> [% 'Eliminar feriado' | i18n %]</button>
         <button type="submit" id="mostrarFeriadosTotales" class="btn btn-info" style="display:none;">
-            <i id="mostrarFeriadosTotalesIcon" class="icon-white icon-eye-open"></i> [% 'Mostrar feriados originales' | i18n %]</button>
+            <i id="mostrarFeriadosTotalesIcon" class="icon-white icon-eye-open"></i> [% 'Mostrar feriados originales' | i18n %]
+        </button>
     </form>
+
+    <legend class="titulos">[% "Pr&oacute;ximos Feriados" | i18n %]</legend> 
+    <div id="proximosFeriados"></div><br />
 
 </fieldset>
 

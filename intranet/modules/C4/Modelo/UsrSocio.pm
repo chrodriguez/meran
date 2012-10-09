@@ -387,47 +387,12 @@ sub forzarCambioDePassword{
     }
 }
 
-# FIXME DEPRECATED
-# sub cambiarPermisos{
-#     my ($self)=shift;
-#     my ($params) = @_;
-# 
-#     my $array_permisos= $params->{'array_permisos'};
-#     my $loop=scalar(@$array_permisos);
-# 
-#     my $flags=0;
-#     for(my $i=0;$i<$loop;$i++){
-#         my $flag= $array_permisos->[$i];
-#         $flags=$flags+2**$flag;
-#     }
-# 
-#     $self->setFlags($flags);
-#     $self->save();
-# }
-
-=item
-Retorna los permisos del socio
-=cut
-# FIXME DEPRECATED
-# sub getPermisos{
-#     my ($self) = shift;
-#     #retorna todos los permisos
-#     my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
-# 
-#     my $accessFlagsHash;
-#     foreach my $permiso (@$permisos_array_ref){
-#         if ( $self->getFlags & 2**$permiso->{'bit'} ) {
-#             $accessFlagsHash->{ $permiso->{'flag'} }= 1;
-#         }
-#     }
-# 
-# #     $self->log($accessFlagsHash,'getPermisos => permisos del socio');
-#     
-#     return ($accessFlagsHash);
-# }
 
 sub activar{
     my ($self) = shift;
+
+    $self->forget();
+
     $self->setActivo(1);
     $self->persona->activar();
 

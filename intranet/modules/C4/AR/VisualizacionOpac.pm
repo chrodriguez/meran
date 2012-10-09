@@ -12,8 +12,9 @@ use C4::Modelo::CatVisualizacionOpac;
 use C4::Modelo::CatVisualizacionOpac::Manager;
 use C4::Modelo::CatEstructuraCatalogacion;
 use C4::Modelo::CatEstructuraCatalogacion::Manager;
-use vars qw($VERSION @EXPORT_OK @ISA $CACHE_MERAN);
+use vars qw($VERSION @EXPORT_OK @ISA);
 
+#~ use C4::AR::CacheMeran;
 # set the version for version checking
 $VERSION = 0.01;
 
@@ -353,20 +354,21 @@ sub getVistaCampo{
     #TESTING CACHE MERAN
     # my $key = C4::AR::Utilidades::joinArrayOfString(@filtros);
     my $key = $nivel.$campo.$template;
+    # C4::AR::Debug::error("CACHED3!!!!!!!");
 
-    if (defined $CACHE_MERAN->{$key}){
-        C4::AR::Debug::debug("VisualizacionOpac::getVistaCampo => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
-        return $CACHE_MERAN->{$key};
+    if (defined C4::AR::CacheMeran::obtener($key)){
+        # C4::AR::Debug::error("CACHED!!!!!!!");
+        return C4::AR::CacheMeran::obtener($key);
     } else {
 
         my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, db => $db,);
 
         if(scalar(@$configuracion) > 0){
             # return $configuracion->[0]->getVistaCampo;
-            $CACHE_MERAN->{$key} = $configuracion->[0]->getVistaCampo;
-            return $CACHE_MERAN->{$key};
+            C4::AR::CacheMeran::setear($key,$configuracion->[0]->getVistaCampo);
+            return C4::AR::CacheMeran::obtener($key);
         } else {
-            $CACHE_MERAN->{$key} = 0;
+            C4::AR::CacheMeran::setear($key,0);
             return 0;
         }
     }
@@ -388,20 +390,21 @@ sub getVistaOpac{
     #TESTING CACHE MERAN
     # my $key = C4::AR::Utilidades::joinArrayOfString(@filtros);
     my $key = $nivel.$campo.$template;
+# C4::AR::Debug::error("CACHED4!!!!!!!");
 
-    if (defined $CACHE_MERAN->{$key}){
-        C4::AR::Debug::debug("VisualizacionOpac::getVistaOpac => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
-        return $CACHE_MERAN->{$key};
+    if (defined C4::AR::CacheMeran::obtener($key)){
+        # C4::AR::Debug::error(" CACHED!!!!!!!");
+        return C4::AR::CacheMeran::obtener($key);
     } else {
 
         my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, db => $db,);
 
         if(scalar(@$configuracion) > 0){
-            $CACHE_MERAN->{$key} = $configuracion->[0]->getVistaOpac;
+            C4::AR::CacheMeran::setear($key, $configuracion->[0]->getVistaOpac);
             # return $configuracion->[0]->getVistaOpac;
-            return $CACHE_MERAN->{$key};
+            return C4::AR::CacheMeran::obtener($key);
         } else {
-            $CACHE_MERAN->{$key} = 0;
+            C4::AR::CacheMeran::setear($key, 0);
             return 0;
         }
 
@@ -529,21 +532,17 @@ sub getVisualizacionFromCampoSubCampo{
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
     push(@filtros, ( nivel          => { eq => $nivel } ) );
-#     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
     push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ])
                      );
 
-
-#TESTING CACHE MERAN
-    # my $key = C4::AR::Utilidades::joinArrayOfString(@filtros);
-    # FIXME esta clave no esta bien armada, faltan los operadores logicos
     my $key = $campo.$subcampo.$nivel.$tipo_ejemplar;
     my $cat_estruct_info_array;
 
-    if (defined $CACHE_MERAN->{$key}){
-        C4::AR::Debug::debug("VisualizacionOpac::getVisualizacionFromCampoSubCampo => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
-        $cat_estruct_info_array = $CACHE_MERAN->{$key};
+# C4::AR::Debug::error("CACHED2!!!!!!!".C4::AR::CacheMeran::obtener($key)." es ".$key);
+
+    if (defined C4::AR::CacheMeran::obtener($key)){
+        $cat_estruct_info_array = C4::AR::CacheMeran::obtener($key);
 
     } else { 
 
@@ -554,11 +553,13 @@ sub getVisualizacionFromCampoSubCampo{
                                             );  
 
         if(scalar(@$cat_estruct_info_array) > 0){
-            $CACHE_MERAN->{$key} = $cat_estruct_info_array->[0];
-            return $CACHE_MERAN->{$key};
+            C4::AR::CacheMeran::setear($key, $cat_estruct_info_array->[0]);
+            # C4::AR::Debug::error("CACHED2.1!!!!!!!".C4::AR::CacheMeran::obtener($key)." es ".$key);
+            return C4::AR::CacheMeran::obtener($key);
           # return $cat_estruct_info_array->[0];
         }else{
-            $CACHE_MERAN->{$key} = 0;
+            # C4::AR::Debug::error("CACHED2.2!!!!!!!".C4::AR::CacheMeran::obtener($key)." es ".$key);
+            C4::AR::CacheMeran::setear($key,0);
             return 0;
         }
     }
@@ -586,9 +587,9 @@ sub getVisualizacionFromCampoAndNivel{
     my $key = $campo.$nivel.$itemtype;
     my $cat_estruct_info_array;
 
-    if (defined $CACHE_MERAN->{$key}){
-        C4::AR::Debug::debug("VisualizacionOpac::getVisualizacionFromCampoAndNivel => KEY ==".$key."== valor => ".$CACHE_MERAN->{$key}." CACHED!!!!!!!");
-        $cat_estruct_info_array = $CACHE_MERAN->{$key};
+    if (defined C4::AR::CacheMeran::obtener($key)){
+        # C4::AR::Debug::error("CACHED!!!!");
+        $cat_estruct_info_array = C4::AR::CacheMeran::obtener($key);
 
     } else {
 
@@ -600,11 +601,11 @@ sub getVisualizacionFromCampoAndNivel{
 
         if(scalar(@$cat_estruct_info_array) > 0){
           # C4::AR::Debug::debug("VisualizacionOpac => getVisualizacionFromCampoAndNivel => lo encontre!!!");
-          $CACHE_MERAN->{$key} = $cat_estruct_info_array->[0];
-          return $CACHE_MERAN->{$key};
+          C4::AR::CacheMeran::setear($key, $cat_estruct_info_array->[0]);
+          return C4::AR::CacheMeran::obtener($key);
           # return $cat_estruct_info_array->[0];
         }else{
-            $CACHE_MERAN->{$key} = 0;
+            C4::AR::CacheMeran::setear($key, 0);
             return 0;
         }
     }

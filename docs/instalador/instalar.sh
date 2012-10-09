@@ -42,7 +42,7 @@ generarJaula()
 
 generarPermisosBDD()
 {
-  head -n2 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g > /tmp/$ID.permisosbdd
+  head -n3 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g > /tmp/$ID.permisosbdd
   sed s/reemplazarUSER/$(escaparVariable $USER_BDD_MERAN)/g /tmp/$ID.permisosbdd > /tmp/$ID.permisosbdd2
   sed s/reemplazarPASS/$(escaparVariable $PASS_BDD_MERAN)/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd3
   cat $sources_MERAN/base.sql >>  /tmp/$ID.permisosbdd3
@@ -51,18 +51,40 @@ generarPermisosBDD()
   sed s/reemplazarIPASS/$(escaparVariable $IPASS_BDD_MERAN)/g /tmp/$ID.permisosbdd5 >> /tmp/$ID.permisosbdd3
   echo "Creando Base de DAtos, esto se va a demorar un buen rato"
   echo "Tenemos que crear la base de datos $DD_MERAN y para eso pediremos los permisos de root de MySQL"
-  mysql --default-character-set=utf8  $BDD_MERAN -p < /tmp/$ID.permisosbdd3
+  mysql --default-character-set=utf8  -p < /tmp/$ID.permisosbdd3
   rm /tmp/$ID.permisosbdd*
 }
 
 generarConfiguracion()
 {
   sed s/reemplazarID/$(escaparVariable $ID)/g $sources_MERAN/meran.conf > /tmp/$ID.meran.conf
-sed s/reemplazarUSER/$(escaparVariable $USER_BDD_MERAN)/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
+  sed s/reemplazarUSER/$(escaparVariable $USER_BDD_MERAN)/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarPASS/$(escaparVariable $PASS_BDD_MERAN)/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
   sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g  /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g /tmp/$ID.meran2.conf > $CONFIGURACION_MERAN/meran$ID.conf
   rm /tmp/$ID.meran*
+  generarScriptDeInicio
+}
+
+generarCrons()
+{
+  crontab -l >/tmp/$ID.crontab
+  echo "
+  0 7 * * *      export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/recordatorio_prestamos_vto.pl 2>&1
+  0 * * * *      export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/mail_prestamos_vencidos.pl  2>&1
+  * * * * *      export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/procesarColaZ3950.pl  2>&1
+  * * * * *      export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/reindexar.pl 2>&1
+  0 0 * * *      export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/obtener_portadas_de_registros.pl  2>&1
+  0 0 * * 6      export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/generar_indice.pl  2>&1" >>/tmp/$ID.crontab
+  crontab /tmp/$ID.crontab
+
+}
+
+generarScriptDeInicio()
+{  
+ sed s/reemplazarID/$(escaparVariable $ID)/g $sources_MERAN/iniciando.pl > /tmp/iniciando$ID.pl
+ sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g  /tmp/iniciando$ID.pl > $CONFIGURACION_MERAN/iniciando$ID.pl
+ rm /tmp/iniciando$ID.pl
 }
 
 usage()
@@ -159,38 +181,31 @@ if [ $(perl -v|grep 5.10.1|wc -l) -eq 0 ];
 fi
 
 
-if [ $(dpkg -l |grep apache2|grep ii |wc -l ) -eq 0 ];
-  then
-  echo "Apache no se detecta instalado"
-  echo "¿Quiere proceder a instalar toda la base necesaria para Meran?"
-  select OPCION in Instalar No_instalar
-    do
-      if [ $OPCION = Instalar ]; 
+echo "¿Quiere proceder a instalar toda la base necesaria para Meran?"
+select OPCION in Instalar No_instalar
+do
+    if [ $OPCION = Instalar ]; 
         then
-          echo "Procederemos a instalar todo lo necesario sobre Debian GNU/Linux"
-          echo "Para hacerlo hay q ser superusuario"
-          #Instalar paquetes
-          #su
-          apt-get update
-          apt-get install apache2 mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15
-
-
-          #Configurar apache
-          echo "Procederemos a habilitar en apache los modulos necesarios"
-          a2enmod rewrite
-          a2enmod expires
-          a2enmod ssl
-          a2enmod headers
-
-          echo "Procederemos a habilitar en apache los sites"
-          a2dissite default
-          break
-      else
+        echo "Procederemos a instalar todo lo necesario sobre Debian GNU/Linux"
+        echo "Para hacerlo hay q ser superusuario"
+        #Instalar paquetes
+        #su
+        apt-get update
+        apt-get install apache2 mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15
+        #Configurar apache
+        echo "Procederemos a habilitar en apache los modulos necesarios"
+        a2enmod rewrite
+        a2enmod expires
+        a2enmod ssl
+        a2enmod headers
+        echo "Procederemos a habilitar en apache los sites"
+        a2dissite default
+        break
+    else
         echo "NO se instalará nada base"
         break
-      fi
-    done
-fi
+    fi
+done
 
 echo "Seleccione el tipo de Instalacion que quiere realizar"
 
@@ -234,12 +249,11 @@ select OPCION in Jaula Sistemica
       echo "Copiando los Virtualhosts"
       generarJaula 
       #Crear bdd
-      echo "FIXME Faltan configurar los BDD"
       echo "Generando la Base de datos"
       generarPermisosBDD
       
       #Configurar cron
-      echo "FIXME Faltan configurar los Crons"
+      generarCrons
       echo "La instalación esta concluida"
       echo "Reiniciaremos los servicios"
       #Reiniciar apache 

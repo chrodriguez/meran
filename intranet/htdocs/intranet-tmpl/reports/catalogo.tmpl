@@ -16,7 +16,7 @@
                                                 {id => 'unindexed', text => "[% 'Registros no indexados' | i18n %]"},
                                                 {id => 'colecciones', text => "[% 'Colecciones' | i18n %]"},
                                                 {id => 'disponibilidad', text => "[% 'Disponibilidad de Ejemplares' | i18n %]"},
-                                                {id => 'estantes', text => "[% 'Estantes Virtuales' | i18n %]"},
+                                              
                                                 {id => 'busquedas', text => "[% 'Búsquedas' | i18n %]"}
                                               ],
                                  content_id=> 'reportes_catalogo',
@@ -25,6 +25,8 @@
     );
 
 [% END %]
+ <!--  {id => 'estantes', text => "[% 'Estantes Virtuales' | i18n %]"}, -->
+
          <div class="tab-pane fade in active" id="labels">
             [% INCLUDE 'partials/reportes/_reporte_gen_etiquetas.inc' %]
         </div>

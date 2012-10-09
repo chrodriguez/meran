@@ -152,6 +152,9 @@ sub convertirEnSocio{
     my ($data_hash,$vienePassword)=@_;
 
     $self->log($data_hash,'convertirEnSocio');
+
+    $self->forget();
+
     my $db = $self->db;
     my $socio = C4::Modelo::UsrSocio->new(db => $db);
         $data_hash->{'id_persona'} = $self->getId_persona;
@@ -238,8 +241,6 @@ sub sortByString{
     my ($campo) = @_;
 
     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
-# 	C4::AR::Debug::debug("UsrPersona=> sortByString => fieldsString: ".$fieldsString);
-# 	C4::AR::Debug::debug("UsrPersona=> campo: ".$campo);
     my $index = rindex $fieldsString,$campo;
 
     if ($index != -1){
@@ -251,6 +252,7 @@ sub sortByString{
 
 sub activar{
     my ($self) = shift;
+
     $self->setEs_socio(1);
     $self->save();
 }

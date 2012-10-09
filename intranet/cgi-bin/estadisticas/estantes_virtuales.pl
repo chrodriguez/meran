@@ -12,18 +12,18 @@ use C4::AR::PdfGenerator;
 my $input = new CGI;
 my $obj=$input->param('obj');
 my $estante;
-
+my $msg_object = C4::AR::Mensajes::create();
 
 if ($obj){
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
     
 }else{ 
     $obj = $input->Vars;
-    $obj->{'estante'} = $obj->{"estante_name"};
-        
+    $obj->{'estante'} = $obj->{"estante_name"};     
 }
 
 $estante= C4::AR::Estantes::getEstante($obj->{'estante'}); 
+
 my ($template, $session, $t_params, $data_url);
 
 ($template, $session, $t_params) = get_template_and_user({
@@ -48,12 +48,13 @@ $t_params->{'cantR'}= $obj->{'cantR'}   = $cantR;
 
 my ($data, $cant)         = C4::AR::Reportes::reporteEstantesVirtuales($obj);
 
-    $t_params->{'data'} = $data;
+$t_params->{'data'} = $data;
+$t_params->{'cant'} = $cant;
+$t_params->{'estante'}= $estante;
+$t_params->{'nombre_estante'}=$estante->{"estante"};
 
-    $t_params->{'cant'} = $cant;
-    $t_params->{'estante'}= $estante;
-    $t_params->{'nombre_estante'}=$estante->{"estante"};
-    $t_params->{'contenido'}= $estante->getContenido();
+$t_params->{'mensajes'} = $msg_object;
+
 
 if ($obj->{'exportar'}) {
 
@@ -69,7 +70,6 @@ if ($obj->{'exportar'}) {
 } else {
 
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
-   
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

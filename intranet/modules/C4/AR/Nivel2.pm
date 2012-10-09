@@ -725,15 +725,22 @@ sub getDestacados{
     my $db = $db || C4::Modelo::CatRating->new()->db;
     
     my $rating = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros, db => $db,);
-    my $rating_count = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros, db => $db,);
+    my @array_n2;
 
-    my @array_rating;
-
+    my %hash_n1;
+    my $count_rating = 0;
     foreach my $r (@$rating){
-        my $n2 = getNivel2FromId2($r->getId2);
-        push(@array_rating, $n2);
-    }
+        my $n1 = C4::AR::Nivel1::getNivel1FromId2($r->getId2);
+        @array_n2= getNivel2FromId1($n1->id);
+        $n1->{"rating"} = C4::AR::Nivel2::getRatingPromedio(@array_n2);
 
+        # C4::AR::Debug::debug($n1->{"rating"});
+
+        if ( $n1->{"rating"} != '0'){
+            $hash_n1{$n1->id}= $n1;
+            $count_rating++;
+        }
+    }
 
     $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db;
 
@@ -749,17 +756,9 @@ sub getDestacados{
         $r->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'L');
         $r->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($r->getId2);
 
-
-        C4::AR::Debug::debug("portada: ".$r->{'portada_registro'});
-
-        C4::AR::Debug::debug("portada: ".$r->{'portada_registro_medium'});
-        C4::AR::Debug::debug("portada: ".$r->{'portada_registro_big'});
-        C4::AR::Debug::debug("portada: ".$r->{'portada_edicion_local'});
-
-
     }
 
-    return (\@array_rating, $rating_count, $promoted, $promoted_count);
+    return (\%hash_n1, $promoted, $promoted_count,$count_rating);
 
 }
 
@@ -783,6 +782,7 @@ sub getRatingPromedio{
     my($nivel2_array_ref) = @_;
 
     my $cant = scalar(@$nivel2_array_ref);
+
     if ($cant > 0){
         my $ratings = 0;
         foreach my $nivel2 (@$nivel2_array_ref){

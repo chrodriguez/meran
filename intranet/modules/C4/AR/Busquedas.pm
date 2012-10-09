@@ -1871,10 +1871,10 @@ sub t_loguearBusqueda {
     my $db = $historial->db;
     my $msg_object= C4::AR::Mensajes::create();
     $db->{connect_options}->{AutoCommit} = 0;
-    eval {
+    #eval {
         $historial->agregar($nro_socio,$desde,$http_user_agent,$search_array);
         $db->commit;
-    };
+    #};
 
     if ($@){
         #Se loguea error de Base de Datos
@@ -1901,6 +1901,7 @@ sub logBusqueda{
 	my $valorINTRA= C4::AR::Preferencias::getValorPreferencia("logSearchINTRA");
 
     $session = $session || CGI::Session->load();
+
     
 	if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'INTRA')) ){
 		if($params->{'codBarra'} ne ""){
@@ -1933,6 +1934,13 @@ sub logBusqueda{
 			$search->{'keyword'}= $params->{'keyword'};
 			push (@search_array, $search);
 		}
+
+        if($params->{'string'} != -1 && $params->{'string'} ne ""){
+            my $search;
+            $search->{'keyword'}= $params->{'string'};
+            push (@search_array, $search);
+        }
+
 
 		if($params->{'filtrarPorAutor'} ne ""){
 			my $search;
