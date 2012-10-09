@@ -495,7 +495,8 @@ sub show_componente {
         }
     }
   
-    if((($campo eq "650")||($campo eq "653"))&&($subcampo eq "a")) {
+    # if((($campo eq "650")||($campo eq "653"))&&($subcampo eq "a")) {
+    if((($campo eq "650"))&&($subcampo eq "a")) {
   
         if($session_type eq 'intranet'){
     
