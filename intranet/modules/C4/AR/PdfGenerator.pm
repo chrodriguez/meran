@@ -448,7 +448,7 @@ sub generateCard {
     my $phone;
 
     #Datos del usuario
-    my $socio = &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
     #     open A,">>/tmp/debug.txt";
     #     print A "ID_SOCIO:   ".$socio->persona->getApellido;

@@ -566,8 +566,8 @@ sub getSocioInfoPorNroSocio {
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
                                                     require_objects => ['persona','ui',
-                                                                        'persona.documento'],
-                                                    with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref','categoria'],
+                                                                        'persona.documento','categoria'],
+                                                    with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref'],
                                                     select       => ['persona.*','usr_socio.*'],
                                         );
 
