@@ -1645,6 +1645,8 @@ sub getReporteCirculacionGeneralToExport{
     my $orden           = $data->{'orden'};
     my $sentido         = $data->{'asc'};
 
+    my $tieneFecha      = 0;
+
     my @filtros;
     my $resultsarray;
 
@@ -1667,6 +1669,8 @@ sub getReporteCirculacionGeneralToExport{
 
         push( @filtros, and => [ 'fecha' => { ge => $fecha_inicio },
                                 'fecha' => { le => $fecha_fin } ] ); 
+
+        $tieneFecha = 1;
     }
 
     # primero traemos todos los id3 filtrando por los parametros de busqueda
@@ -1687,6 +1691,11 @@ sub getReporteCirculacionGeneralToExport{
 
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         #######################################################################################
         
         my $cantidadUsuarios = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
@@ -1702,6 +1711,11 @@ sub getReporteCirculacionGeneralToExport{
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         my $cantidadDevoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
                                                                       select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
@@ -1716,6 +1730,11 @@ sub getReporteCirculacionGeneralToExport{
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_operacion' =>  {eq => 'renovacion'} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         my $cantidadRenovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
                                                                       select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
@@ -1728,6 +1747,11 @@ sub getReporteCirculacionGeneralToExport{
 
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_prestamo' =>  {eq => 'DO'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
 
         my $cantidadDomiciliario = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
@@ -1743,6 +1767,11 @@ sub getReporteCirculacionGeneralToExport{
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_prestamo' =>  {eq => 'SA'} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         my $cantidadSala = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
                                                                       select  => ['COUNT(tipo_prestamo) AS agregacion_temp'],
@@ -1756,6 +1785,11 @@ sub getReporteCirculacionGeneralToExport{
 
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_prestamo' =>  {eq => 'ES'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
 
         my $cantidadEspecial = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
@@ -1806,6 +1840,8 @@ sub getReporteCirculacionGeneral{
     my @filtros;
     my $resultsarray;
 
+    my $tieneFecha      = 0;
+
     # tabla circ_ref_tipo_prestamo 
     if ( C4::AR::Utilidades::validateString($tipoPrestamo) ) {
         push(@filtros, ('tipo_prestamo_ref.id_tipo_prestamo' =>  {eq => $tipoPrestamo} ));
@@ -1830,6 +1866,8 @@ sub getReporteCirculacionGeneral{
 
         push( @filtros, and => [ 'fecha' => { ge => $fecha_inicio },
                                 'fecha' => { le => $fecha_fin } ] ); 
+
+        $tieneFecha     = 1;
     }
 
     # primero traemos todos los id3 filtrando por los parametros de busqueda
@@ -1861,6 +1899,11 @@ sub getReporteCirculacionGeneral{
 
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         #######################################################################################
         
         my $cantidadUsuarios = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
@@ -1876,6 +1919,11 @@ sub getReporteCirculacionGeneral{
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         my $cantidadDevoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
                                                                       select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
@@ -1890,6 +1938,11 @@ sub getReporteCirculacionGeneral{
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_operacion' =>  {eq => 'renovacion'} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         my $cantidadRenovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
                                                                       select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
@@ -1902,6 +1955,11 @@ sub getReporteCirculacionGeneral{
 
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_prestamo' =>  {eq => 'DO'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
 
         my $cantidadDomiciliario = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
@@ -1917,6 +1975,11 @@ sub getReporteCirculacionGeneral{
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_prestamo' =>  {eq => 'SA'} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         my $cantidadSala = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
                                                                       select  => ['COUNT(tipo_prestamo) AS agregacion_temp'],
@@ -1931,6 +1994,11 @@ sub getReporteCirculacionGeneral{
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_prestamo' =>  {eq => 'ES'} ));
 
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
         my $cantidadEspecial = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
                                                                       select  => ['COUNT(tipo_prestamo) AS agregacion_temp'],
@@ -1944,6 +2012,11 @@ sub getReporteCirculacionGeneral{
 
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
         push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
 
         my $responsable = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
