@@ -102,3 +102,4 @@ bytesTransfered=(Math.round(bytesUploaded*100)/100)
 function uploadComplete(evt){clearInterval(intervalTimer);$('#'+'progressIndicator'+'_'+ID2_file+' > div').removeClass('active');$('#'+'progressIndicator'+'_'+ID2_file+' > div').removeClass('progress-striped');var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML=evt.target.responseText;uploadResponse.style.display='block';setTimeout(refreshMeranPage,4000);}
 function uploadFailed(evt){clearInterval(intervalTimer);alert("An error occurred while uploading the file.");}
 function uploadCanceled(evt){clearInterval(intervalTimer);alert("The upload has been canceled by the user or the browser dropped the connection.");}
+function historyBack(){window.history.back();}

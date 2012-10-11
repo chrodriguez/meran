@@ -1,5 +1,8 @@
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
-<script>
+
+<script type="text/javascript">
 
     var ORDEN   = '';
     var ASC     = 1;
@@ -29,6 +32,7 @@
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoria_socio_id').val();
         // objAH.tipoOperacion     = $('#tipoOperacion').val();
+        objAH.nroSocio          = $('#nro_socio_hidden').val();
         objAH.tipoPrestamo      = $('#tipo_prestamo_id').val();
         objAH.fecha_inicio      = $('#date-from').val();
         objAH.fecha_fin         = $('#date-to').val();
@@ -47,9 +51,21 @@
 
     }   
 
+    clearUsuario = function(){
+        $('#nro_socio_hidden').val('');
+        $('#usuario').val('');
+    }
+
     $(document).ready(function(){
         $('#date-from').datepicker();
         $('#date-to').datepicker();
+
+        CrearAutocompleteUsuariosByCredential({ 
+            IdInput: 'usuario', 
+            IdInputHidden: 'nro_socio_hidden', 
+            // callBackFunction: onCompleteUsuarios,
+        });
+                
     });
 
 </script>
@@ -78,6 +94,15 @@
             <div class="controls">
                 <input type="text" id="date-from" name="date-from" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
                 <input type="text" id="date-to" name="date-to" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
+            </div>
+        </div>
+
+        <div id="divInfoUsuario" class="control-group" >
+            <label for="usuario" class="control-label">[% 'Usuario' | i18n %]</label>
+            <div class="controls">
+                <input type='text' id='usuario' name='usuario' value='' size='32' tabindex='3' style="float: left" onclick="clearUsuario();">
+                <div id="estadoUsuario"></div>
+                <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
             </div>
         </div>
 

@@ -4089,6 +4089,34 @@ sub usuarioAutocomplete{
 }
 
 =item
+    Autocomplete para usuarios filtrando por una credencial
+=cut
+sub usuarioAutocompleteByCredentialType{
+    my ($usuarioStr, $credential)    = @_;
+    my @data_array;
+    my $textout         = "";
+    my ($cant, $usuarios_array_ref) = C4::AR::Usuarios::getSocioLikeByCredentialType($usuarioStr, $credential);
+
+    if ($cant > 0){
+
+        foreach my $usuario (@$usuarios_array_ref){
+
+            my %has_temp;
+
+            $has_temp{'id'}     = $usuario->getNro_socio;
+
+            $has_temp{'dato'}   = $usuario->persona->getApeYNom." (".$usuario->getNro_socio.")"."\n";
+            
+            push (@data_array, \%has_temp);
+        }
+
+        $textout = getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
+    }
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
+=item
 busca barcodeStr sobre todos los barcodes
 =cut
 sub barcodeAutocomplete{

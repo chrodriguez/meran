@@ -11,6 +11,7 @@ function CrearAutocompleteLenguajes(options){_CrearAutocomplete({IdInput:options
 function CrearAutocompleteAutores(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_autores',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteSoportes(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_soportes',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteUsuarios(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_usuarios',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteUsuariosByCredential(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_usuarios_by_credential',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteUsuariosConRegularidad(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_usuarios_con_regularidad',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteBarcodes(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_barcodes',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteBarcodesPrestados(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_barcodes_prestados',callBackFunction:options.callBackFunction,});}

@@ -1836,6 +1836,7 @@ sub getReporteCirculacionGeneral{
     # my $tipoOperacion   = $data->{'tipoOperacion'};
     my $orden           = $data->{'orden'};
     my $sentido         = $data->{'asc'};
+    my $responsable     = $data->{'nroSocio'};
 
     my @filtros;
     my $resultsarray;
@@ -1851,10 +1852,9 @@ sub getReporteCirculacionGeneral{
         push(@filtros, ('socio.id_categoria' =>  {eq => $categoria} ));
     }
 
-    # if ( C4::AR::Utilidades::validateString($tipoOperacion) && ($tipoOperacion ne 'SIN SELECCIONAR') ) {
-    #     push(@filtros, ('tipo_operacion' =>  {eq => $tipoOperacion} ));
-    # }
-
+    if ( C4::AR::Utilidades::validateString($responsable) ) {
+        push(@filtros, ('responsable_ref.nro_socio' =>  {eq => $responsable} ));
+    }
 
     my $desde = C4::AR::Filtros::i18n('Desde');
     my $hasta = C4::AR::Filtros::i18n('Hasta');
@@ -1875,7 +1875,7 @@ sub getReporteCirculacionGeneral{
                                                                       query             => \@filtros,
                                                                       limit             => $cantR,
                                                                       offset            => $ini,
-                                                                      require_objects   => [ 'socio', 'tipo_prestamo_ref' ],
+                                                                      require_objects   => [ 'socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       # select            => ['id3'],
                                                                       # distinct          => 1,
                                                                       # with_objects => [],
@@ -2008,20 +2008,20 @@ sub getReporteCirculacionGeneral{
         #######################################################################################
 
         #responsable
-        @filtro = ();
+        # @filtro = ();
 
-        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
-        push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
+        # push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+        # push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
 
-        if ($tieneFecha) {
-             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
-                                     'fecha' => { le => $fecha_fin } ] ); 
-        }
+        # if ($tieneFecha) {
+        #      push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+        #                              'fecha' => { le => $fecha_fin } ] ); 
+        # }
 
-        my $responsable = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query   => \@filtro,
-                                                                      select  => ['responsable'],
-                                                                );
+        # my $responsable = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+        #                                                               query   => \@filtro,
+        #                                                               select  => ['responsable'],
+        #                                                         );
 
 
         #######################################################################################
@@ -2036,7 +2036,7 @@ sub getReporteCirculacionGeneral{
         $dataHash{'cantidad_especial'}      = $cantidadEspecial->[0]->{'agregacion_temp'};
         $dataHash{'objeto'}                 = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId1());
         $dataHash{'nivel3'}                 = $objetoRepCirculacion;
-        $dataHash{'responsable'}            = $responsable->[0]->{'responsable'};
+        # $dataHash{'responsable'}            = $responsable->[0]->{'responsable'};
         
         push(@resultArray, \%dataHash);
 
