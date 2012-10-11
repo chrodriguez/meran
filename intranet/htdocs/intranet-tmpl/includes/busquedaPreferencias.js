@@ -37,22 +37,24 @@
 
                 //ocultamos las que no machean y dejamos las que si
                 $(".control-group:Contains('" + buscar + "')").fadeIn('slow');
-                $(".control-group").not(":Contains('" + buscar + "')").fadeOut('normal');
+                $(".control-group").not(":Contains('" + buscar + "')").fadeOut('normal', function() {
+                    /* Lo hacemos como callback del fadeOut para que cuente bien los elementos ocultos */
 
-                //cuento la cantidad de elementos que se estan mostrando
-                cant = $('.control-group').filter(function() {
-                    return $(this).css('display') !== 'none';
-                }).size();
+                    //cuento la cantidad de elementos que se estan mostrando
+                    cant = $('.control-group').filter(function() {
+                        return $(this).css('display') !== 'none';
+                    }).size();
 
-                //si es 0 ocultamos el .form-actions y mostramos el div de mensaje
-                if (cant == 0) {
-                    $('.form-actions').hide();
-                    $('#mensajePreferenciasNoEncontradas').show();
-                } 
-                else {
-                    $('.form-actions').show();
-                    $('#mensajePreferenciasNoEncontradas').hide();
-                }
+                    //si es 0 ocultamos el .form-actions y mostramos el div de mensaje
+                    if (cant == 0) {
+                        $('.form-actions').hide();
+                        $('#mensajePreferenciasNoEncontradas').show();
+                    } 
+                    else {
+                        $('.form-actions').show();
+                        $('#mensajePreferenciasNoEncontradas').hide();
+                    }
+                });
 
             } else {
 

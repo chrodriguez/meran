@@ -12,7 +12,7 @@
                                 id              => "tablaResultCirculacion",
                                 columns         => ['[% "T&iacute;tulo" | i18n %]',
                                                     '[% "C&oacute;digo de barras" | i18n %]',
-                                                    '[% "Ultimo responsable" | i18n %]',
+                                                    '[% "Responsable" | i18n %]',
                                                     '[% "Cantidad de Renovaciones" | i18n %]',
                                                     '[% "Cantidad de Usuarios" | i18n %]',
                                                     '[% "Cantidad de Devoluciones" | i18n %]',
@@ -40,9 +40,9 @@
                     </td>
                     <td>
                         [% PERL %]
-                          print C4::AR::Filtros::link_to(   text    =>  "[% res.responsable %]",
+                          print C4::AR::Filtros::link_to(   text    =>  "[% res.nivel3.responsable %]",
                                                           url       =>  "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
-                                                          params    =>  ["nro_socio=[% res.responsable %]"], 
+                                                          params    =>  ["nro_socio=[% res.nivel3.responsable %]"], 
                                                           blank     =>  1, 
                                                       ) ;
                         [% END %]

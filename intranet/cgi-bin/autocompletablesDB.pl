@@ -54,6 +54,10 @@ elsif ($accion eq 'autocomplete_usuarios_con_regularidad'){
 
     $result = C4::AR::Utilidades::usuarioAutocomplete($string, 1);
 }
+elsif ($accion eq 'autocomplete_usuarios_by_credential'){
+
+    $result = C4::AR::Utilidades::usuarioAutocompleteByCredentialType($string, 'librarian');
+}
 elsif ($accion eq 'autocomplete_barcodes_prestados'){
 
 	$result = C4::AR::Utilidades::barcodePrestadoAutocomplete($string);
