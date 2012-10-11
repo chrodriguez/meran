@@ -754,7 +754,7 @@ sub as_stringReloaded {
         my $ocurrencias = $subcampos{$subcampo}{'datos'};
         my $inter = $subcampos{$subcampo}{'inter'};
         my $subsJoined= join( $inter, @$ocurrencias);
-        C4::AR::Debug::debug("JOINED!!! ".$subsJoined);
+        C4::AR::Debug::debug("Catalogacion => JOINED!!! => ".$subsJoined." campo, subcampo => ".$campo.", ".$subcampo);
         $texto.=$subcampos{$subcampo}{'pre'}.$subsJoined.$subcampos{$subcampo}{'post'};
     }
     return $texto;

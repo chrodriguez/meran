@@ -196,7 +196,7 @@ var loaderPath= "";
                       <dt class="inline left rightMargin">[% "Categor&iacute;a:" | i18n %] </dt>
                       <dd>
                           [% TRY %]
-                            [% socio.categoria.getDescription %]
+                            [% socio.getCategoria.toString %]
                           [% CATCH %]
                             [% 'Sin categor&iacute;a' | i18n %]
                           [% END %] 

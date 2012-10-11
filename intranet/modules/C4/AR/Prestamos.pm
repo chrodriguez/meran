@@ -70,7 +70,7 @@ sub getInfoPrestamo{
     $db = $db || $db_temp;
     my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( query => \@filtros,
                                                                           db => $db,
-                                                                          require_objects => ['nivel3','socio','ui','tipo'],
+                                                                          require_objects => ['nivel3','socio','socio.categoria','ui','tipo'],
                                                                         );
 
     if (scalar(@$prestamos)){

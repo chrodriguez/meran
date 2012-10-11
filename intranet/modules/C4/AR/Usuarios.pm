@@ -561,14 +561,13 @@ sub getSocioInfo {
 =cut
 sub getSocioInfoPorNroSocio {
     my ($nro_socio) = @_;
-
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
                                                     require_objects => ['persona','ui',
                                                                         'persona.documento','categoria'],
                                                     with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref'],
-                                                    select       => ['persona.*','usr_socio.*'],
+                                                    select       => ['persona.*','usr_socio.*','usr_ref_categoria_socio.*','ui.*'],
                                         );
 
         if($socio_array_ref){
@@ -679,8 +678,8 @@ sub getSocioLike {
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                                            select => ['*','length(apellido) AS agregacion_temp'],
-                                                              with_objects => ['persona','ui','categoria','persona.ciudad_ref',
+                                                                            select => ['*','persona.*','length(apellido) AS agregacion_temp'],
+                                                                            with_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
      ); 
 

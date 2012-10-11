@@ -63,7 +63,6 @@ my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 my $branchcode  = C4::AR::Preferencias::getValorPreferencia("defaultUI");
 my $biblio      = C4::AR::Busquedas::getBranch($branchcode);
 
-
 $t_params->{'biblio'}= $biblio;
 $t_params->{'socio'}= $socio;
 $t_params->{'socio_nombre'}= Encode::decode_utf8($socio->persona->nombre);
