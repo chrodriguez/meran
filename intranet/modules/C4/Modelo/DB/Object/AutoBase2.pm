@@ -68,7 +68,7 @@ sub getByPk{
   
 #     SI NO SE TRABAJA CON CACHE, COMENTAR LA SIGUIENTE LINEA
 
-    $self_like->forget;
+#    $self_like->forget;
     
     $self_like->load();
 

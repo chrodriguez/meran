@@ -391,7 +391,7 @@ sub forzarCambioDePassword{
 sub activar{
     my ($self) = shift;
 
-    $self->forget();
+#    $self->forget();
 
     $self->setActivo(1);
     $self->persona->activar();
