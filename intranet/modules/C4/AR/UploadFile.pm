@@ -647,49 +647,65 @@ sub uploadIndiceFile{
 # my $check_size = -s "$uploaddir/$name.$type";
 #if ($check_size > $maxFileSize) { blabla }
 
+    my @extensiones_permitidas    = qw(
+                                        bmp
+                                        jpg
+                                        gif
+                                        png
+                                        jpeg
+                                        doc
+                                        docx
+                                        odt
+                                        pdf
+                                        xls
+                                    );
 
-        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls");
-        my $size = scalar(@nombreYextension) - 1;
-        my $ext= @nombreYextension[$size];
+    # my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls");
+    my $size = scalar(@nombreYextension) - 1;
+    my $ext  = @nombreYextension[$size];
 
-        if (!grep(/$ext/i,@extensiones_permitidas)) {
-                $msg= "Solo se permiten archivos del tipo (".join(", ",@extensiones_permitidas).") [Fallo de extension]";
-        }elsif (scalar(@nombreYextension)>=2) { # verifica que el nombre del archivo tenga el punto (.)
-            my $ext= @nombreYextension[$size];
-            my $buff='';
+    # if (!grep(/$ext/i,@extensiones_permitidas)) {
+    if (!($ext ~~ @extensiones_permitidas)) {
 
-            $name = @nombreYextension[0];
-            my $file_type = $ext;
-            my $hash_unique = Digest::MD5::md5_hex(localtime());
-            my $file_name = $name.".".$ext."_".$hash_unique;
-            my $write_file= $eDocsDir."/".$file_name;
+            $msg = "Solo se permiten archivos del tipo (".join(", ",@extensiones_permitidas).") [Fallo de extension]";
 
-            if (!open(WFD,">$write_file")) {
-                    $msg="Hay un error y el archivo no puede escribirse en el servidor.";
-            }else{
-                my $size = 0;
-                while ($bytes_read=read($file_data,$buff,2096,0)) {
-                        $size += $bytes_read;
-                        binmode WFD;
-                        print WFD $buff;
-                }
-                close(WFD);
+    } elsif (scalar(@nombreYextension)>=2) { # verifica que el nombre del archivo tenga el punto (.)
 
-                my $isValidFileType = C4::AR::Utilidades::isValidFile($write_file);
+        my $ext         = @nombreYextension[$size];
+        my $buff        = '';
 
-                if ( !$isValidFileType )
-                {
-                    $msg= "Solo se permiten archivos (".join(", ",@extensiones_permitidas).") [Fallo de contenido]";
-                    unlink($write_file);
-                }else
-                {
-                    $msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente. Refresque la p&aacute;gina para ver.";
-                    C4::AR::Catalogacion::saveIndice($id2,$file_name);
-                }
-            }
+        $name           = @nombreYextension[0];
+        my $file_type   = $ext;
+        my $hash_unique = Digest::MD5::md5_hex(localtime());
+        my $file_name   = $name.".".$ext."_".$hash_unique;
+        my $write_file  = $eDocsDir."/".$file_name;
+
+        if (!open(WFD,">$write_file")) {
+                $msg = "Hay un error y el archivo no puede escribirse en el servidor.";
         }else{
-            $msg= C4::AR::Filtros::i18n("El nombre del archivo no tiene un formato correcto.");
+            my $size = 0;
+            while ($bytes_read=read($file_data,$buff,2096,0)) {
+                    $size += $bytes_read;
+                    binmode WFD;
+                    print WFD $buff;
+            }
+            close(WFD);
+
+            my $isValidFileType = C4::AR::Utilidades::isValidFile($write_file);
+
+            if ( !$isValidFileType )
+            {
+                $msg= "Solo se permiten archivos (".join(", ",@extensiones_permitidas).") [Fallo de contenido]";
+                unlink($write_file);
+            }else
+            {
+                $msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente. Refresque la p&aacute;gina para ver.";
+                C4::AR::Catalogacion::saveIndice($id2,$file_name);
+            }
         }
+    }else{
+        $msg= C4::AR::Filtros::i18n("El nombre del archivo no tiene un formato correcto.");
+    }
 
     return($msg);
 }
