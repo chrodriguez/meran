@@ -3,6 +3,7 @@
 require Exporter;
 use strict;
 use C4::AR::Auth;
+use C4::AR::Utilidades;
 use CGI;
 use JSON;
 use C4::AR::Reportes;
@@ -146,6 +147,7 @@ elsif ($tipoAccion eq "CIRC_GENERAL") {
     my ($results, $cantidad)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj,$ini,$cantR);
 
     $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR,$pageNumber,$funcion,$t_params);
+    C4::AR::Debug::debug("paginador ----------> " . $t_params->{'paginador'});
     $t_params->{'cantidad'}         = $cantidad;
     $t_params->{'results'}          = $results;
 
