@@ -1884,12 +1884,10 @@ sub getReporteCirculacionGeneral{
       
                                                         );
     # cantidad para el paginador
-    # my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
-    #                                                                 query               => \@filtros,
-    #                                                                 select              => ['id3'],
-    #                                                                 distinct            => 1,
-    #                                                                 require_objects     => [ 'socio', 'tipo_prestamo_ref' ]                                               
-    #                                                                 );
+    my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
+                                                                    query               => \@filtros,
+                                                                    require_objects     => [ 'socio', 'tipo_prestamo_ref', 'responsable_ref' ]                                               
+                                                                );
       
     my @resultArray;                                                                      
 
@@ -2007,25 +2005,6 @@ sub getReporteCirculacionGeneral{
 
         #######################################################################################
 
-        #responsable
-        # @filtro = ();
-
-        # push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
-        # push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
-
-        # if ($tieneFecha) {
-        #      push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
-        #                              'fecha' => { le => $fecha_fin } ] ); 
-        # }
-
-        # my $responsable = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-        #                                                               query   => \@filtro,
-        #                                                               select  => ['responsable'],
-        #                                                         );
-
-
-        #######################################################################################
-
         my %dataHash;
 
         $dataHash{'cantidad_usuarios'}      = $cantidadUsuarios->[0]->{'agregacion_temp'};
@@ -2042,7 +2021,7 @@ sub getReporteCirculacionGeneral{
 
     }
 
-    return (\@resultArray, scalar(@$resultsArray));
+    return (\@resultArray, $rep_busqueda_count);
 
 }
 
@@ -2260,13 +2239,13 @@ sub getReservasCirculacion {
       
                                                         );
    
-    # my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
-    #                                                                         query   => \@filtros,
-    #                                                                         require_objects => ['socio', 'socio.persona.documento',
-    #                                                                                             'nivel1', 'nivel1.IndiceBusqueda'
-    #                                                                         ],
-    #                                                                           # with_objects => [],                                                           
-    #                                                                         );
+    my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
+                                                                            query   => \@filtros,
+                                                                            require_objects => ['socio', 'socio.persona.documento',
+                                                                                                'nivel1', 'nivel1.IndiceBusqueda'
+                                                                            ],
+                                                                              # with_objects => [],                                                           
+                                                                            );
 
     my @resultArray;  
 
@@ -2311,7 +2290,7 @@ sub getReservasCirculacion {
         push(@resultArray, \%dataHash);
     }
 
-    return (\@resultArray, scalar(@$resultsArray));
+    return (\@resultArray, $rep_busqueda_count);
 
 }
 

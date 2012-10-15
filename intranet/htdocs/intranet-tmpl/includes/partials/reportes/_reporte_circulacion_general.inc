@@ -98,7 +98,7 @@
         </div>
 
         <div id="divInfoUsuario" class="control-group" >
-            <label for="usuario" class="control-label">[% 'Usuario' | i18n %]</label>
+            <label for="usuario" class="control-label">[% 'Responsable' | i18n %]</label>
             <div class="controls">
                 <input type='text' id='usuario' name='usuario' value='' size='32' tabindex='3' style="float: left" onclick="clearUsuario();">
                 <div id="estadoUsuario"></div>
