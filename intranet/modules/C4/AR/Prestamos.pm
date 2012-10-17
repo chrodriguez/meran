@@ -1424,7 +1424,11 @@ sub getAllPrestamosVencidosParaMail{
 =cut
 sub getAllPrestamosVencidos{
 
-    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(require_objects => ['socio','nivel3','socio.persona','tipo']);
+    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                require_objects => ['socio','nivel3','socio.persona','tipo'],
+                                                                sort_by => 'fecha_prestamo DESC',
+
+                                                        );
      
     my @arrayPrestamos;
 
