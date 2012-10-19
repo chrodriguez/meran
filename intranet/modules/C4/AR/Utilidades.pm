@@ -251,7 +251,7 @@ sub checkFileMagic{
     
     }
     
-    # unlink($path . "/" . $hash_unique);
+    unlink($path . "/" . $hash_unique);
     
     if (!$ok){
         C4::AR::Debug::debug("el tipo de archivo no estaba en la whitelist");
