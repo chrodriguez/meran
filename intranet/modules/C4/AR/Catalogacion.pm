@@ -14,6 +14,7 @@ use C4::AR::VisualizacionIntra;
 use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
 use C4::Modelo::CatEstructuraCatalogacion::Manager;
+use C4::AR::CacheMeran;
 
 use vars qw(@EXPORT_OK @ISA );
 
