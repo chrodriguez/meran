@@ -31,19 +31,12 @@
 </script>
 
 <script type="text/javascript" src="/intranet-tmpl/includes/busquedaPreferencias.js"></script>
-   
-<style type="text/css"> 
-    .buscadorPreferenciasClass{
-        float: right;
-        margin-top: -51px;
-    }
-</style> 
 
 <form id="formPreferenciasCatalogo" class="form-horizontal" 
       action="[% url_prefix %]/admin/global/catalogo_config.pl?token=[% token %]" method="post"
       onsubmit="buttonPost('preferencias-submit');"
       >
-    <fieldset class="resultados_busqueda">
+    <fieldset class="resultados_busqueda fixed">
     <legend>[% "Administraci&oacute;n de preferencias de Cat&oacute;logo" | i18n %]</legend>
 
         <div class="buscadorPreferenciasClass">

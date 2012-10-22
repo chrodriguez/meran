@@ -66,6 +66,7 @@ sub getSancionesLike {
                                         query           => \@filtros,
                                         select          => ['circ_sancion.*'],
                                         with_objects    => ['socio','socio.persona','nivel3'],
+                                        select          => ['*'],
                                         limit   => $cantR,
                                         offset  => $ini,
                                 ); 
@@ -92,7 +93,8 @@ sub tieneSanciones {
 																			fecha_comienzo 	=> { le => $hoy },
 																			fecha_final    	=> { ge => $hoy},
 																		],
-                                                                    require_objetcs => ['ref_tipo_prestamo_sancion','nivel3','tipo_sancion.ref_tipo_prestamo'],
+                                    require_objetcs => ['ref_tipo_prestamo_sancion','nivel3','tipo_sancion.ref_tipo_prestamo'],
+                                    select          => ['*',]
 									);
   if (scalar(@$sanciones_array_ref) == 0){
         return 0;
@@ -238,6 +240,7 @@ sub diasDeSancion {
       C4::AR::Debug::debug("EN DiasDeSancion ?");
 
 
+
     if (Date_Cmp($fecha_vencimiento, $fecha_devolucion) >= 0) {
         #Si es un prestamo especial debe devolverlo antes de una determinada hora
         if ($tipo_prestamo ne 'ES'){return(0);}
@@ -257,6 +260,9 @@ sub diasDeSancion {
         }#else ES
     }#if Date_Cmp
 
+
+
+
 #Corresponde una sancion vamos a calcular de cuantos dias!
 C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!");
   use C4::Modelo::CircTipoSancion::Manager;
@@ -265,6 +271,8 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
                                                                             tipo_prestamo       => { eq => $tipo_prestamo },
                                                                             categoria_socio     => { eq => $categoria },
                                                                         ],
+                                                                        require_objetcs     => ['ref_regla_tipo_sancion','ref_tipo_prestamo_sancion','ref_tipo_prestamo','ref_categoria_socio'],
+                                                                        select              => ['*']
                                     );
 
  C4::AR::Debug::debug("HAY REGLAS? ");
@@ -273,6 +281,7 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
     C4::AR::Debug::debug("NO HAY REGLAS!!!! DIAS DE SANCION 0!!! ");	
     return 0;
  }
+
 
   my $reglas_tipo_array_ref=$tipo_sancion_array_ref->[0]->ref_regla_tipo_sancion;
 
@@ -286,11 +295,23 @@ If $subtract is non-zero, the delta produced is:
 	DELTA = DATE1 - DATE2
 =cut
   my $err;
-  my $delta= &DateCalc($fecha_vencimiento,$fecha_devolucion,\$err,0);
+ 
+  my $dias= 0;#Delta_Days($fecha_vencimiento,$fecha_devolucion);
   
-  my $dias= &Delta_Format($delta,0,"%dh");
+#  my $dias= &Delta_Format($delta,0,"%dh");
+#  my $date_manip_vencimiento = new Date::Manip::Date;
+#  my $date_manip_devolucion  = new Date::Manip::Date;
 
-  C4::AR::Debug::debug("CUANTOS DIAS??? FECHA:".$fecha_vencimiento." DEVOLUCION:".$fecha_devolucion." DELTA:".$delta." DIAS: ".$dias);
+#  $err = $date_manip_vencimiento->parse_date($fecha_vencimiento); 
+#  $err = $date_manip_devolucion->parse_date($fecha_devolucion); 
+
+#  my $days= $date_manip_vencimiento->calc_delta_days($date_manip_devolucion,'semi');
+
+  C4::AR::Debug::error("CUANTOS DIAS??? FECHA: ".$fecha_vencimiento." DEVOLUCION: ".$fecha_devolucion." DIAS: ".$dias);
+die;  
+# my $delta ='';  
+# my $dias= $delta->printf('%dv');
+# C4::AR::Debug::error("CUANTOS DIAS??? FECHA: ".$fecha_vencimiento." DEVOLUCION: ".$fecha_devolucion." DELTA: ".$delta->value()." DIAS: ".$dias);
 
   #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dia
   if ($tipo_prestamo eq 'ES'){$dias++;}

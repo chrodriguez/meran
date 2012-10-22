@@ -561,14 +561,13 @@ sub getSocioInfo {
 =cut
 sub getSocioInfoPorNroSocio {
     my ($nro_socio) = @_;
-
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
                                                     require_objects => ['persona','ui',
                                                                         'persona.documento','categoria'],
                                                     with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref'],
-                                                    select       => ['persona.*','usr_socio.*'],
+                                                    select       => ['persona.*','usr_socio.*','usr_ref_categoria_socio.*','ui.*'],
                                         );
 
         if($socio_array_ref){
@@ -672,6 +671,76 @@ sub getSocioLike {
     push(@filtros, ( es_socio => { eq => $habilitados}));
     $orden = "apellido,nombre";
     my $ordenAux= $socioTemp->sortByString($orden);
+    
+   # $ordenAux = 'agregacion_temp,'.$ordenAux;
+    
+    my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
+                                                                            sort_by => $ordenAux,
+                                                                            limit   => $cantR,
+                                                                            offset  => $ini,
+                                                                            select => ['*','persona.*','length(apellido) AS agregacion_temp'],
+                                                                            with_objects => ['persona','ui','categoria','persona.ciudad_ref',
+                                                                                  'persona.documento'],
+     ); 
+
+    #Obtengo la cant total de socios para el paginador
+    my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros,
+                                                              with_objects => ['persona','ui','categoria','persona.ciudad_ref',
+                                                                                  'persona.documento'],
+                                                                     );
+
+    if(scalar(@$socios_array_ref) > 0){
+        return ($socios_array_ref_count, $socios_array_ref);
+    }else{
+        return (0,());
+    }
+}
+
+=item
+    Esta funcion busca por nro_documento, nro_socio, apellido y combinados por ej: "27 Car", donde 27 puede ser parte del DNI o legajo o ambos
+    Tambien recibe una credencial, para filtrar solo a los socios con dicha credencial
+=cut
+sub getSocioLikeByCredentialType {
+
+    my ($socio, $credential) = @_;
+
+    my @filtros;
+    my $socioTemp           = C4::Modelo::UsrSocio->new();
+    my @searchstring_array  = C4::AR::Utilidades::obtenerBusquedas($socio);
+    my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+    my $cantR               = $limit_pref;
+    my $ini                 = 0;
+    my $inicial             = undef;
+
+
+    if($socio ne 'TODOS'){
+        #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
+        if (!($inicial)){
+            foreach my $s (@searchstring_array){ 
+                push (  @filtros, ( or   => [   
+                                                'persona.nombre'    => { like => $s.'%'},   
+                                                'persona.nombre'    => { like => '% '.$s.'%'},
+                                                apellido            => { like => $s.'%'},
+                                                apellido            => { like => '% '.$s.'%'},
+                                                nro_documento       => { like => '%'.$s.'%' }, 
+                                                legajo              => { like => '%'.$s.'%' },
+                                                nro_socio           => { like => '%'.$s.'%' }          
+                                            ])
+                     );
+            }
+
+# TODO preferencia para ECONO
+        } else {
+            foreach my $s (@searchstring_array){ 
+                push (  @filtros, ( or   => [   apellido => { like => $s.'%'}, ]) );
+            }
+        }
+    }
+
+    push(@filtros, ( credential_type => { eq => $credential}));
+
+    my $orden       = "apellido, nombre";
+    my $ordenAux    = $socioTemp->sortByString($orden);
     
    # $ordenAux = 'agregacion_temp,'.$ordenAux;
     

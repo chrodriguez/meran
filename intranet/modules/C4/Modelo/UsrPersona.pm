@@ -153,7 +153,7 @@ sub convertirEnSocio{
 
     $self->log($data_hash,'convertirEnSocio');
 
-    $self->forget();
+#    $self->forget();
 
     my $db = $self->db;
     my $socio = C4::Modelo::UsrSocio->new(db => $db);

@@ -683,7 +683,7 @@ sub _verificarSession {
             } elsif (defined($session->param('flag')) && ($session->param('flag') eq 'LOGUIN_DUPLICADO')){
                     $code_MSG='U359';            
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => loguin duplicado");  
-            } elsif (($session->param('token') ne $token) and ($valido_token)){
+            } elsif ((C4::AR::Utilidades::validateString($token)) && (($session->param('token') ne $token) and ($valido_token))){
                     $code_MSG='U354';            
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => token invalido");    
                   } else {

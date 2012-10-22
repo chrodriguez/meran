@@ -165,6 +165,14 @@ function CrearAutocompleteUsuarios(options){
 					});
 }
 
+function CrearAutocompleteUsuariosByCredential(options){
+    _CrearAutocomplete( {   IdInput: options.IdInput, 
+                            IdInputHidden: options.IdInputHidden, 
+                            accion: 'autocomplete_usuarios_by_credential', 
+                            callBackFunction: options.callBackFunction,
+                    });
+}
+
 function CrearAutocompleteUsuariosConRegularidad(options){
     _CrearAutocomplete( {   IdInput: options.IdInput, 
                             IdInputHidden: options.IdInputHidden, 

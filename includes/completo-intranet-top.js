@@ -2042,7 +2042,8 @@ bytesTransfered=(Math.round(bytesUploaded*100)/100)
 +'%';document.getElementById('progressBar'+'_'+ID2_file).style.width=percentComplete.toString()+'%';document.getElementById('transferBytesInfo'+'_'+ID2_file).innerHTML=bytesTransfered;if(percentComplete==100){var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML='<span style="font-size: 18pt; font-weight: bold;">Procesando...</span>';uploadResponse.style.display='block';}}else{document.getElementById('progressBar').innerHTML='No se pudo completar';}}
 function uploadComplete(evt){clearInterval(intervalTimer);$('#'+'progressIndicator'+'_'+ID2_file+' > div').removeClass('active');$('#'+'progressIndicator'+'_'+ID2_file+' > div').removeClass('progress-striped');var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML=evt.target.responseText;uploadResponse.style.display='block';setTimeout(refreshMeranPage,4000);}
 function uploadFailed(evt){clearInterval(intervalTimer);alert("An error occurred while uploading the file.");}
-function uploadCanceled(evt){clearInterval(intervalTimer);alert("The upload has been canceled by the user or the browser dropped the connection.");}var overlay_on=false;function startOverlay(){try{if(!overlay_on){$('#ajax-indicator').modal({show:true,keyboard:false,backdrop:false,});overlay_on=true;}}
+function uploadCanceled(evt){clearInterval(intervalTimer);alert("The upload has been canceled by the user or the browser dropped the connection.");}
+function historyBack(){window.history.back();}var overlay_on=false;function startOverlay(){try{if(!overlay_on){$('#ajax-indicator').modal({show:true,keyboard:false,backdrop:false,});overlay_on=true;}}
 catch(e){}}
 function closeModal(id){try{if((id=='')||(id==null))
 $('#ajax-indicator').modal('hide');else
@@ -2121,6 +2122,7 @@ function CrearAutocompleteLenguajes(options){_CrearAutocomplete({IdInput:options
 function CrearAutocompleteAutores(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_autores',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteSoportes(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_soportes',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteUsuarios(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_usuarios',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteUsuariosByCredential(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_usuarios_by_credential',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteUsuariosConRegularidad(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_usuarios_con_regularidad',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteBarcodes(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_barcodes',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteBarcodesPrestados(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_barcodes_prestados',callBackFunction:options.callBackFunction,});}

@@ -597,12 +597,21 @@ sub devolver {
 		my $daysissue = $self->tipo->getDias_prestamo;
 
 		use C4::AR::Sanciones;
+
 		my $diasSancion =  C4::AR::Sanciones::diasDeSancion( $fechaHoy, $fechaVencimiento,$self->socio->getCod_categoria ,$self->getTipo_prestamo );
+
+
+      C4::AR::Debug::error("DIAS DE SANCION: ".$diasSancion);
+
 
 		if ( $diasSancion > 0 ) {
 
+
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
+
 			$self->debug("SANCION!!  DIAS: $diasSancion");
+
+
 
             $self->debug("SANCION!!  TIPO PRESTAMO: ".$self->getTipo_prestamo." CATEGORIA SOCIO: ".$self->socio->getCod_categoria);
 
