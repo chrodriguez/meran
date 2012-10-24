@@ -294,9 +294,9 @@
                                 </li>
                                 <li>
                                             [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Sanciones' | i18n %]",
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Esquemas de Sanciones' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/circulacion/sanciones.pl",
-                                                                                title =>    "[% 'Sanciones' | i18n %]"
+                                                                                title =>    "[% 'Esquemas de Sanciones' | i18n %]"
                                                                             ) ;
                                             [% END %]
                                 </li>
@@ -360,7 +360,7 @@
                                                                       ) ;
                                       [% END %]
                           </li>
-                          <li>
+<!--                           <li>
                                       [% PERL %]
                                           print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n de Estilos' | i18n %]",
                                                                           url =>      "[% url_prefix %]/admin/global/estilos_config.pl",
@@ -368,7 +368,7 @@
                                                                       ) ;
                                       [% END %]
                           </li>
-                          <li>
+ -->                          <li>
                                       [% PERL %]
                                           print C4::AR::Filtros::link_to( text =>     "<i class='icon-flag'></i> [% 'Feriados' | i18n %]",
                                                                           url =>      "[% url_prefix %]/admin/feriados.pl",
@@ -439,7 +439,7 @@
                                                                             ) ;
                                             [% END %]
                                 </li>
-	                            	<li>
+<!-- 	                            	<li>
 	                                            [% PERL %]
 	                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-lock'></i> [% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]",
 	                                                                                url =>      "[% url_prefix %]/admin/global/auth_methods.pl",
@@ -447,7 +447,7 @@
 	                                                                            ) ;
 	                                            [% END %]
 	                                </li>
-	                                <li>
+ -->	                                <li>
 	                                            [% PERL %]
 	                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-envelope'></i> [% 'Configuraci&oacute;n del Mail' | i18n %]",
 	                                                                                url =>      "[% url_prefix %]/admin/global/mail_config.pl",
@@ -464,24 +464,6 @@
 	                                                                            ) ;
 	                                            [% END %]
 	                                </li>
-	                            	<li class="nav-header">[% 'Importar' | i18n %]</li>	
-		              				<li class="divider"></li>
-	                                        <li>
-	                                                  [% PERL %]
-	                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Importar' | i18n %]",
-	                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
-	                                                                                      title =>    "[% 'Listar' | i18n %]"
-	                                                                                  ) ;
-	                                                  [% END %]
-	                                        </li>
-		                                  <li>
-		                                              [% PERL %]
-		                                                  print C4::AR::Filtros::link_to( text =>     "<i class='icon-share'></i> [% 'Exportar' | i18n %]",
-		                                                                                  url =>      "[% url_prefix %]/herramientas/exportacion/exportar.pl",
-		                                                                                  title =>    "[% 'Exportaci&oacute;n' | i18n %]"
-		                                                                              ) ;
-		                                              [% END %]
-		                                  </li>
               					[% END %]
                    </ul>
                </li>

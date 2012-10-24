@@ -6,21 +6,21 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-        [% IF ui.tieneLogoOpacMenu %]
         <div id="opacLogo">
-        	<a href="[% url_prefix %]/opac-main.pl" class="logo_opac_menu">
-        		<img src="[% temas %]/[% user_theme %]/imagenes/[% logo %]" />
-        	</a>
+          [% IF ui.tieneLogoOpacMenu %]
+          	<a href="[% url_prefix %]/opac-main.pl" class="logo_opac_menu">
+          		<img src="[% temas %]/[% user_theme %]/imagenes/[% logo %]" />
+          	</a>
+          [% ELSE %]
+      			[% PERL %]
+      	                   print C4::AR::Filtros::link_to( text    =>  "[% 'MERAN' | i18n %]",
+      	                                                    url     =>  '[% url_prefix %]/opac-main.pl',
+      	                                                    title   =>  "[% 'Inicio' | i18n %]",
+      	                                                    class	=> "brand brand_less_padding white",
+      	                            ) ;
+      			[% END %]
+    		[% END %]
         </div>
-        [% ELSE %]
-    			[% PERL %]
-    	                   print C4::AR::Filtros::link_to( text    =>  "[% 'MERAN' | i18n %]",
-    	                                                    url     =>  '[% url_prefix %]/opac-main.pl',
-    	                                                    title   =>  "[% 'Inicio' | i18n %]",
-    	                                                    class	=> "brand brand_less_padding",
-    	                            ) ;
-    			[% END %]
-		[% END %]
         <div class="nav-collapse">
           <ul class="nav">
 	            <li class="dropdown">

@@ -709,9 +709,6 @@ sub esRegularToString{
     
     eval{
         $result =  $object?$object->estado->getNombre:C4::AR::Filtros::i18n("INDEFINIDO");
-        if ($result == 1){
-        	
-        }
     };
     
     if ($@){

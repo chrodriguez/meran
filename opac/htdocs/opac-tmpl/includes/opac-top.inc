@@ -85,27 +85,27 @@
     <script type="text/javascript">    
 
       $(document).ready(function() {
-			$('.popover_button').popover({delay: { show: 600, hide: 100 }, trigger: 'hover'});
-			$(".alert").alert();
-          
-                    $(function () {
-                        var $alert = $('#alert_msg_main');
-                        if($alert.length)
-                        {
-                            $alert.animate({height: $alert.css('line-height') || '50px'}, 200)
-                            .click(function () {
-                                window.close;
-                                $alert.animate({height: '0'}, 200);
-                            });
-                        }
-                    });
-             [% IF portada %]
-             	$('#carousel_portada_opac').carousel({
-             		pause: "hover",
-             		interval: 5000,
-              });
-          	 [% END %]
-             	
+  			$('.popover_button').popover({delay: { show: 600, hide: 100 }, trigger: 'hover'});
+  			$(".alert").alert();
+            
+                      $(function () {
+                          var $alert = $('#alert_msg_main');
+                          if($alert.length)
+                          {
+                              $alert.animate({height: $alert.css('line-height') || '50px'}, 200)
+                              .click(function () {
+                                  window.close;
+                                  $alert.animate({height: '0'}, 200);
+                              });
+                          }
+                      });
+               [% IF portada %]
+               	$('#carousel_portada_opac').carousel({
+               		pause: "hover",
+               		interval: 5000,
+                });
+            	 [% END %]
+        $('#input-bar-search-opac-main').focus();   	
         });
 	</script>
 	

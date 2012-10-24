@@ -54,7 +54,9 @@
 		        	<input type="text" name="string" class="input-medium search-query span98 bigInput"
 	                 		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
 	                   		  speech onspeechchange="javascript:startSearch();"
+	                   		  id="input-bar-search-opac-main"
 	                   		  placeholder="[% IF title_search_bar %] [% title_search_bar %] [% ELSE %] [% 'Qu&eacute; necesit&aacute;s' | i18n %]? [% END %]"
+	                   		  autofocus="on"
 		        	>
 		        </p>
 		    </form>
