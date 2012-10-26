@@ -273,7 +273,7 @@ select OPCION in Jaula Sistemica
       break
     else
       echo "Solicitó una instalación sistemica de Meran, lo que significa que se modificará el sistema base."
-      echo "Para continuar con la instalación dependerá de la buena voluntad del Mono que termine el script."
+      echo "Este tipo de instalación no esta disponible por el momento de manera automática, siga los pasos especificados en el Readme si quiere hacerlo de forma manual"
       break
   fi
 done
