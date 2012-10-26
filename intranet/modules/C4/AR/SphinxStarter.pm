@@ -37,7 +37,11 @@ sub sysdebug{
 }
 
 sub sphinx_start{
-    my ($mgr)= @_;
+    my ($mgr,$conf)= @_;
+    my $context = new C4::Context($conf);
+    my $hash= $context->{'config'};
+    my $sphinx_conf= $hash->{'sphinx_conf'};
+    my $sphinx_bin_dir= $hash->{'sphinx_bin_dir'};
     defined (my $kid = fork) or die "Cannot fork: $!\n";
     if ($kid) {
     # Parent runs this block
@@ -45,15 +49,14 @@ sub sphinx_start{
     } else {
         # Child runs this block
         # some code comes here
-        $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") ,
-          bindir => C4::Context->config("sphinx_bin_dir")});
+        $mgr = Sphinx::Manager->new({ config_file => $sphinx_conf ,
+          bindir => $sphinx_bin_dir});
         $mgr->debug(1);
-
         my $pids = $mgr->get_searchd_pid;
         if(scalar(@$pids) == 0){
             $mgr->start_searchd;
-             sysdebug("El proceso ".$mgr->get_searchd_pid->[0]." acaba de prender por primera vez el servicio");
-        }else{
+            sysdebug("El proceso ".$mgr->get_searchd_pid->[0]." acaba de prender por primera vez el servicio");
+}else{
             sysdebug("Ya existe otro proceso de searchd");
             foreach my  $value (@$pids) {
                 my $string = `ps aux | grep $value`;
@@ -65,10 +68,10 @@ sub sphinx_start{
     }
 }
 
-BEGIN
-{
-  sphinx_start();
-};
+#BEGIN
+#{
+ # sphinx_start();
+#};
 
 
 

@@ -27,9 +27,11 @@ generarLogRotate()
 
 generarJaula()
 {
-  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/apache-jaula-ssl > /tmp/$ID-apache-jaula-tmp
+  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/apache-jaula-ssl > /tmp/$ID-apache-jaula-tmp2
+ sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID-apache-jaula-tmp2 > /tmp/$ID-apache-jaula-tmp
   sed s/reemplazarID/$(escaparVariable $ID)/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-ssl
-  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/apache-jaula-opac > /tmp/$ID-apache-jaula-tmp
+  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/apache-jaula-opac > /tmp/$ID-apache-jaula-tmp2
+ sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID-apache-jaula-tmp2 > /tmp/$ID-apache-jaula-tmp
   sed s/reemplazarID/$(escaparVariable $ID)/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-opac
   rm /tmp/$ID-apache-jaula-tmp
   #Generar certificado de apache
@@ -61,7 +63,8 @@ generarConfiguracion()
   sed s/reemplazarUSER/$(escaparVariable $USER_BDD_MERAN)/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarPASS/$(escaparVariable $PASS_BDD_MERAN)/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
   sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g  /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
-  sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g /tmp/$ID.meran2.conf > $CONFIGURACION_MERAN/meran$ID.conf
+  sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID.meran2.conf > /$ID.meran3.conf
+  sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g /tmp/$ID.meran3.conf > $CONFIGURACION_MERAN/meran$ID.conf
   rm /tmp/$ID.meran*
   generarScriptDeInicio
 }
@@ -83,7 +86,8 @@ generarCrons()
 
 generarScriptDeInicio()
 {  
- sed s/reemplazarID/$(escaparVariable $ID)/g $sources_MERAN/iniciando.pl > /tmp/iniciando$ID.pl
+ sed s/reemplazarID/$(escaparVariable $ID)/g $sources_MERAN/iniciando.pl > /tmp/iniciando$ID.pl2
+ sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/iniciando$ID.pl2 > /tmp/iniciando$ID.pl
  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g  /tmp/iniciando$ID.pl > $CONFIGURACION_MERAN/iniciando$ID.pl
  rm /tmp/iniciando$ID.pl
 }
