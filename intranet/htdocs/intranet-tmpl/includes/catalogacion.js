@@ -1282,11 +1282,12 @@ function procesarInfoJson(marc_object_array, id_padre){
 
         //los indicadores quedan ocultos y se muestran en una ventana
         strComp                 = strComp + "<form id='" + id_div_alta_indicador + "' class= 'modal fade hide form-horizontal well' onsubmit='return false;'>";
-   
+    
+        strComp                += '<div class="modal-header"><h3>Indicadores</h3></div>';
         
         //genero el indicador primario
         if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
-            strIndicadores = "<div class='control-group'>" + "<label for='"+id_div_alta_indicador+"'>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</label>"+"<div class='controls'>";
+            strIndicadores = "<div class='modal-body'><div class='control-group'>" + "<label for='"+id_div_alta_indicador+"'>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</label>"+"<div class='controls'>";
             strIndicadores = strIndicadores + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, id_aux);
             strIndicadores = strIndicadores + "<p class='help-inline'>Seleccione un indicador primario para el campo</p>";
             strIndicadores = strIndicadores + "</div></div>";
@@ -1298,10 +1299,10 @@ function procesarInfoJson(marc_object_array, id_padre){
             strIndicadores += "<div class='control-group'>" + "<label for='"+id_div_alta_indicador+"'>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</label>"+"<div class='controls'>";
             strIndicadores = strIndicadores + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, id_aux);
             strIndicadores = strIndicadores + "<p class='help-block'>Seleccione un indicador secundario para el campo</p>";
-            strIndicadores = strIndicadores + "</div></div>";
+            strIndicadores = strIndicadores + "</div></div></div>";
         }
         
-        strIndicadores = strIndicadores + "<div class='form-actions'><p style='text-align: center; margin: 0;'>";
+        strIndicadores = strIndicadores + "<div class='modal-footer'><p style='text-align: center; margin: 0;'>";
         
         strIndicadores = strIndicadores + "<button class='btn horizontal' onclick=close_alta_indicador('"+id_div_alta_indicador+"');>Cancelar</button>";
         strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_alta_indicador + ", " + i +");'>Aceptar</button></p>";
@@ -1476,7 +1477,7 @@ function ayudaParaCampo(campo){
 
 function updateAyudaParaCampo(responseText){
     $('#ayudaMARC').html(responseText);
-    $('#ayudaMARC').modal();
+    $('#ayudaMARC').modal('show');
 }
 
 function generarOpcionesParaSelect(array_options){
