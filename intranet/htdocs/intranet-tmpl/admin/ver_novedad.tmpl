@@ -22,8 +22,8 @@
     <div class="control-group">
         <div class="controls">
             [% FOREACH imagen IN imagenes_hash %]
-                <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
-                    <img border="0" src="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+                <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                    <img border="0" src="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
                           style="width: 60%; max-width: 120px;" 
                           alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
                           title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
@@ -38,5 +38,15 @@
   
 </div>
 <div class="modal-footer">
-   <h4> [% novedad.getFechaLegible %]</h4>
+  <p class="help-block">
+     <h5 class="left">[% novedad.getFechaLegible %]</h5>
+        [% 'Creado por ' | i18n %]
+        [% PERL %]
+            print C4::AR::Filtros::link_to(   text =>     "[% novedad.getUsuario %]",
+                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                              params =>   ["nro_socio=[% novedad.getUsuario %]"],
+                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                        );
+        [% END %]
+    </p>        
 </div>
