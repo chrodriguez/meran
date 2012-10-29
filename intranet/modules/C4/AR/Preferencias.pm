@@ -495,6 +495,9 @@ sub getMetodosAuthAll{
 	return ($metodos_auth);
 }
 
+sub unsetCacheMeran{
+    C4::AR::CacheMeran::borrar();
+}
 
 BEGIN{
       C4::AR::Preferencias::reloadAllPreferences();
