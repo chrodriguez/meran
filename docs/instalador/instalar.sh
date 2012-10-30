@@ -104,7 +104,7 @@ OPTIONS:
    -i      Identificador para esta instalación de meran. Este Identificador se va a utilizar en todo
    -d      Carpeta DESTINO donde se guardara meran. Por defecto /usr/share/meran
    -b      Base de datos a usar. Por Defecto va a ser meran
-   -u      Usuario que se va a conectar a la base de datos. Por defecto kohaadmin
+   -u      Usuario que se va a conectar a la base de datos. Por defecto meranadmin
    -p      Pass del usuario que se va a conectar a la base de dato. Por defecto sera un random
    -s      Usuario que se va a utilizar en el indice. Por defecto indice
    -w      Pass del usuario que se va a utilizar en el indice. Por defecto sera un random
@@ -196,7 +196,7 @@ do
         #Instalar paquetes
         #su
         apt-get update
-        apt-get install apache2 mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15 ntp -y
+        apt-get install apache2 mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15 ntp-date -y
         #Configurar apache
         echo "Procederemos a habilitar en apache los modulos necesarios"
         a2enmod rewrite

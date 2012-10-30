@@ -28,35 +28,35 @@ function guardarCambiarPassword(){
         }
         
         [% IF minPassLength %]
-        if($("#newpassword1").val().length < [% minPassLength %])
-        {
-            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassLength %] caracteres.');
-            return false;
-        }
+            if($("#newpassword1").val().length < [% minPassLength %])
+            {
+                jAlert('Por favor verifique que la nueva password contenga al menos [% minPassLength %] caracteres.');
+                return false;
+            }
         [% END %]
         
         [% IF minPassNumeric %]
-        if (!$("#newpassword1").val().match(/([0-9]{[% minPassNumeric %],})/)) 
-        {
-            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassNumeric %] numeros.');
-            return false;
-        }
+            if (!$("#newpassword1").val().match(/([0-9]{[% minPassNumeric %],})/)) 
+            {
+                jAlert('Por favor verifique que la nueva password contenga al menos [% minPassNumeric %] numeros.');
+                return false;
+            }
         [% END %]
         
         [% IF minPassAlpha %]
-        if (!$("#newpassword1").val().match(/([a-zA-Z]{[% minPassAlpha %],})/)) 
-        {
-            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassAlpha %] letras.');
-            return false;
-        }
+            if (!$("#newpassword1").val().match(/([a-zA-Z]{[% minPassAlpha %],})/)) 
+            {
+                jAlert('Por favor verifique que la nueva password contenga al menos [% minPassAlpha %] letras.');
+                return false;
+            }
         [% END %]
         
         [% IF minPassSymbol %]
-        if (!$("#newpassword1").val().match(/(\W{[% minPassSymbol %],})/)) 
-        {
-            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassSymbol %] simbolos.');
-            return false;
-        }
+            if (!$("#newpassword1").val().match(/(\W{[% minPassSymbol %],})/)) 
+            {
+                jAlert('Por favor verifique que la nueva password contenga al menos [% minPassSymbol %] simbolos.');
+                return false;
+            }
         [% END %]
     
         $("#actual_password").val(hash_actual);
