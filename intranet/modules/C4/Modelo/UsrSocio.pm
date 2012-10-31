@@ -183,7 +183,7 @@ sub agregar{
     
     $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
 
-    if ($data_hash->{'changepassword'}){
+    if ($data_hash->{'changepassword'} eq '1'){
         $self->forzarCambioDePassword(1);
     }
     
@@ -297,6 +297,14 @@ sub modificar{
         $self->setCumple_requisito("0000000000:00:00");
     }
     
+    my $change_password = $data_hash->{'changepassword'};
+    
+    if ($change_password eq '1'){
+        $self->forzarCambioDePassword();
+    }else{
+        $self->setChange_password(0);
+    }
+
     $self->persona->modificar($data_hash);
     $self->agregarAutorizado($data_hash);
 
@@ -709,9 +717,6 @@ sub esRegularToString{
     
     eval{
         $result =  $object?$object->estado->getNombre:C4::AR::Filtros::i18n("INDEFINIDO");
-        if ($result == 1){
-        	
-        }
     };
     
     if ($@){

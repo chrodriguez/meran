@@ -8,4 +8,5 @@ use CGI;
 use Rose::DB;
 use C4::AR::CacheMeran;
 use C4::AR::SphinxStarter;
+C4::AR::SphinxStarter->sphinx_start("reemplazarCONFMERAN/meranreemplazarID.conf");
 return 1;

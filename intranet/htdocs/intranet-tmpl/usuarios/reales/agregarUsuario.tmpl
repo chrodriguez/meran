@@ -91,7 +91,7 @@
                 <label class="control-label" for="nro_documento">[% "Documento" | i18n %]*</label>    
                       <div class="controls">
                           [% combo_tipo_documento %] 
-                          <input  id="nro_documento" name="nro_documento" required class="input focused" type="number" value="[% socio_modificar.persona.getNro_documento %]">
+                          <input  id="nro_documento" name="nro_documento" required class="input focused" type="text" value="[% socio_modificar.persona.getNro_documento %]">
                       </div>
             </div>
 
@@ -220,10 +220,10 @@
             [% END %]
             
             <div class="control-group">
-                <!--    <label class="control-label" for="changepassword">[% "Forzar cambio de contrase&ntilde;a " | i18n %]</label>-->
                     <div class="controls">
                               <label class="checkbox">
-                                    <input  id="changepassword" name="changepassword" type="checkbox"  [% socio_modificar.getChange_password %] checked>[% "Forzar cambio de contrase&ntilde;a " | i18n %]
+                                    <input  id="changepassword" name="changepassword" type="checkbox"  [% IF socio_modificar.getChange_password %] checked [% END %]>
+                                    [% "Forzar cambio de contrase&ntilde;a " | i18n %]
                               </label>      
                     </div>
             </div>

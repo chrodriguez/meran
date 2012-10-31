@@ -397,10 +397,7 @@ sub setVariable {
 #        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
         $preferencia->[0]->save();
-#        $PREFERENCES->{$variable} = $valor;
-        # porque hacia esto ? ==> reloadAllPreferences();
-        
-#        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
+        reloadAllPreferences();
         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
     }
 }
@@ -498,6 +495,9 @@ sub getMetodosAuthAll{
 	return ($metodos_auth);
 }
 
+sub unsetCacheMeran{
+    C4::AR::CacheMeran::borrar();
+}
 
 BEGIN{
       C4::AR::Preferencias::reloadAllPreferences();

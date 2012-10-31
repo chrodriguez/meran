@@ -454,6 +454,10 @@ sub _new_stopwords
 	return $stopwordlist;
 }
 
+BEGIN{
+      new C4::Context;
+};
+
 1;
 
 __END__

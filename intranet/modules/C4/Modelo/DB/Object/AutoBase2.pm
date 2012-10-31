@@ -260,6 +260,10 @@ sub modifyFieldValue{
 
     $self->{$field} = $value;
 
+    if ($self->meta->class eq "C4::Modelo::CatAutor"){
+      $self->setCompleto();
+    }
+
     $self->save;
 }
     
