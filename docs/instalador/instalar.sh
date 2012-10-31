@@ -274,6 +274,12 @@ select OPCION in Jaula Sistemica
           $DESTINO_MERAN/$ID/sphinx/bin/indexer -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf --all --rotate
           $DESTINO_MERAN/$ID/sphinx/bin/searchd -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
       fi
+
+      chown www-data:www-data $DESTINO_MERAN/$ID/opac/htdocs/uploads/ -R
+      chown www-data:www-data $DESTINO_MERAN/$ID/opac/htdocs/opac-tmpl/uploads/ -R
+      chown www-data:www-data $DESTINO_MERAN/$ID/intranet/htdocs/uploads -R
+      chown www-data:www-data $DESTINO_MERAN/$ID/intranet/htdocs/private-uploads -R
+
       break
     else
       echo "Solicitó una instalación sistemica de Meran, lo que significa que se modificará el sistema base."
