@@ -92,6 +92,40 @@ generarScriptDeInicio()
  rm /tmp/iniciando$ID.pl
 }
 
+descomprimirArchivos()
+{
+	echo "Procedemos a la instalación"
+	echo "Descomprimiendo Intranet y Opac"
+	tar xzf $sources_MERAN/intranetyopac.tar.gz -C $DESTINO_MERAN/$ID
+	echo "Descomprimiendo las dependencias" 
+	tar xzf $sources_MERAN/jaula$versionKernel.tar.gz -C $DESTINO_MERAN/$ID/intranet/modules/C4/
+	echo "Descomprimiendo sphinxsearch" 
+	tar xzf $sources_MERAN/sphinx$versionKernel.tar.gz -C $DESTINO_MERAN/$ID
+      
+}
+cambiarPermisos()
+{
+      chown www-data:www-data $DESTINO_MERAN/$ID/opac/htdocs/uploads/ -R
+      chown www-data:www-data $DESTINO_MERAN/$ID/opac/htdocs/opac-tmpl/uploads/ -R
+      chown www-data:www-data $DESTINO_MERAN/$ID/intranet/htdocs/uploads -R
+      chown www-data:www-data $DESTINO_MERAN/$ID/intranet/htdocs/private-uploads -R
+
+
+	
+}
+arrancarSphinx()
+{
+echo "Ahora el Sphinx"
+      if [ $(netstat -natp |grep searchd |grep 9312|wc -l) -gt 0 ]
+        then
+          echo "Sphinx ya esta corriendo vas a tener que combinar a mano el archivo de configuracion y generar los indices"
+          echo "El archivo generado que tiene que andar es el $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf "
+        else
+          echo "Como Sphinx no estaba ejecutándose lo vamos a hacer ahora"
+          $DESTINO_MERAN/$ID/sphinx/bin/indexer -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf --all --rotate
+          $DESTINO_MERAN/$ID/sphinx/bin/searchd -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
+      fi
+}
 usage()
 {
 cat << EOF
@@ -186,8 +220,8 @@ if [ $(perl -v|grep 5.10.1|wc -l) -eq 0 ];
 fi
 
 
-echo "¿Quiere proceder a instalar toda la base necesaria para Meran?"
-select OPCION in Instalar No_instalar
+echo "¿Quiere proceder a instalar todo el software de base base necesaria para Meran? (Apache/Mysql/perl/etc)"
+select OPCION in Instalar No_instalar 
 do
     if [ $OPCION = Instalar ]; 
         then
@@ -207,16 +241,17 @@ do
         a2dissite default
         break
     else
-        echo "NO se instalará nada base"
-        break
+	    echo "NO se instalará nada base"
+            break
     fi
 done
 
-echo "Seleccione el tipo de Instalacion que quiere realizar"
+echo "Ahora si vamos a instalar Meran en el sistema"
+echo "Seleccione el tipo de Operación que quiere realizar"
 
-select OPCION in Jaula Sistemica
+select OPCION in InstalacionNueva Actualizar
   do
-  if [ $OPCION = Jaula ]; 
+  if [ $OPCION = InstalacionNueva ]; 
     then
       echo "Procediendo a la Instalación como Jaula de la aplicación"
       echo "Este proceso instalará los módulos específicos para la arquitectura de su Kernel que ya vienen precompilados y se distribuyen junto con Meran"
@@ -240,13 +275,7 @@ select OPCION in Jaula Sistemica
                 echo "Se backupeo el directorio original a $DESTINO_MERAN$fecha"
       fi
       mkdir -p $DESTINO_MERAN/$ID
-      echo "Procedemos a la instalación"
-      echo "Descomprimiendo Intranet y Opac" 
-      tar xzf $sources_MERAN/intranetyopac.tar.gz -C $DESTINO_MERAN/$ID
-      echo "Descomprimiendo las dependencias" 
-      tar xzf $sources_MERAN/jaula$versionKernel.tar.gz -C $DESTINO_MERAN/$ID/intranet/modules/C4/
-      echo "Descomprimiendo sphinxsearch" 
-      tar xzf $sources_MERAN/sphinx$versionKernel.tar.gz -C $DESTINO_MERAN/$ID
+      descomprimirArchivos
       echo "Generando Archivos de logs y logrotate"
       generarLogRotate
       echo "Copiando configuración de sphinx" 
@@ -264,23 +293,21 @@ select OPCION in Jaula Sistemica
       #Reiniciar apache 
       /etc/init.d/apache2 restart
       #Iniciar sphinx
-      echo "Ahora el Sphinx"
-      if [ $(netstat -natp |grep searchd |grep 9312|wc -l) -gt 0 ]
-        then
-          echo "Sphinx ya esta corriendo vas a tener que combinar a mano el archivo de configuracion y generar los indices"
-          echo "El archivo generado que tiene que andar es el $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf "
-        else
-          echo "Como Sphinx no estaba ejecutándose lo vamos a hacer ahora"
-          $DESTINO_MERAN/$ID/sphinx/bin/indexer -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf --all --rotate
-          $DESTINO_MERAN/$ID/sphinx/bin/searchd -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
-      fi
-
-      chown www-data:www-data $DESTINO_MERAN/$ID/opac/htdocs/uploads/ -R
-      chown www-data:www-data $DESTINO_MERAN/$ID/opac/htdocs/opac-tmpl/uploads/ -R
-      chown www-data:www-data $DESTINO_MERAN/$ID/intranet/htdocs/uploads -R
-      chown www-data:www-data $DESTINO_MERAN/$ID/intranet/htdocs/private-uploads -R
-
+      arrancarSphinx
+      cambiarPermisos
       break
+    elif [ $OPCION = Actualizar ];
+	then 
+    	   echo "Se hará una actualización"
+	   if [ -d $DESTINO_MERAN/$ID ]; 
+	   then
+	     descomprimirArchivos
+      	     cambiarPermisos
+	     break
+	   else
+	     echo "No existe la instalación"
+	    break
+	   fi
     else
       echo "Solicitó una instalación sistemica de Meran, lo que significa que se modificará el sistema base."
       echo "Este tipo de instalación no esta disponible por el momento de manera automática, siga los pasos especificados en el Readme si quiere hacerlo de forma manual"
