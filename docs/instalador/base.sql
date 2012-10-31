@@ -2646,7 +2646,7 @@ CREATE TABLE `rep_historial_busqueda` (
   `agregacion_temp` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idHistorial`),
   KEY `FK_idBusqueda` (`idBusqueda`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2655,7 +2655,6 @@ CREATE TABLE `rep_historial_busqueda` (
 
 LOCK TABLES `rep_historial_busqueda` WRITE;
 /*!40000 ALTER TABLE `rep_historial_busqueda` DISABLE KEYS */;
-INSERT INTO `rep_historial_busqueda` VALUES (1,1,'keyword','test','OPAC',NULL,NULL),(2,1,'keyword','test','OPAC',NULL,NULL),(3,2,'keyword','econo','OPAC',NULL,NULL),(4,2,'keyword','econo','OPAC',NULL,NULL),(5,6,'keyword','econo','OPAC',NULL,NULL),(6,6,'keyword','econo','OPAC',NULL,NULL),(7,8,'keyword','prueba','OPAC',NULL,NULL),(8,8,'keyword','prueba','OPAC',NULL,NULL),(9,9,'keyword','prueba','OPAC',NULL,NULL),(10,9,'keyword','prueba','OPAC',NULL,NULL),(11,10,'keyword','prueba','OPAC',NULL,NULL),(12,10,'keyword','prueba','OPAC',NULL,NULL),(13,11,'keyword','prueba','OPAC','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4',NULL),(14,11,'keyword','prueba','OPAC','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4',NULL),(15,12,'keyword','hola','OPAC','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1',NULL),(16,12,'keyword','hola','OPAC','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1',NULL);
 /*!40000 ALTER TABLE `rep_historial_busqueda` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2682,7 +2681,7 @@ CREATE TABLE `rep_historial_circulacion` (
   `tipo_prestamo` char(2) DEFAULT NULL,
   `agregacion_temp` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2691,7 +2690,6 @@ CREATE TABLE `rep_historial_circulacion` (
 
 LOCK TABLES `rep_historial_circulacion` WRITE;
 /*!40000 ALTER TABLE `rep_historial_circulacion` DISABLE KEYS */;
-INSERT INTO `rep_historial_circulacion` VALUES (1,1,1,1,'reserva','meranadmin','meranadmin','MERA','2012-10-29 13:29:25','2012-10-29',NULL,'0000-00-00','DO',NULL),(2,1,1,0,'espera','meranadmin','meranadmin','MERA','2012-10-29 13:29:25','2012-10-29',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `rep_historial_circulacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3216,4 +3214,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-10-30 18:50:24
+-- Dump completed on 2012-10-31 14:42:40

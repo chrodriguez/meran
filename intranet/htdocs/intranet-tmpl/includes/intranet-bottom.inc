@@ -8,13 +8,9 @@
         </div> <!-- container_test -->
 
         [% IF !registrado_meran %]
-            <a target="_blank" href="http://meran.unlp.edu.ar/registrarse/" onclick="refreshMeranPage();" class="btn btn-large btn-success right" style="margin-right: 10px;">
+            <a target="_blank" href="register.pl" onclick="setTimeout(function(){refreshMeranPage();}, 5000);" class="btn btn-large btn-success right" style="margin-right: 10px;">
                     [% 'Registrar' | i18n %]
             </a>  
-
-            [% PERL %]
-                C4::AR::Preferencias::setVariable('registradoMeran', 1);
-            [% END %]
             
         [% END %]
 
