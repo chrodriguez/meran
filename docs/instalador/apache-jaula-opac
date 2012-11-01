@@ -4,7 +4,7 @@ DirectoryIndex /meran/opac-main.pl
 DocumentRoot reemplazarPATHBASE/reemplazarID/opac/htdocs
 ErrorLog /var/log/meran/reemplazarID/opac-error.log
 TransferLog /var/log/meran/reemplazarID/opac-access.log
-SetEnv MERAN_CONF "/etc/meran/meranreemplazarID.conf"
+SetEnv MERAN_CONF "reemplazarCONFMERAN/meranreemplazarID.conf"
 Header set Access-Control-Allow-Origin *
 #SetEnv PERL5LIB "reemplazarPATHBASE/reemplazarID/intranet/modules"
 
@@ -30,7 +30,7 @@ push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl5/");
 </Perl>
 
-PerlPostConfigRequire /etc/meran/iniciandoreemplazarID.pl
+PerlPostConfigRequire reemplazarCONFMERAN/iniciandoreemplazarID.pl
 
 Alias /includes/ "reemplazarPATHBASE/reemplazarID/includes/"
 <Directory reemplazarPATHBASE/reemplazarID/includes/ >

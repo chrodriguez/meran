@@ -696,8 +696,22 @@ sub estaEnFechaDeRenovacion {
 	my $err;
 	my $dateformat = C4::Date::get_date_format();
 	my $hoy =  C4::Date::format_date_in_iso(Date::Manip::DateCalc( Date::Manip::ParseDate("today"), "+ 0 days", \$err ), $dateformat );
+
+#Agregados para que renueve los sabados tambien
+	my $apertura               =C4::AR::Preferencias::getValorPreferencia("open");
+	my $cierre                 =C4::AR::Preferencias::getValorPreferencia("close");
+	my $first_day_week         =C4::AR::Preferencias::getValorPreferencia("primer_dia_semana");
+	my $last_day_week          =C4::AR::Preferencias::getValorPreferencia("ultimo_dia_semana");
+	my ($actual,$min,$hora)    = localtime;
+	
+	$actual=($hora).':'.$min;
+	Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
+    Date_Init("WorkWeekBeg=".$first_day_week,"WorkWeekEnd=".$last_day_week);
+#fin agregados
+
 	my $desde = C4::Date::format_date_in_iso(Date::Manip::DateCalc($self->getFecha_vencimiento,"- ".$self->tipo->getDias_antes_renovacion . " business days",\$err),$dateformat );
 	my $flag = Date_Cmp( $desde, $hoy );
+
 
 	#comparo la fecha de hoy con el inicio del plazo de renovacion
 	if ( !( $flag gt 0 ) ) {

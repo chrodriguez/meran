@@ -32,24 +32,18 @@ sub reindexar{
     if(C4::AR::Preferencias::getValorPreferencia('indexado')){
         C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO!!!!!!!");
     } else {
-        C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA DESACTUALIZADO!!!!!!!!");
-        my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
-        #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada
-        #Esto no deberia llamarse mas porque el sphinx es un servicio del squezze ahora!
-        #asi que lo comento
-        #C4::AR::Sphinx::sphinx_start($mgr);
-
+	C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA DESACTUALIZADO!!!!!!!!");
+	my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") , bindir => C4::Context->config("sphinx_bin_dir"), searchd_bin=> C4::Context->config("sphinx_bin_dir")});
+        sphinx_start($mgr);
+        my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
         my @args;
-        
-        my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';        
-        
         push (@args, $index_to_use);
         push (@args, '--rotate');
         push (@args, '--quiet');
-        #$mgr->indexer_sudo("sudo");
         $mgr->indexer_args(\@args);
         $mgr->run_indexer();
-        C4::AR::Debug::debug("Sphinx => reindexar => --all --rotate => ");
+        C4::AR::Debug::debug("Sphinx => reindexar => --all --ro/tate => ");
+        C4::AR::Debug::debug("Sphinx => reindexando indice =>". $index_to_use);
         C4::AR::Preferencias::setVariable('indexado', 1);
     }
 
@@ -68,10 +62,8 @@ sub sphinx_start{
       } else {
           # Child runs this block
           # some code comes here
-          $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") ,
-            bindir => C4::Context->config("sphinx_bin_dir")});
+	 $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") , bindir => C4::Context->config("sphinx_bin_dir"), searchd_bin=> C4::Context->config("sphinx_bin_dir")});
           $mgr->debug(1);
-      #$mgr->searchd_sudo("sudo");
           my $pids = $mgr->get_searchd_pid;
           if(scalar(@$pids) == 0){
                #C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
@@ -82,8 +74,7 @@ sub sphinx_start{
           CORE::exit(0);
       }
   }else{
-    $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") ,
-            searchd_bin => C4::Context->config("sphinx_bin_dir")});
+	 $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") , bindir => C4::Context->config("sphinx_bin_dir"), searchd_bin=> C4::Context->config("sphinx_bin_dir")});
       $mgr->debug(1);
       #$mgr->searchd_sudo("sudo");
       my $pids = $mgr->get_searchd_pid;

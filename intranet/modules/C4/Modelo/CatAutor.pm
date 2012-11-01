@@ -99,6 +99,7 @@ sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
 
+
     $self->nombre($nombre);
     $self->setCompleto($self->getCompleto);
 }
@@ -159,11 +160,11 @@ sub getCompleto{
     
 sub setCompleto{
     my ($self) = shift;
-    my ($completo) = @_;
+    my ($completo) = shift;
 
     $completo = C4::AR::Utilidades::trim($completo);
 
-    if (!$completo){
+    if ( (!C4::AR::Utilidades::validateString($completo))||($completo eq "_SIN_VALOR_")){
         if($self->getApellido){
             
             $completo = $self->getApellido;

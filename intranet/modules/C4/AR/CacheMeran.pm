@@ -106,10 +106,6 @@ sub borrar{
     C4::AR::CacheMeran::nueva();
 }
 
-sub borrar{
-    C4::AR::CacheMeran::nueva();
-}
-
 
 BEGIN{
       C4::AR::CacheMeran::nueva();

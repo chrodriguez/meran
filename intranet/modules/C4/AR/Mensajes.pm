@@ -651,8 +651,8 @@ my %mensajesINTRA = (
     'TD005' => 'Ocurri&oacute; un error mientras se eliminaba el tipo de documento',
 
     #portadas nivel 2
-    'POR00' => 'Error guardando la imagen de la portada, int&eacute;ntelo nuevamente.',
-    'POR01' => 'Las imagenes fueron modificadas con &eacute;xito',
+    'POR00' => 'Error guardando la imagen de la portada, intentelo nuevamente.',
+    'POR01' => 'Las imagenes fueron modificadas con exito',
 
     #novedades
     'NOV00' => 'La novedad fue guardada con &eacute;xito',

@@ -14,12 +14,13 @@ function showAddPortadaEdicion(id2, id1){
 function updateShowAddPortadaEdicion(responseText){
 
     $('#addPortadaEdicion').html(responseText);
-    $('#addPortadaEdicion').modal();
+    $('#addPortadaEdicion').modal('show');
 
 }
 
 function guardarFormPortadaEdicion(responseText){
-
+    $('#addPortadaEdicion').modal('hide');
+    startOverlay();
     $('#formAddPortadaEdicion').submit();
 
 }

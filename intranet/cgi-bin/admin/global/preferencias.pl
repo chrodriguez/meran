@@ -34,9 +34,7 @@ if($input->param('editando')){
     my $tmp;
     
     foreach my $preferencia (@$preferenciasSistema){ 
-
-        $tmp = C4::AR::Preferencias::t_modificarVariable($preferencia->getVariable,$input->param($preferencia->getVariable),$preferencia->getExplanation,'sistema');
-        
+        $tmp = C4::AR::Preferencias::setVariable($preferencia->getVariable,$input->param($preferencia->getVariable));
     }
     
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP000', 'params' => []} ) ;
