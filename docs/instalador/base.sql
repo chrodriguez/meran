@@ -1851,7 +1851,7 @@ CREATE TABLE `portada_opac` (
 
 LOCK TABLES `portada_opac` WRITE;
 /*!40000 ALTER TABLE `portada_opac` DISABLE KEYS */;
-INSERT INTO `portada_opac` VALUES (11,'aa50034975b912ac5449f3f2a8de6e74.png','Esta imágen es una demostración. Es recomendable cambiarla al activar el sitio','Un nuevo enfoque en la gestión bibliotecaria',1),(12,'3df998026f8b0045e67bc3e1b30bcd63.png','Didiva sus ejemplares por estantes virtuales, reflejando la Biblioteca física, u organizando por temas su colección','La eficiencia de la división',2),(13,'4d1cd120e9ff071e5ca4d03b91941d7f.png','Con Meran, organizar el catálogo es sólo una secuencia de pasos','Cuando la organización lo es todo',3);
+INSERT INTO `portada_opac` VALUES (11,'aa50034975b912ac5449f3f2a8de6e74.png','Esta imágen es una demostración. Es recomendable cambiarla al activar el sitio','Un nuevo enfoque en la gestión bibliotecaria',1),(12,'3df998026f8b0045e67bc3e1b30bcd63.png','ivida sus ejemplares por estantes virtuales, reflejando la Biblioteca física, u organizando por temas su colección','La eficiencia de la división',2),(13,'4d1cd120e9ff071e5ca4d03b91941d7f.png','Con Meran, organizar el catálogo es sólo una secuencia de pasos','Cuando la organización lo es todo',3);
 /*!40000 ALTER TABLE `portada_opac` ENABLE KEYS */;
 UNLOCK TABLES;
 

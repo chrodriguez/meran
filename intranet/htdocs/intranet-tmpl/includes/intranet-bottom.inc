@@ -8,7 +8,7 @@
         </div> <!-- container_test -->
 
         [% IF !registrado_meran %]
-            <a target="_blank" href="register.pl" onclick="setTimeout(function(){refreshMeranPage();}, 5000);" class="btn btn-large btn-success right" style="margin-right: 10px;">
+            <a target="_blank" href="[% url_prefix %]/register.pl" onclick="setTimeout(function(){refreshMeranPage();}, 5000);" class="btn btn-large btn-success right" style="margin-right: 10px;">
                     [% 'Registrar' | i18n %]
             </a>  
             

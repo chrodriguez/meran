@@ -972,6 +972,7 @@ legend{}
 .margin_top_3px{margin-top:3px;}
 .no_margin{margin:0 !important;}
 .darkGrey{color:#222222;}
+.flexslider .slides>li{display:none;-webkit-backface-visibility:hidden;margin:0 !important;}
 .alert-success blockquote{border-left:5px solid #DFF0D8 !important;}
 .title{background-color:#FAFAFA;font-size:20px;margin-bottom:20px;margin-top:15px;min-height:20px;padding:4px;}
 body{padding-bottom:60px;}
@@ -1013,7 +1014,7 @@ body{padding-bottom:60px;}
 .nano .content{padding:1px;}
 .nano .pane{background:#444;}
 #fotoUsuario{width:200px;float:right;}
-body{position:relative;padding-top:40px;}
+body{position:relative;padding-top:50px;}
 h3 code{font-size:14px;font-weight:normal;}
 body>.navbar{font-size:13px;}
 body>.navbar .brand{padding-right:0;padding-left:0;margin-left:20px;float:right;font-weight:bold;color:#000;text-shadow:0 1px 0 rgba(255, 255, 255, 0.1),0 0 30px rgba(255, 255, 255, 0.125);-webkit-transition:all .2s linear;-moz-transition:all .2s linear;transition:all .2s linear;}

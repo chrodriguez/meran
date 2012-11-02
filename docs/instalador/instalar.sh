@@ -303,6 +303,7 @@ select OPCION in InstalacionNueva Actualizar
 	   then
 	     descomprimirArchivos
       	     cambiarPermisos
+            /etc/init.d/apache2 restart
 	     break
 	   else
 	     echo "No existe la instalación"
