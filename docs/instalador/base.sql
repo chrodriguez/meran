@@ -118,7 +118,6 @@ CREATE TABLE `adq_pedido_cotizacion_detalle` (
 
 LOCK TABLES `adq_pedido_cotizacion_detalle` WRITE;
 /*!40000 ALTER TABLE `adq_pedido_cotizacion_detalle` DISABLE KEYS */;
-INSERT INTO `adq_pedido_cotizacion_detalle` VALUES (1,1,861,'Dornbusch, Rudiger','MacroeconomÃ­a','ref_localidad@33906','McGraw-Hill','0000-00-00','','84-481-1883-9',3,0,1,1),(2,1,10490,'PoviÃ±a, Alfredo','Diccionario de sociologÃ­a a travÃ©s de los sociÃ³logos','Buenos Aires','Astrea','0000-00-00','','',2,0,2,2),(3,1,5124,'Mantel, Rolf R.','Aranceles Ã³ptimos, represalias y la existencia de equilibrios de polÃ­tica comercial','Buenos Aires','Centro de Estudios MacroeconÃ³micos de Argentina','0000-00-00','','',3,0,3,3),(4,2,NULL,'Pepe, Luz','Adquisiciones en la biblioteca','La Plata','Edulp','0000-00-00','','',2,0,4,1),(5,2,NULL,'Pietroboni, Maria Fernanda','Las bibliotecas del nuevo milenio','Buenos Aires','Alfagrama','0000-00-00','','',2,0,5,2),(6,3,NULL,'Ander-Egg, Ezequiel','IntroducciÃ³n a la planificaciÃ³n estratÃ©gica','Buenos Aires','Lumen','0000-00-00','','',4,0,6,1);
 /*!40000 ALTER TABLE `adq_pedido_cotizacion_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,7 +316,6 @@ CREATE TABLE `adq_recomendacion_detalle` (
 
 LOCK TABLES `adq_recomendacion_detalle` WRITE;
 /*!40000 ALTER TABLE `adq_recomendacion_detalle` DISABLE KEYS */;
-INSERT INTO `adq_recomendacion_detalle` VALUES (1,861,'Dornbusch, Rudiger','Macroeconomía','ref_localidad@33906','McGraw-Hill','1994','','84-481-1883-9',3,'Ajsnfdkjasdnfksdjnfksdnfsdkjf kjsdnf ksdnf ksdnf ksjd nfkjsdnf','Rapido',0,17),(4,NULL,'Pepe, Luz','Adquisiciones en la biblioteca','La Plata','Edulp','2010','','',2,'Se encuentra en el programa vigente de la matreria','',0,31),(5,NULL,'Pietroboni, Maria Fernanda','Las bibliotecas del nuevo milenio','Buenos Aires','Alfagrama','2009','','',2,'material interesante para la formación profesional','',0,32),(6,NULL,'Ander-Egg, Ezequiel','Introducción a la planificación estratégica','Buenos Aires','Lumen','última','','',4,'Cátedra Turismo','',0,34);
 /*!40000 ALTER TABLE `adq_recomendacion_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2896,7 +2894,6 @@ CREATE TABLE `sys_novedad` (
 
 LOCK TABLES `sys_novedad` WRITE;
 /*!40000 ALTER TABLE `sys_novedad` DISABLE KEYS */;
-INSERT INTO `sys_novedad` VALUES (5,'meranadmin','2012-10-29 16:34:28','pepe','pepe','pepe',' http://pepe',NULL,'');
 /*!40000 ALTER TABLE `sys_novedad` ENABLE KEYS */;
 UNLOCK TABLES;
 

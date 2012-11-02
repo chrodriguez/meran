@@ -210,12 +210,12 @@ sub checkFileMagic{
     my $notBinary   = 0;
 
     #escribimos el archivo
-    open ( WRITEIT, ">$path/$hash_unique" ) or die "$!"; 
-    binmode WRITEIT; 
+    open ( FILE_TO_CHECK, ">$path/$hash_unique" ) or die "$!"; 
+    binmode FILE_TO_CHECK; 
     while ( <$file> ) { 
-    	print WRITEIT; 
+    	print FILE_TO_CHECK; 
     }
-    close(WRITEIT);
+    close(FILE_TO_CHECK);
     
     my $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
     
@@ -227,9 +227,9 @@ sub checkFileMagic{
         #borramos el archivo y lo escribimos de nuevo
         unlink($path . "/" . $hash_unique);
     
-        open(WRITEIT, ">$path/$hash_unique") or die "Cant write to $path/$hash_unique. Reason: $!";
-            print WRITEIT $file;
-        close(WRITEIT);
+        open(FILE_TO_CHECK, ">$path/$hash_unique") or die "Cant write to $path/$hash_unique. Reason: $!";
+            print FILE_TO_CHECK $file;
+        close(FILE_TO_CHECK);
     
     }
     
