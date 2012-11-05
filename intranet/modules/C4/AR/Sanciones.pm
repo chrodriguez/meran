@@ -14,17 +14,17 @@ use C4::Modelo::CircSancion::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(	
+@EXPORT=qw( 
         &getSancionesLike
-		&tieneSanciones
-		&eliminarSanciones
-		&sanciones
-		&permisoParaPrestamo
-		&estaSancionado
-		&tieneLibroVencido
-		&getSociosSancionados
-		&diasDeSancion
-		&getTipoSancion
+    &tieneSanciones
+    &eliminarSanciones
+    &sanciones
+    &permisoParaPrestamo
+    &estaSancionado
+    &tieneLibroVencido
+    &getSociosSancionados
+    &diasDeSancion
+    &getTipoSancion
 );
 
 
@@ -66,7 +66,6 @@ sub getSancionesLike {
                                         query           => \@filtros,
                                         select          => ['circ_sancion.*'],
                                         with_objects    => ['socio','socio.persona','nivel3'],
-                                        select          => ['*'],
                                         limit   => $cantR,
                                         offset  => $ini,
                                 ); 
@@ -88,14 +87,15 @@ sub tieneSanciones {
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
   
   my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
-																	query => [ 
-																			nro_socio 		=> { eq => $nro_socio },
-																			fecha_comienzo 	=> { le => $hoy },
-																			fecha_final    	=> { ge => $hoy},
-																		],
-                                    require_objetcs => ['ref_tipo_prestamo_sancion','nivel3','tipo_sancion.ref_tipo_prestamo'],
-                                    select          => ['*',]
-									);
+                                  query => [ 
+                                      nro_socio     => { eq => $nro_socio },
+                                      fecha_comienzo  =>
+ { le => $hoy },
+                                      fecha_final     =>
+ { ge => $hoy},
+                                    ],
+                                                                    require_objetcs => ['ref_tipo_prestamo_sancion','nivel3','tipo_sancion.ref_tipo_prestamo'],
+                  );
   if (scalar(@$sanciones_array_ref) == 0){
         return 0;
   }else{
@@ -124,15 +124,16 @@ sub tieneSancionPendiente {
 
 
 sub permisoParaPrestamo {
-#Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
-  	my ($nro_socio, $tipo_prestamo, $es_reserva) = @_;
+#Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de e
+#star sancionado la fecha en la que la sancion finaliza
+    my ($nro_socio, $tipo_prestamo, $es_reserva) = @_;
 
-  	my $deudaOsancion   = 0; #Se supone que no esta sancionado
-  	my $hasta           = undef;
+    my $deudaOsancion   = 0; #Se supone que no esta sancionado
+    my $hasta           = undef;
     my $cod_error;
     my %status_hash     = {};
     
-  	if (tieneLibroVencido($nro_socio)) {
+    if (tieneLibroVencido($nro_socio)) {
         $deudaOsancion  = 1; #Tiene libros vencidos 
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => tieneLibroVencido ");
         if ($es_reserva){
@@ -140,19 +141,19 @@ sub permisoParaPrestamo {
         } else {
             $cod_error      = 'S204';
         }
-  	}
-	elsif (my $sancion = estaSancionado($nro_socio, $tipo_prestamo)) {
+    }
+  elsif (my $sancion = estaSancionado($nro_socio, $tipo_prestamo)) {
         $deudaOsancion  = 1; #Tiene una sancion vigente
         $hasta          = $sancion->getFecha_final;
         $cod_error      = 'S205';
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => estaSancionado ");
-  	}
+    }
 
     $status_hash{'deudaSancion'} = $deudaOsancion;
     $status_hash{'hasta'}        = $hasta;
     $status_hash{'cod_error'}    = $cod_error;
     
-  	return(\%status_hash);
+    return(\%status_hash);
 }
 
 
@@ -165,18 +166,18 @@ sub estaSancionado {
 
   my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (
                                                                                 query => [ 
-                                                                                    nro_socio 		=> { eq => $nro_socio },
-                                                                                    fecha_comienzo 	=> { le => $hoy },
-                                                                                    fecha_final    	=> { ge => $hoy},
+                                                                                    nro_socio     => { eq => $nro_socio },
+                                                                                    fecha_comienzo  => { le => $hoy },
+                                                                                    fecha_final     => { ge => $hoy},
                                                                                     ],
                                                                                 require_objetcs => ['ref_tipo_sancion','reserva','ref_tipo_sancion.ref_tipo_prestamo'],
                                                                                 select => ['*'],
                                                                                 );
                                                                                 
   foreach my $sancion (@$sanciones_array_ref){
-	foreach my $tipo ($sancion->ref_tipo_prestamo_sancion){
-			if ( $tipo->getTipo_prestamo eq $tipo_prestamo ){ return $sancion; }
-		}
+  foreach my $tipo ($sancion->ref_tipo_prestamo_sancion){
+      if ( $tipo->getTipo_prestamo eq $tipo_prestamo ){ return $sancion; }
+    }
   }
   
   return (0);
@@ -192,10 +193,10 @@ sub tieneLibroVencido {
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
   foreach my $prestamo (@$prestamos_array_ref) {
            C4::AR::Debug::debug("El prestamo del Nivel3 -- ".$prestamo->getId3." -- esta vencido? : ".$prestamo->estaVencido);
-    		if ($prestamo->estaVencido){
+        if ($prestamo->estaVencido){
                 C4::AR::Debug::debug("EL EJEMPLAR CON ID ".$prestamo->nivel3->getId." DEL USUARIO ".$prestamo->socio->getNro_socio." ESTA VENCIDO!!!!!!!!!!!!!");
-    			return(1);
-    		}
+          return(1);
+        }
   }
   return(0);
 }
@@ -210,9 +211,9 @@ sub getSociosSancionados {
   
   my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
                                                                 query => [ 
-                                                                    fecha_comienzo 	=> { le => $hoy },
-                                                                    fecha_final    	=> { ge => $hoy},
-                                                                    tipo_prestamo 	=> { eq => $tipo_prestamo },
+                                                                    fecha_comienzo  => { le => $hoy },
+                                                                    fecha_final     => { ge => $hoy},
+                                                                    tipo_prestamo   => { eq => $tipo_prestamo },
                                                                     or   => [
                                                                       tipo_prestamo => { eq => 0 },
                                                                                                           ],
@@ -240,7 +241,6 @@ sub diasDeSancion {
       C4::AR::Debug::debug("EN DiasDeSancion ?");
 
 
-
     if (Date_Cmp($fecha_vencimiento, $fecha_devolucion) >= 0) {
         #Si es un prestamo especial debe devolverlo antes de una determinada hora
         if ($tipo_prestamo ne 'ES'){return(0);}
@@ -260,9 +260,6 @@ sub diasDeSancion {
         }#else ES
     }#if Date_Cmp
 
-
-
-
 #Corresponde una sancion vamos a calcular de cuantos dias!
 C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!");
   use C4::Modelo::CircTipoSancion::Manager;
@@ -271,17 +268,14 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
                                                                             tipo_prestamo       => { eq => $tipo_prestamo },
                                                                             categoria_socio     => { eq => $categoria },
                                                                         ],
-                                                                        require_objetcs     => ['ref_regla_tipo_sancion','ref_tipo_prestamo_sancion','ref_tipo_prestamo','ref_categoria_socio'],
-                                                                        select              => ['*']
                                     );
 
  C4::AR::Debug::debug("HAY REGLAS? ");
 
  if (!$tipo_sancion_array_ref->[0]){
-    C4::AR::Debug::debug("NO HAY REGLAS!!!! DIAS DE SANCION 0!!! ");	
+    C4::AR::Debug::debug("NO HAY REGLAS!!!! DIAS DE SANCION 0!!! ");  
     return 0;
  }
-
 
   my $reglas_tipo_array_ref=$tipo_sancion_array_ref->[0]->ref_regla_tipo_sancion;
 
@@ -289,29 +283,22 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
 Date-Date calculations
 $delta  = $date->calc($date2 [,$subtract] [,$mode]);
 Two dates can be worked with and a delta will be produced which is the amount of time between the two dates.
-$date1 and $date2 are Date::Manip::Date objects with valid dates. The Date::Manip::Delta object returned is the amount of time between them. If $subtract is not passed in (or is 0), the delta produced is:
-	DELTA = DATE2 - DATE1
+$date1 and $date2 are Date::Manip::Date objects with valid dates. The Date::Manip::Delta object returned is the amount of time between them. If $subtract is not passed in
+ (or is 0), the delta produced is:
+  DELTA = DATE2 - DATE1
 If $subtract is non-zero, the delta produced is:
-	DELTA = DATE1 - DATE2
+  DELTA = DATE1 - DATE2
 =cut
   my $err;
- 
-  my $dias= 0;#Delta_Days($fecha_vencimiento,$fecha_devolucion);
+  my $delta= Date::Manip::DateCalc(ParseDate($fecha_vencimiento),ParseDate($fecha_devolucion),\$err,0);
   
-#  my $dias= &Delta_Format($delta,0,"%dh");
-#  my $date_manip_vencimiento = new Date::Manip::Date;
-#  my $date_manip_devolucion  = new Date::Manip::Date;
 
-#  $err = $date_manip_vencimiento->parse_date($fecha_vencimiento); 
-#  $err = $date_manip_devolucion->parse_date($fecha_devolucion); 
+  #FIXME esta horrible, agarro las horas y las divido por 24!!!
+  my $dias= Date::Manip::Delta_Format($delta,0,"%.2hhs") / 24;
 
-#  my $days= $date_manip_vencimiento->calc_delta_days($date_manip_devolucion,'semi');
+  C4::AR::Debug::error("HAY ERROR?????    ".$err);
 
-  C4::AR::Debug::error("CUANTOS DIAS??? FECHA: ".$fecha_vencimiento." DEVOLUCION: ".$fecha_devolucion." DIAS: ".$dias);
-die;  
-# my $delta ='';  
-# my $dias= $delta->printf('%dv');
-# C4::AR::Debug::error("CUANTOS DIAS??? FECHA: ".$fecha_vencimiento." DEVOLUCION: ".$fecha_devolucion." DELTA: ".$delta->value()." DIAS: ".$dias);
+  C4::AR::Debug::error("CUANTOS DIAS??? FECHA: ".$fecha_vencimiento." DEVOLUCION: ".$fecha_devolucion." DELTA: ".$delta." DIAS: ".$dias);
 
   #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dia
   if ($tipo_prestamo eq 'ES'){$dias++;}
@@ -320,7 +307,7 @@ C4::AR::Debug::debug("DIAS Excedido -->>> ".$dias);
   my $cantidadDeDias= 0;
     
   foreach  my $regla_tipo (@$reglas_tipo_array_ref) {
-     C4::AR::Debug::debug("REGLAS DE SANCION -->>> Orden ".$regla_tipo->getOrden);
+     C4::AR::Debug::error("REGLAS DE SANCION -->>> Orden ".$regla_tipo->getOrden);
 
         if($diasExcedido > 0){
             #($regla_tipo->getCantidad == 0) ===> INFINITO
@@ -413,27 +400,27 @@ Elimina las sanciones
 =cut
 
 sub eliminarSanciones{
- 	my ($userid,$sanciones_ids) = @_;
+  my ($userid,$sanciones_ids) = @_;
 
     my @infoMessages;
     my %messageObj;
-	my ($msg_object) = C4::AR::Mensajes::create();
-	my $sancionTEMP  = C4::Modelo::CircSancion->new();
-	my $db           = $sancionTEMP->db;
-	$db->{connect_options}->{AutoCommit} = 0;
-	$db->begin_work;
+  my ($msg_object) = C4::AR::Mensajes::create();
+  my $sancionTEMP  = C4::Modelo::CircSancion->new();
+  my $db           = $sancionTEMP->db;
+  $db->{connect_options}->{AutoCommit} = 0;
+  $db->begin_work;
 
-	foreach my $id_sancion (@$sanciones_ids) {
-	my $sancion = C4::Modelo::CircSancion->new(id_sancion => $id_sancion, db => $db);
-	$sancion->load();
+  foreach my $id_sancion (@$sanciones_ids) {
+  my $sancion = C4::Modelo::CircSancion->new(id_sancion => $id_sancion, db => $db);
+  $sancion->load();
     my $socio_sancionado = $sancion->getNro_socio;
     my $socio_temp       = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio_sancionado);
     my $nombre_persona   = $socio_temp->persona->getNombre();
     my $apellido_persona = $socio_temp->persona->getApellido();
         if(!$msg_object->{'error'}){
-                eval{	
+                eval{ 
                     $sancion->eliminar_sancion($userid);
-                	$db->commit;
+                  $db->commit;
                 };
                 if ($@){
                     $db->rollback;
@@ -450,7 +437,7 @@ sub eliminarSanciones{
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$apellido_persona, $nombre_persona, $socio_sancionado]} ) ;
         }
 
-	}
+  }
 
   $db->{connect_options}->{AutoCommit} = 1;
 
@@ -477,7 +464,7 @@ sub actualizarTiposPrestamoQueAplica {
     #Busco el tipo de sanción
     my $tipo_sancion    = C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio,$db);
 
-	eval {	
+  eval {  
         $tipo_sancion->actualizarTiposPrestamoQueAplica($tiposQueAplica,$db);
         $db->commit;
         $msg_object->{'error'}= 0;
@@ -485,8 +472,8 @@ sub actualizarTiposPrestamoQueAplica {
     };
    
     if ($@){
-		C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
-		$db->rollback;
+    C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+    $db->rollback;
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP014', 'params' => []} ) ;
 
