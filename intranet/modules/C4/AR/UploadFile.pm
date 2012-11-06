@@ -67,36 +67,18 @@ sub uploadPortadaNivel2{
     my $hash_unique             = Digest::MD5::md5_hex(localtime() + rand(10));
     my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($foto, @whiteList);
 
-
-    # FIXME: en arquitecturas de 64 bits guarda la imagen con 0 bytes. Probar asi
-    # if($file_type){
-
-    #     open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
-    #         print WRITEIT $foto;
-    #     close(WRITEIT);
-
-    #     return ("$hash_unique.$file_type");
-        
-    # }else{
-    
-    #     return 0;
-
-    # }
-    
     #es un archivo valido
     if($file_type){
     
         if($notBinary){
         
             #no hay que escribirlo con binmode
-            C4::AR::Debug::debug("UploadFile => uploadPortadaNivel2 => vamos a escribirla sin binmode");
             open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
             print WRITEIT $foto;
             close(WRITEIT);
    
         }else{
         
-            C4::AR::Debug::debug("UploadFile => uploadPortadaNivel2 => vamos a escribirla CON binmode");
             open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
             binmode WRITEIT; 
             while ( <$foto> ) { 
@@ -106,11 +88,50 @@ sub uploadPortadaNivel2{
         
         }
 
+        #si es tamaño 0, lo escribimos del modo inverso
+        if (_ceroSize("$uploaddir/$hash_unique.$file_type")) {
+
+            # lo borramos primero
+            unlink("$uploaddir/$hash_unique.$file_type");
+
+            # es un if inverso al de arriba
+            if ($notBinary) {
+
+                open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
+                binmode WRITEIT; 
+                while ( <$foto> ) { 
+                    print WRITEIT; 
+                }
+                close(WRITEIT);
+
+            } else {
+
+                open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
+                print WRITEIT $foto;
+                close(WRITEIT);
+
+            }
+        }
+
         return ("$hash_unique.$file_type");
         
     }
     
     return 0;
+}
+
+=item
+    Checkea el tamaño de un archivo recivido como parametro.
+    Devuelve true si es 0 bytes, false en caso contrario 
+=cut
+sub _ceroSize{
+    my ($filePath) = @_;
+
+    if (-s $filePath) {
+        return 0;
+    } else {
+        return 1;
+    }
 }
 
 =item
@@ -137,14 +158,12 @@ sub uploadTipoDeDocImage{
         if($notBinary){
         
             #no hay que escribirlo con binmode
-            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla sin binmode");
             open(WRITEIT, ">$uploaddir/$file_name.$file_type") or die "Cant write to $uploaddir/$file_name.$file_type. Reason: $!";
             print WRITEIT $foto;
             close(WRITEIT);
    
         }else{
         
-            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla CON binmode");
             open ( WRITEIT, ">$uploaddir/$file_name.$file_type" ) or die "Cant write to $uploaddir/$file_name.$file_type. Reason: $!"; 
             binmode WRITEIT; 
             while ( <$foto> ) { 
@@ -191,14 +210,12 @@ sub uploadAdjuntoNovedadOpac{
         if($notBinary){
         
             #no hay que escribirlo con binmode
-            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla sin binmode");
             open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
             print WRITEIT $adjunto;
             close(WRITEIT);
    
         }else{
         
-            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla CON binmode");
             open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
             binmode WRITEIT; 
             while ( <$adjunto> ) { 
@@ -242,14 +259,12 @@ sub uploadFotoNovedadOpac{
         if($notBinary){
         
             #no hay que escribirlo con binmode
-            C4::AR::Debug::debug("UploadFile => uploadFotoNovedadOpac => vamos a escribirla sin binmode");
             open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
             print WRITEIT $imagen;
             close(WRITEIT);
    
         }else{
         
-            C4::AR::Debug::debug("UploadFile => uploadFotoNovedadOpac => vamos a escribirla CON binmode");
             open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
             binmode WRITEIT; 
             while ( <$imagen> ) { 
@@ -257,6 +272,30 @@ sub uploadFotoNovedadOpac{
             }
             close(WRITEIT);
         
+        }
+
+        if (_ceroSize("$uploaddir/$hash_unique.$file_type")) {
+
+            # lo borramos primero
+            unlink("$uploaddir/$hash_unique.$file_type");
+
+            # es un if inverso al de arriba
+            if ($notBinary) {
+
+                open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
+                binmode WRITEIT; 
+                while ( <$imagen> ) { 
+                    print WRITEIT; 
+                }
+                close(WRITEIT);
+
+            } else {
+
+                open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
+                print WRITEIT $imagen;
+                close(WRITEIT);
+
+            }
         }
 
         return ("$hash_unique.$file_type");
@@ -308,7 +347,6 @@ sub uploadPhoto{
             print WRITEIT $file;
         close(WRITEIT);
 
-        C4::AR::Debug::debug("esta en : $uploaddir/$name");
 
         my $check_size = -s "$uploaddir/$name";
 
@@ -340,7 +378,6 @@ sub deletePhoto{
     my $msg_object  = C4::AR::Mensajes::create();
 
 #   if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
-C4::AR::Debug::debug("UploadFile => deletePhoto => ".C4::AR::Utilidades::trim($picturesDir."/".$foto_name));
     if (unlink(C4::AR::Utilidades::trim($picturesDir."/".$foto_name))) {
         $msg_object->{'error'}= 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U344', 'params' => []} ) ;
@@ -369,22 +406,8 @@ sub uploadFile{
             my $ext         = @nombreYextension[1];
             my $buff        = '';
 
-    #         if (!grep(/$ext/i,@extensiones_permitidas)) {
-    #             $msg_object->{'error'}= 1;
-    #             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;
-    #             C4::AR::Debug::debug("UploadFile => uploadPhoto => error U341");
-    #         } else
-    #         {
-    #
             if ((open(WFD,">$write_file"))) {
-    #                 $msg_object->{'error'}= 1;
-    #                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;
-    #                 C4::AR::Debug::debug("UploadFile => uploadPhoto => error U342");
-    #             }
-    #             else
-    #             {
                     while ($bytes_read=read($filepath,$buff,2096)) {
-#                         C4::AR::Debug::debug("ESCRIBIENDO: ".$bytes_read);
                         $size += $bytes_read;
                         binmode WFD;
                         print WFD $buff;

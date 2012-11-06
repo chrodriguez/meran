@@ -72,6 +72,10 @@ my $code            = C4::AR::Mensajes::getFirstCodeError($msg_object);
 
 my $mensaje         = C4::AR::Mensajes::getMensaje($code, 'intranet');
 
-my $url             = C4::AR::Utilidades::getUrlPrefix()."/catalogacion/estructura/detalle.pl?id1=" . $id1 . "&token=" . $query->param('token') . "&msg_file=". $mensaje;
+my $url             = C4::AR::Utilidades::getUrlPrefix()."/catalogacion/estructura/detalle.pl";
+
+$url                = C4::AR::Utilidades::addParamToUrl($url,'id1',$id1);
+$url                = C4::AR::Utilidades::addParamToUrl($url,'&token',$query->param('token'));
+$url                = C4::AR::Utilidades::addParamToUrl($url,'msg_file',$mensaje);
 
 C4::AR::Auth::redirectTo($url);

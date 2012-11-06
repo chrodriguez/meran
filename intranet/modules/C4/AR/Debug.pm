@@ -11,8 +11,12 @@ use vars qw(@EXPORT_OK @ISA);
                 debug
                 warn
                 info
+                debugObject
                 error
+                debug_date_time
                 printErrorDB
+                printSession
+
 );
 
 
@@ -69,22 +73,29 @@ sub _str_debug_date_time{
 sub _write_debug{
     my ($data) = @_;
 
-    my $context = new C4::Context;
+    eval {
+        my $context = new C4::Context;
 
-    my $debug_file = $context->config('debug_file') || "/usr/share/meran/logs/debug.txt";
-    open(Z, ">>".$debug_file);
-    my $type = C4::AR::Auth::getSessionType();
-    my $nro_socio = C4::AR::Auth::getSessionNroSocio() || "";
-    if (C4::AR::Utilidades::validateString($nro_socio)){
-    	$nro_socio.=" -- ";
-    }
-	print Z $nro_socio."$type --("._str_debug_date_time().") => ".$data."\n";
-	close(Z);        
+        my $debug_file = $context->config('debug_file') || "/usr/share/meran/logs/debug.txt";
+        my $type = C4::AR::Auth::getSessionType();
+        my $nro_socio = C4::AR::Auth::getSessionNroSocio() || "";
+        if (C4::AR::Utilidades::validateString($nro_socio)){
+        	$nro_socio.=" -- ";
+        }
+
+        open(DEBUG_FILE, ">>".$debug_file);
+
+    	print DEBUG_FILE $nro_socio."$type --("._str_debug_date_time().") => ".$data."\n";
+
+    	close(DEBUG_FILE);        
+    };
 }
 
 sub _debugStatus{
 
   my $context = new C4::Context;
+
+  C4::AR::Auth::getSessionType();
     
   return ($context->config('debug'));    
 }
@@ -125,7 +136,7 @@ sub debug{
 
     my $enabled = _debugStatus();
 
-    (($enabled >= 1024) && _write_debug("[debug] ".$data));
+    ($enabled >= 1024) && (_write_debug("[debug] ".$data));
 }
 
 sub _printHASH {

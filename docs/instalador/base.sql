@@ -118,7 +118,6 @@ CREATE TABLE `adq_pedido_cotizacion_detalle` (
 
 LOCK TABLES `adq_pedido_cotizacion_detalle` WRITE;
 /*!40000 ALTER TABLE `adq_pedido_cotizacion_detalle` DISABLE KEYS */;
-INSERT INTO `adq_pedido_cotizacion_detalle` VALUES (1,1,861,'Dornbusch, Rudiger','MacroeconomÃ­a','ref_localidad@33906','McGraw-Hill','0000-00-00','','84-481-1883-9',3,0,1,1),(2,1,10490,'PoviÃ±a, Alfredo','Diccionario de sociologÃ­a a travÃ©s de los sociÃ³logos','Buenos Aires','Astrea','0000-00-00','','',2,0,2,2),(3,1,5124,'Mantel, Rolf R.','Aranceles Ã³ptimos, represalias y la existencia de equilibrios de polÃ­tica comercial','Buenos Aires','Centro de Estudios MacroeconÃ³micos de Argentina','0000-00-00','','',3,0,3,3),(4,2,NULL,'Pepe, Luz','Adquisiciones en la biblioteca','La Plata','Edulp','0000-00-00','','',2,0,4,1),(5,2,NULL,'Pietroboni, Maria Fernanda','Las bibliotecas del nuevo milenio','Buenos Aires','Alfagrama','0000-00-00','','',2,0,5,2),(6,3,NULL,'Ander-Egg, Ezequiel','IntroducciÃ³n a la planificaciÃ³n estratÃ©gica','Buenos Aires','Lumen','0000-00-00','','',4,0,6,1);
 /*!40000 ALTER TABLE `adq_pedido_cotizacion_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,7 +316,6 @@ CREATE TABLE `adq_recomendacion_detalle` (
 
 LOCK TABLES `adq_recomendacion_detalle` WRITE;
 /*!40000 ALTER TABLE `adq_recomendacion_detalle` DISABLE KEYS */;
-INSERT INTO `adq_recomendacion_detalle` VALUES (1,861,'Dornbusch, Rudiger','Macroeconomía','ref_localidad@33906','McGraw-Hill','1994','','84-481-1883-9',3,'Ajsnfdkjasdnfksdjnfksdnfsdkjf kjsdnf ksdnf ksdnf ksjd nfkjsdnf','Rapido',0,17),(4,NULL,'Pepe, Luz','Adquisiciones en la biblioteca','La Plata','Edulp','2010','','',2,'Se encuentra en el programa vigente de la matreria','',0,31),(5,NULL,'Pietroboni, Maria Fernanda','Las bibliotecas del nuevo milenio','Buenos Aires','Alfagrama','2009','','',2,'material interesante para la formación profesional','',0,32),(6,NULL,'Ander-Egg, Ezequiel','Introducción a la planificación estratégica','Buenos Aires','Lumen','última','','',4,'Cátedra Turismo','',0,34);
 /*!40000 ALTER TABLE `adq_recomendacion_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1851,7 +1849,7 @@ CREATE TABLE `portada_opac` (
 
 LOCK TABLES `portada_opac` WRITE;
 /*!40000 ALTER TABLE `portada_opac` DISABLE KEYS */;
-INSERT INTO `portada_opac` VALUES (11,'aa50034975b912ac5449f3f2a8de6e74.png','Esta imágen es una demostración. Es recomendable cambiarla al activar el sitio','Un nuevo enfoque en la gestión bibliotecaria',1),(12,'3df998026f8b0045e67bc3e1b30bcd63.png','Didiva sus ejemplares por estantes virtuales, reflejando la Biblioteca física, u organizando por temas su colección','La eficiencia de la división',2),(13,'4d1cd120e9ff071e5ca4d03b91941d7f.png','Con Meran, organizar el catálogo es sólo una secuencia de pasos','Cuando la organización lo es todo',3);
+INSERT INTO `portada_opac` VALUES (11,'aa50034975b912ac5449f3f2a8de6e74.png','Esta imágen es una demostración. Es recomendable cambiarla al activar el sitio','Un nuevo enfoque en la gestión bibliotecaria',1),(12,'3df998026f8b0045e67bc3e1b30bcd63.png','ivida sus ejemplares por estantes virtuales, reflejando la Biblioteca física, u organizando por temas su colección','La eficiencia de la división',2),(13,'4d1cd120e9ff071e5ca4d03b91941d7f.png','Con Meran, organizar el catálogo es sólo una secuencia de pasos','Cuando la organización lo es todo',3);
 /*!40000 ALTER TABLE `portada_opac` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2646,7 +2644,7 @@ CREATE TABLE `rep_historial_busqueda` (
   `agregacion_temp` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idHistorial`),
   KEY `FK_idBusqueda` (`idBusqueda`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2655,7 +2653,6 @@ CREATE TABLE `rep_historial_busqueda` (
 
 LOCK TABLES `rep_historial_busqueda` WRITE;
 /*!40000 ALTER TABLE `rep_historial_busqueda` DISABLE KEYS */;
-INSERT INTO `rep_historial_busqueda` VALUES (1,1,'keyword','test','OPAC',NULL,NULL),(2,1,'keyword','test','OPAC',NULL,NULL),(3,2,'keyword','econo','OPAC',NULL,NULL),(4,2,'keyword','econo','OPAC',NULL,NULL),(5,6,'keyword','econo','OPAC',NULL,NULL),(6,6,'keyword','econo','OPAC',NULL,NULL),(7,8,'keyword','prueba','OPAC',NULL,NULL),(8,8,'keyword','prueba','OPAC',NULL,NULL),(9,9,'keyword','prueba','OPAC',NULL,NULL),(10,9,'keyword','prueba','OPAC',NULL,NULL),(11,10,'keyword','prueba','OPAC',NULL,NULL),(12,10,'keyword','prueba','OPAC',NULL,NULL),(13,11,'keyword','prueba','OPAC','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4',NULL),(14,11,'keyword','prueba','OPAC','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4',NULL),(15,12,'keyword','hola','OPAC','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1',NULL),(16,12,'keyword','hola','OPAC','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1',NULL);
 /*!40000 ALTER TABLE `rep_historial_busqueda` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2682,7 +2679,7 @@ CREATE TABLE `rep_historial_circulacion` (
   `tipo_prestamo` char(2) DEFAULT NULL,
   `agregacion_temp` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2691,7 +2688,6 @@ CREATE TABLE `rep_historial_circulacion` (
 
 LOCK TABLES `rep_historial_circulacion` WRITE;
 /*!40000 ALTER TABLE `rep_historial_circulacion` DISABLE KEYS */;
-INSERT INTO `rep_historial_circulacion` VALUES (1,1,1,1,'reserva','meranadmin','meranadmin','MERA','2012-10-29 13:29:25','2012-10-29',NULL,'0000-00-00','DO',NULL),(2,1,1,0,'espera','meranadmin','meranadmin','MERA','2012-10-29 13:29:25','2012-10-29',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `rep_historial_circulacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2898,7 +2894,6 @@ CREATE TABLE `sys_novedad` (
 
 LOCK TABLES `sys_novedad` WRITE;
 /*!40000 ALTER TABLE `sys_novedad` DISABLE KEYS */;
-INSERT INTO `sys_novedad` VALUES (5,'meranadmin','2012-10-29 16:34:28','pepe','pepe','pepe',' http://pepe',NULL,'');
 /*!40000 ALTER TABLE `sys_novedad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3216,4 +3211,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-10-30 18:50:24
+-- Dump completed on 2012-10-31 14:42:40
