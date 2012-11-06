@@ -294,7 +294,13 @@ If $subtract is non-zero, the delta produced is:
   
 
   #FIXME esta horrible, agarro las horas y las divido por 24!!!
-  my $dias= Date::Manip::Delta_Format($delta,0,"%.2hhs") / 24;
+  my $dias;
+
+  $dias = Date::Manip::Delta_Format($delta,2,"%.2hhs") / 24;
+
+  if ( (!$dias)||($dias<=0)){
+    $dias = Date::Manip::Delta_Format($delta,2,"%dh");
+  }
 
   C4::AR::Debug::error("HAY ERROR?????    ".$err);
 
