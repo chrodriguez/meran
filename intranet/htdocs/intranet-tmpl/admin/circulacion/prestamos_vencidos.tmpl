@@ -1,7 +1,10 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script type="text/javascript" src="/includes/jquery/jquery.uitablefilter.js" ></script>
+<script type="text/javascript" src="/includes/jquery/jquery-scrollpagination.js" ></script>
 <script type="text/javascript" language="javascript">
+
+    var INI = 0;
 
     $(document).ready( function() {
       makeDataTable('#prestamosVencidos');
@@ -74,6 +77,39 @@
       });
   });
 
+
+  $(function(){
+   INI++;
+    $('#prest_venc_pag').scrollPagination({
+
+
+      'contentPage': URL_PREFIX +"/admin/circulacion/prestamos_vencidos.pl", // the url you are fetching the results
+      'contentData': {ok:1, ini:INI}, // these are the variables you can pass to the request, for example: children().size() to know which page you are
+      'scrollTarget': $(window), // who gonna scroll? in this example, the full window
+      'heightOffset': 10, // it gonna request when scroll is 10 pixels before the page ends
+      'beforeLoad': function(){ // before load function, you can display a preloader div
+        $('#loading').fadeIn();
+
+      },
+      'afterLoad': function(elementsLoaded){ // after loading content, you can use this function to animate your new elements
+         $('#loading').fadeOut();
+          alert(INI); 
+      }
+    });
+    
+    // code for fade in element by element
+    $.fn.fadeInWithDelay = function(){
+      var delay = 0;
+      return this.each(function(){
+        $(this).delay(delay).animate({opacity:1}, 200);
+        delay += 100;
+      });
+    };
+         
+  });
+
+
+
 </script>
 
 <fieldset>
@@ -84,21 +120,22 @@
     </form>
 
  [% IF cantidad  %]
-      [% PERL %]
-                print C4::AR::Filtros::tableHeader(   
-                                  id              => "prestamosVencidos",
-                                  class           => "",
-                                  selectAll_id    => "prestamos_vencidos",
-                                  columns         => ['[% "Apellido y nombre"|i18n %]','[% "N&uacute;mero de Socio"|i18n %]',
-                                                    '[% "Ejemplar"|i18n %]','[% "Tipo de pr&eacute;stamo"|i18n %]',
-                                                    '[% "Fecha de pr&eacute;stamo"|i18n %]',
-                                                    
-                                                     ]
-                                                                   
-                                        ) ;
-      [% END %]
+    
+    <table id="prestamosVencidos" class="table table-striped ">
+      <thead>
+        <tr>
+            <th>
+                <i id="prestamos_vencidos" class="icon-ok-sign click" title="Seleccionar todos"></i>
+            </th>
+            <th>Apellido y nombre</th>
+            <th>Número de Socio</th>
+            <th>Ejemplar</th>
+            <th>Tipo de préstamo</th>
+            <th>Fecha de préstamo</th>
+        </tr>
+      </thead>
 
-      <tbody>
+      <tbody id="prest_venc_pag">
           [% FOREACH prestamo IN prestamos %]
             <tr>
                 <td>
@@ -142,6 +179,7 @@
             </td>
             </tr>
           [% END %]
+
          </tbody>
   </table>
   <div class="form-actions">
