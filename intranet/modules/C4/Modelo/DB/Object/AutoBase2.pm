@@ -33,7 +33,7 @@ sub load{
          }
 
 #         C4::AR::Debug::debug("AutoBase2 =>  SUPER load");
-        return $self->SUPER::load(@_);
+        return $self->SUPER::load(@_);º
     };
 
     if($@){
@@ -397,6 +397,8 @@ sub addNewRecord{
     
     if ($self->meta->table eq "usr_ref_categoria_socio"){
     	$self->conformarUsrRegularidad();
+    }elsif ($self->meta->table eq "ref_estado"){
+      $self->setCodigo('STATE002');
     }
     
     return $self;
