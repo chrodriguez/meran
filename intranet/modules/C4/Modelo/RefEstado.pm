@@ -8,12 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'ref_estado',
 
     columns => [
-        id          => { type => 'serial', overflow => 'truncate', not_null => 1 , length => 11},
-        nombre      => { type => 'varchar', overflow => 'truncate', default => '', length => 255, not_null => 1 },
-        codigo      => { type => 'varchar', overflow => 'truncate', default => '', length => 8, not_null => 1 },
+        nombre => { type => 'varchar', overflow => 'truncate', default => '', length => 255, not_null => 1 },
+        codigo => { type => 'varchar', overflow => 'truncate', default => '', length => 8, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'id' ],
+    primary_key_columns => [ 'codigo' ],
     unique_key => [ 'nombre' ],
 );
 use C4::Modelo::RefLocalidad;
