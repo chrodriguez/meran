@@ -33,7 +33,7 @@ sub load{
          }
 
 #         C4::AR::Debug::debug("AutoBase2 =>  SUPER load");
-        return $self->SUPER::load(@_);º
+        return $self->SUPER::load(@_);
     };
 
     if($@){
