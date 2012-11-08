@@ -309,7 +309,7 @@
                                                         actions         => [
                                                                             {title => "Modificar", action=>"modificarNivel1()",icon=>"icon-edit"},
                                                                             {title => "Eliminar", action=>"borrarN1([% id1 %])", icon=>"icon-trash"},
-                                                                            {title => "Agregar Edición", action=>'agregarEdicion("[% id1 %]")', icon=>"icon-plus-sign"},
+                                                                            {title => "Agregar Nivel 2", action=>'agregarEdicion("[% id1 %]")', icon=>"icon-plus-sign"},
 	                                                                        [% IF show_asociar_registro_fuente > 0 %]
 	                                                                            {title => "Asociar registro fuente", action=>"asociarRegistroFuente([% id1 %])", icon=>"icon-edit"},
 	                                                                        [% END %]
@@ -426,7 +426,7 @@
 					 	</div>
 		                [% PERL %]
 		                    print C4::AR::Filtros::action_set_button(    
-		                                                        title           => "[% 'Edici&oacute;n' | i18n %]",
+		                                                        title           => "[% 'Nivel 2' | i18n %]",
 		                                                        button          => 'btn btn-primary',
 		                                                        class           => "width_200",
 		                                                        actions         => [
