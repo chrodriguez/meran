@@ -398,6 +398,9 @@ sub addNewRecord{
     if ($self->meta->table eq "usr_ref_categoria_socio"){
     	$self->conformarUsrRegularidad();
     }
+    #elsif ($self->meta->table eq "ref_estado"){
+    #  $self->setCodigo('STATE002');
+    #}
     
     return $self;
 
