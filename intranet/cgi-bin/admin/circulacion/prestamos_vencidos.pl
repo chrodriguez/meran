@@ -24,8 +24,6 @@ if ($obj->{'ok'}){
                                                             entorno         => 'undefined'},
     });
 
-
-
     my $ini = $obj->{'ini'};
 
     $prestamos_array_ref   = C4::AR::Prestamos::getPrestamosVencidosPaginado($ini);
