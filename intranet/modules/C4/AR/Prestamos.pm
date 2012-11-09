@@ -1450,6 +1450,8 @@ sub getPrestamosVencidosPaginado{
 
     my ($ini) = @_;
 
+    C4::AR::Debug::debug("INI EN PRESTAMOS ============>". $ini);
+
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 require_objects => ['socio','nivel3','socio.persona','tipo'],
                                                                 sort_by => 'fecha_prestamo DESC',

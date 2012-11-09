@@ -26,10 +26,10 @@ if ($obj->{'ok'}){
 
     my $ini = $obj->{'ini'};
 
+    C4::AR::Debug::debug("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5");
+    C4::AR::Debug::debug($ini);
+
     $prestamos_array_ref   = C4::AR::Prestamos::getPrestamosVencidosPaginado($ini);
-
-    $t_params->{'ini'} = $ini;
-
 
 
 } else {

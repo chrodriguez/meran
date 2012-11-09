@@ -1,10 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script type="text/javascript" src="/includes/jquery/jquery.uitablefilter.js" ></script>
-<script type="text/javascript" src="/includes/jquery/jquery-scrollpagination.js" ></script>
 <script type="text/javascript" language="javascript">
-
-    var INI = 0;
 
     $(document).ready( function() {
       makeDataTable('#prestamosVencidos');
@@ -12,7 +9,7 @@
     });
     
     var selected = new Array();
-
+  
     function enviarMailsATodos(){
 
         objAH                   = new AjaxHelper(updateEnviarMailsATodos);
@@ -75,38 +72,38 @@
       $("#q").keyup(function() {
       $.uiTableFilter(theTable, this.value);
       });
-  });
-
-
-  $(function(){
-   INI++;
-    $('#prest_venc_pag').scrollPagination({
-
-
-      'contentPage': URL_PREFIX +"/admin/circulacion/prestamos_vencidos.pl", // the url you are fetching the results
-      'contentData': {ok:1, ini:INI}, // these are the variables you can pass to the request, for example: children().size() to know which page you are
-      'scrollTarget': $(window), // who gonna scroll? in this example, the full window
-      'heightOffset': 10, // it gonna request when scroll is 10 pixels before the page ends
-      'beforeLoad': function(){ // before load function, you can display a preloader div
-        $('#loading').fadeIn();
-
-      },
-      'afterLoad': function(elementsLoaded){ // after loading content, you can use this function to animate your new elements
-         $('#loading').fadeOut();
-          alert(INI); 
-      }
     });
-    
-    // code for fade in element by element
-    $.fn.fadeInWithDelay = function(){
-      var delay = 0;
-      return this.each(function(){
-        $(this).delay(delay).animate({opacity:1}, 200);
-        delay += 100;
-      });
-    };
-         
-  });
+
+    var cont = true;
+
+
+    $(window).scroll(function(){   
+
+        if($(window).scrollTop() == $(document).height() - $(window).height()){
+          // La variable cont se utiliza para evitar que se haga mas de un llamado ajax a la vez, para asegurar que el valor de ini se actualice como corresponde y no haga la peticion con el mimsmo valor mas de una vez.
+          if (cont == true){
+              cont = false;
+              $('div#loadmoreajaxloader').show();
+              $.ajax({
+                type: "POST",
+                url: URL_PREFIX +"/admin/circulacion/prestamos_vencidos.pl",
+                data: {ok:1, ini: $('#prest_venc_pag tr').size() },
+                success: function(html){
+                  if(html){
+                    cont = true;
+                    $("#prest_venc_pag").append(html);
+                    $('div#loadmoreajaxloader').hide();
+                  }else{
+                    $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
+                  }
+                }
+              });
+          }
+        }
+    });
+
+
+
 
 
 
@@ -182,6 +179,8 @@
 
          </tbody>
   </table>
+  <div id="loadmoreajaxloader" style="display:none;"><center><img src="/includes/jquery/indicator.gif" /></center></div>
+
   <div class="form-actions">
        [% PERL %]
                print C4::AR::Filtros::action_button(
