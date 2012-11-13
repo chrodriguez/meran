@@ -1,10 +1,10 @@
 #!/bin/bash
 #obtener el código fuente
-apt-get install git-core -y
-cd /usr/share/
-git clone ssh://root@proyectos.linti.unlp.edu.ar/var/meran
-cd /usr/share/meran/docs/dependenciasInstalacion/
-cp ../configuracion/git/config ../../.git/
+#apt-get install git-core -y
+#cd /usr/share/
+#git clone ssh://root@proyectos.linti.unlp.edu.ar/var/meran
+#cd /usr/share/meran/docs/dependenciasInstalacion/
+#cp ../configuracion/git/config ../../.git/
 
 #Instalar dependencias
 sh dependenciasMERAN.sh
@@ -16,7 +16,7 @@ a2ensite ssl
 a2enmod rewrite
 a2enmod expires
 a2enmod ssl
-
+a2enmod headers
 #Generar certificado
 mkdir /etc/apache2/ssl
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.pem -out /etc/apache2/ssl/apache.pem

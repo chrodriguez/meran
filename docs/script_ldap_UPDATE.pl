@@ -1,5 +1,6 @@
 #!/usr/bin/perl -T -w
 #
+
 # Este script general las entradas ldif a partir de un archivo de texto.
 #
 
