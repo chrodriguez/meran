@@ -9,7 +9,7 @@
     });
     
     var selected = new Array();
-
+  
     function enviarMailsATodos(){
 
         objAH                   = new AjaxHelper(updateEnviarMailsATodos);
@@ -72,7 +72,40 @@
       $("#q").keyup(function() {
       $.uiTableFilter(theTable, this.value);
       });
-  });
+    });
+
+    var cont = true;
+
+
+    $(window).scroll(function(){   
+
+        if($(window).scrollTop() == $(document).height() - $(window).height()){
+          // La variable cont se utiliza para evitar que se haga mas de un llamado ajax a la vez, para asegurar que el valor de ini se actualice como corresponde y no haga la peticion con el mimsmo valor mas de una vez.
+          if (cont == true){
+              cont = false;
+              $('div#loadmoreajaxloader').show();
+              $.ajax({
+                type: "POST",
+                url: URL_PREFIX +"/admin/circulacion/prestamos_vencidos.pl",
+                data: {ok:1, ini: $('#prest_venc_pag tr').size() },
+                success: function(html){
+                  if(html){
+                    cont = true;
+                    $("#prest_venc_pag").append(html);
+                    $('div#loadmoreajaxloader').hide();
+                  }else{
+                    $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
+                  }
+                }
+              });
+          }
+        }
+    });
+
+
+
+
+
 
 </script>
 
@@ -84,21 +117,22 @@
     </form>
 
  [% IF cantidad  %]
-      [% PERL %]
-                print C4::AR::Filtros::tableHeader(   
-                                  id              => "prestamosVencidos",
-                                  class           => "",
-                                  selectAll_id    => "prestamos_vencidos",
-                                  columns         => ['[% "Apellido y nombre"|i18n %]','[% "N&uacute;mero de Socio"|i18n %]',
-                                                    '[% "Ejemplar"|i18n %]','[% "Tipo de pr&eacute;stamo"|i18n %]',
-                                                    '[% "Fecha de pr&eacute;stamo"|i18n %]',
-                                                    
-                                                     ]
-                                                                   
-                                        ) ;
-      [% END %]
+    
+    <table id="prestamosVencidos" class="table table-striped ">
+      <thead>
+        <tr>
+            <th>
+                <i id="prestamos_vencidos" class="icon-ok-sign click" title="Seleccionar todos"></i>
+            </th>
+            <th>Apellido y nombre</th>
+            <th>Número de Socio</th>
+            <th>Ejemplar</th>
+            <th>Tipo de préstamo</th>
+            <th>Fecha de préstamo</th>
+        </tr>
+      </thead>
 
-      <tbody>
+      <tbody id="prest_venc_pag">
           [% FOREACH prestamo IN prestamos %]
             <tr>
                 <td>
@@ -142,8 +176,11 @@
             </td>
             </tr>
           [% END %]
+
          </tbody>
   </table>
+  <div id="loadmoreajaxloader" style="display:none;"><center><img src="/includes/jquery/indicator.gif" /></center></div>
+
   <div class="form-actions">
        [% PERL %]
                print C4::AR::Filtros::action_button(

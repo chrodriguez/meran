@@ -1446,6 +1446,40 @@ sub getAllPrestamosVencidos{
 
 
 
+sub getPrestamosVencidosPaginado{
+
+    my ($ini) = @_;
+
+    C4::AR::Debug::debug("INI EN PRESTAMOS ============>". $ini);
+
+    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                require_objects => ['socio','nivel3','socio.persona','tipo'],
+                                                                sort_by => 'fecha_prestamo DESC',
+                                                                limit   => 15,
+                                                                offset  => $ini,
+
+                                                        );
+     
+    my @arrayPrestamos;
+
+    if(scalar(@$prestamos_array_ref) > 0){
+        foreach my $prestamo (@$prestamos_array_ref){
+            if ($prestamo->estaVencido()){        
+                push(@arrayPrestamos,($prestamo));
+            }
+        }  
+        return (\@arrayPrestamos);     
+    }else{
+        return 0;
+    }
+}
+
+
+
+
+
+
+
 =item
     Funcion que devuelve todos los prestamos que esten activos.
     Hace una consulta vacia sobre la tabla porque ahi estan solo los prestamos activos
