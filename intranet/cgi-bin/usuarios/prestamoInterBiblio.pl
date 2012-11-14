@@ -63,6 +63,19 @@ my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 my $branchcode  = C4::AR::Preferencias::getValorPreferencia("defaultUI");
 my $biblio      = C4::AR::Busquedas::getBranch($branchcode);
 
+
+
+my @datearr = localtime(time);
+my $anio = 1900 + $datearr[5];
+my $mes  = &C4::Date::mesString( $datearr[4] + 1 );
+my $dia  = $datearr[3];
+
+my $fecha= "La Plata ".$dia." de ".$mes." de ".$anio;
+
+
+
+$t_params->{'fecha'}= $fecha;
+
 $t_params->{'biblio'}= $biblio;
 $t_params->{'socio'}= $socio;
 $t_params->{'socio_nombre'}= Encode::decode_utf8($socio->persona->nombre);
