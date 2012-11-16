@@ -179,10 +179,10 @@ sub getCountPrestamosDeGrupoPorUsuario {
         push(@filtros, ( id2                => { eq => $id2 } ));
         push(@filtros, ( nro_socio          => { eq => $nro_socio } ));
 
-	#Se tiene en cuenta el tipo de préstamo al contar los prestamos del grupo?? Esto permitiría prestar varios ejemplares del mismo grupo con distintos tipos de prestamo.
-	if(C4::AR::Preferencias::getValorPreferencia('prestar_mismo_grupo_distintos_tipos_prestamo')){
-	  push(@filtros, ( tipo_prestamo      => { eq => $tipo_prestamo } ));
-	}
+    	#Se tiene en cuenta el tipo de préstamo al contar los prestamos del grupo?? Esto permitiría prestar varios ejemplares del mismo grupo con distintos tipos de prestamo.
+    	if(C4::AR::Preferencias::getValorPreferencia('prestar_mismo_grupo_distintos_tipos_prestamo')){
+    	  push(@filtros, ( tipo_prestamo      => { eq => $tipo_prestamo } ));
+    	}
 
         push(@filtros, ( fecha_devolucion   => { eq => undef } ));
 
