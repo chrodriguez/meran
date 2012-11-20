@@ -17,6 +17,12 @@ my $session = CGI::Session->load();
 ##En este pl, se muestran todos los mensajes al usuario con respecto a la falta de permisos,
 #sin destruir la sesion del usuario, permitiendo asi que navegue por donde tiene permisos
 $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
+
+
+
+my $socio = C4::AR::Auth::getSessionSocioObject();
+
+
 $t_params->{'mensaje_class'}= "alert-error";
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

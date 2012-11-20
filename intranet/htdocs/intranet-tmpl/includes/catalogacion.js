@@ -416,7 +416,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if((MODIFICAR == 0)&&(ACTION != "AGREGAR_ANALITICA")){
-        _mostrarAccion("<h4>Agregando edici&oacute;n con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
+        _mostrarAccion("<h4>Agregando Nivel 2 con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
