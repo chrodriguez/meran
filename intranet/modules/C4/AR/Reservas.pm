@@ -1115,8 +1115,10 @@ sub t_reservarOPAC {
            $db->begin_work;
 
         eval {
+
             ($paramsReserva)= $reserva->reservar($params);
             $db->commit;
+
             #Se setean los parametros para el mensaje de la reserva SIN ERRORES
             if($paramsReserva->{'estado'} eq 'E'){
 	            C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
@@ -1135,6 +1137,8 @@ sub t_reservarOPAC {
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'tipo'=> 'opac', 'params' => [$socio->persona->getEmail]} ) ;
             }
             #Se agrega la reserva al historial
+
+             
             C4::AR::Reservas::agregarReservaAHistorial($reserva);
         };
 
@@ -1166,6 +1170,9 @@ sub agregarReservaAHistorial{
     
     my %params = {};
     
+
+    # C4::AR::Debug::debug( "RESERVAAAAAAAAAAAAAAAA: ".$reserva->getId3);
+
     $params{'nro_socio'}    = $reserva->getNro_socio;
     # $params{'id1'}          = $reserva->getId1;  SE ROMPE !!!! circ_reserva no tiene id1
     $params{'id1'}          = $reserva->nivel2->getId1;
@@ -1175,9 +1182,9 @@ sub agregarReservaAHistorial{
     $params{'responsable'}  = $reserva->getNro_socio;
     $params{'fecha'}        = $reserva->getFecha_reserva;
     $params{'id_ui'}        = $reserva->getId_ui;
+    $params{'estado'}       = $reserva->getEstado;
     
     my $historial_circulacion = C4::Modelo::RepHistorialCirculacion->new();
-    
     
     $historial_circulacion->agregar(\%params);
     
