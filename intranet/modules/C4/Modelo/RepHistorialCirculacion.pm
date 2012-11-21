@@ -239,11 +239,16 @@ sub agregar {
     if ($data_hash->{'tipo'}){
 	   $self->setTipo_operacion($data_hash->{'tipo'});
   	}
+
 	else{
+        
     	#Asignando data...
+        # C4::AR::Debug::debug("ESTADOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ------------------------_" . $data_hash->{'estado'} );
     	if($data_hash->{'estado'} eq 'E'){
 		#es una reserva sobre el ITEM
-		  $self->setTipo_operacion('reserva');
+            $self->setTipo_operacion('reserva');
+            # C4::AR::Debug::debug("EN RESERVAAAAAAAAAAAAAAAAAAAAAAAAAAAA ------------------------_");
+           
 		}else{
 		#es una reserva sobre el GRUPO
 		  $self->setTipo_operacion('espera');
@@ -259,6 +264,7 @@ sub agregar {
     $self->setResponsable($data_hash->{'responsable'});
     my $hoy = ParseDate("today");
     my $dateformat = C4::Date::get_date_format();
+  
     C4::AR::Debug::debug("FECHA desde rep_historial_circulacion***************************: ".$hoy);
 
     $self->setFecha(C4::Date::format_date_in_iso($hoy, $dateformat));
