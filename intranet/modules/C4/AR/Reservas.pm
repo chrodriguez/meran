@@ -1135,7 +1135,15 @@ sub t_reservarOPAC {
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'tipo'=> 'opac', 'params' => [$socio->persona->getEmail]} ) ;
             }
             #Se agrega la reserva al historial
-            C4::AR::Reservas::agregarReservaAHistorial($reserva);
+            #solo cuando tiene id3, porque ya es efectiva
+            C4::AR::Utilidades::printHASH($paramsReserva);
+            if (!$paramsReserva->{'id3'}) {
+                #si es de grupo no hay que agregar al historial
+                #arriba ya se agrego una
+                if (($paramsReserva->{'estado'} ne 'G')){
+                    C4::AR::Reservas::agregarReservaAHistorial($reserva);
+                }
+            }
         };
 
         if ($@){

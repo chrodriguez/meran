@@ -247,7 +247,7 @@ sub agregar {
 		}else{
 		#es una reserva sobre el GRUPO
 		  $self->setTipo_operacion('espera');
-		$data_hash->{'id3'}= 0;
+		  $data_hash->{'id3'}= 0;
 		}
    	}
 
