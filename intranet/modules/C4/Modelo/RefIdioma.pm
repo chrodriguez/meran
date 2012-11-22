@@ -88,7 +88,7 @@ sub obtenerValoresCampo {
     if($v){
 
         my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
-                            ( select   => ['idLanguage', $campo],
+                            ( select   => ['*'],
                               sort_by => ($orden) );
 
         for(my $i=0; $i<scalar(@$ref_valores); $i++ ){

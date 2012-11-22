@@ -15,16 +15,16 @@ use C4::Modelo::CircSancion::Manager;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
-        &getSancionesLike
-    &tieneSanciones
-    &eliminarSanciones
-    &sanciones
-    &permisoParaPrestamo
-    &estaSancionado
-    &tieneLibroVencido
-    &getSociosSancionados
-    &diasDeSancion
-    &getTipoSancion
+    getSancionesLike
+    tieneSanciones
+    eliminarSanciones
+    sanciones
+    permisoParaPrestamo
+    estaSancionado
+    tieneLibroVencido
+    getSociosSancionados
+    diasDeSancion
+    getTipoSancion
 );
 
 
@@ -363,10 +363,16 @@ sub getTipoSancion{
     }
 
     my $tipo_sancion=undef;
-    C4::AR::Debug::debug("sanciones array   :     ".$tipo_sanciones_array_ref);
-    C4::AR::Utilidades::printARRAY($tipo_sanciones_array_ref);
+
+
     if ($tipo_sanciones_array_ref->[0]){
         $tipo_sancion = $tipo_sanciones_array_ref->[0];
+    }else{
+      $tipo_sancion = C4::Modelo::CircTipoSancion->new();
+      $tipo_sancion->setCategoria_socio($categoria_socio);
+      $tipo_sancion->setTipo_prestamo($tipo_prestamo);
+      $tipo_sancion->save();
+
     }
 
     return($tipo_sancion);

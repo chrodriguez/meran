@@ -31,13 +31,14 @@ function guardarTiposQueAplica(){
     objAH                   = new AjaxHelper(updateGuardarTiposQueAplica);
     objAH.url=URL_PREFIX+"/admin/circulacion/sancionesDB.pl";
     objAH.showOverlay       = true;
-    objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
-    objAH.categoria_socio   = $("#categoria_socio_id").val();
+    objAH.debug             = true;
+    objAH.tipo_prestamo     = $.trim($("#tipo_prestamo_id").val());
+    objAH.categoria_socio   = $.trim($("#categoria_socio_id").val());
     TPArray                 = new Array();
     size                    = 0;
 
     $("input[name=chkTP]").each(
-      function() { if(this.checked){TPArray[size] = this.value; size++;}}
+      function() { if(this.checked){TPArray[size] = $.trim(this.value); size++;}}
     );
 
     objAH.tipos_que_aplica  = TPArray;

@@ -299,8 +299,7 @@
     [% IF enable_nivel3 == 0 %]
     <!-- ANA y ELE  no tienen nivel3 -->
     <!-- si es ELE no muestro nada -->
-        [% IF nivel2_template == 'ANA' %]
-        
+        [% IF ((nivel2_template == 'ANA')) %]        
 		    <dt>		
                 [% PERL %]
                     print C4::AR::Filtros::link_to(   text      => "Detalle del registro fuente",
