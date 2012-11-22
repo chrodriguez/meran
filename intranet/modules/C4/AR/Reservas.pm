@@ -974,7 +974,7 @@ sub _verificaciones {
     }
 
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
-    if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias::getValorPreferencia("usercourse")) && 
+    if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias::getValorPreferencia("requisito_necesario")) && 
         (!$socio->getCumple_requisito) ){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
