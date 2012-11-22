@@ -77,7 +77,7 @@ function consultar(filtro,doScroll){
 
 function updateInfoUsuarios(responseText){
     $('#marco_contenido_datos').html(responseText);
-
+    $('#resultBusqueda').html("");
     var idArray = [];
     var classes = [];
     idArray[0] = 'socio';
