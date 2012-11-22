@@ -131,7 +131,7 @@ sub reloadAllPreferences {
 sub getPreferenciasByArray {
     my ($variables_array)= @_;
     
-    C4::AR::Debug::debug("ENTRO A getPreferenciasByArray() ===> FIXEAR PARA QUE USE LA CACHE!!!");
+    # C4::AR::Debug::debug("ENTRO A getPreferenciasByArray() ===> FIXEAR PARA QUE USE LA CACHE!!!");
 
     my @filtros;
     my %preferencias_hash;
@@ -272,7 +272,7 @@ sub getPreferenciasByCategoriaHash{
 sub getPreferenciaLike {
     my ($str,$orden)=@_;
 
-    C4::AR::Debug::debug("getValorPreferencia => getPreferenciaLike == $str");
+    # C4::AR::Debug::debug("getValorPreferencia => getPreferenciaLike == $str");
 
     my $preferencias_array_ref;
     my @filtros;
@@ -324,7 +324,7 @@ sub getValorPreferencia {
 
 #    verifico si se encuentra en la cache, sino se busca de la base
     if (defined $PREFERENCES->{$variable}){
-          C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
+          # C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
         return $PREFERENCES->{$variable};
     }
 
@@ -393,12 +393,12 @@ sub setVariable {
     } 
 
     if(scalar(@$preferencia) > 0){
-        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
+        # C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
 #        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
         $preferencia->[0]->save();
         reloadAllPreferences();
-        C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
+        # C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
     }
 }
 

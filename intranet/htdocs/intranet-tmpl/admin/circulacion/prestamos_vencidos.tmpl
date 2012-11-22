@@ -74,38 +74,6 @@
       });
     });
 
-    var cont = true;
-
-
-    $(window).scroll(function(){   
-
-        if($(window).scrollTop() == $(document).height() - $(window).height()){
-          // La variable cont se utiliza para evitar que se haga mas de un llamado ajax a la vez, para asegurar que el valor de ini se actualice como corresponde y no haga la peticion con el mimsmo valor mas de una vez.
-          if (cont == true){
-              cont = false;
-              $('div#loadmoreajaxloader').show();
-              $.ajax({
-                type: "POST",
-                url: URL_PREFIX +"/admin/circulacion/prestamos_vencidos.pl",
-                data: {ok:1, ini: $('#prest_venc_pag tr').size() },
-                success: function(html){
-                  if(html){
-                    cont = true;
-                    $("#prest_venc_pag").append(html);
-                    $('div#loadmoreajaxloader').hide();
-                  }else{
-                    $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
-                  }
-                }
-              });
-          }
-        }
-    });
-
-
-
-
-
 
 </script>
 
@@ -124,11 +92,13 @@
             <th>
                 <i id="prestamos_vencidos" class="icon-ok-sign click" title="Seleccionar todos"></i>
             </th>
-            <th>Apellido y nombre</th>
-            <th>Número de Socio</th>
-            <th>Ejemplar</th>
-            <th>Tipo de préstamo</th>
-            <th>Fecha de préstamo</th>
+            <th>[% 'Apellido y nombre' | i18n %]</th>
+            <th>[% 'Número de Socio' | i18n %]</th>
+            <th>[% 'Ejemplar' | i18n %]</th>
+            <th>[% 'Tipo de préstamo' | i18n %]</th>
+            <th>[% 'Fecha de préstamo' | i18n %]</th>
+            <th>[% 'Fecha de vencimiento' | i18n %]</th>
+            <th>
         </tr>
       </thead>
 
@@ -171,8 +141,11 @@
                 <td>
                     [% prestamo.tipo.getDescripcion %]
             </td>
-                <td>
+            <td>
                     [% prestamo.getFecha_prestamo_formateada %]
+            </td>
+            <td>
+                    <span class="label label-important">[% prestamo.getFecha_vencimiento_reporte_formateada %]</span>
             </td>
             </tr>
           [% END %]

@@ -1422,7 +1422,7 @@ sub getAllPrestamosVencidosParaMail{
 =item
     Funcion que devuelve todos los prestamos vencidos.
 =cut
-sub getAllPrestamosVencidos{
+sub __OLD_getAllPrestamosVencidos{
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 require_objects => ['socio','nivel3','socio.persona','tipo'],
@@ -1434,6 +1434,8 @@ sub getAllPrestamosVencidos{
 
     if(scalar(@$prestamos_array_ref) > 0){
         foreach my $prestamo (@$prestamos_array_ref){
+            # $prestamo->fecha_vencimiento_reporte($prestamo->getFecha_vencimiento);
+            # $prestamo->save();
             if ($prestamo->estaVencido()){        
                 push(@arrayPrestamos,($prestamo));
             }
@@ -1446,29 +1448,26 @@ sub getAllPrestamosVencidos{
 
 
 
-sub getPrestamosVencidosPaginado{
+sub getAllPrestamosVencidos{
+    my @filtros;
 
-    my ($ini) = @_;
-
-    C4::AR::Debug::debug("INI EN PRESTAMOS ============>". $ini);
+    my $hoy = Date::Manip::ParseDate("today");
+    my $dateformat = C4::Date::get_date_format();
+    my $today = C4::Date::format_date_in_iso($hoy, $dateformat);
+    
+    push (@filtros,(fecha_vencimiento_reporte => {lt => $today}));
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                query => \@filtros,
                                                                 require_objects => ['socio','nivel3','socio.persona','tipo'],
-                                                                sort_by => 'fecha_prestamo DESC',
-                                                                limit   => 15,
-                                                                offset  => $ini,
+                                                                sort_by => 'fecha_vencimiento_reporte ASC',
 
                                                         );
      
     my @arrayPrestamos;
 
     if(scalar(@$prestamos_array_ref) > 0){
-        foreach my $prestamo (@$prestamos_array_ref){
-            if ($prestamo->estaVencido()){        
-                push(@arrayPrestamos,($prestamo));
-            }
-        }  
-        return (\@arrayPrestamos);     
+        return ($prestamos_array_ref);     
     }else{
         return 0;
     }

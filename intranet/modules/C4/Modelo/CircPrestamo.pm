@@ -9,20 +9,19 @@ __PACKAGE__->meta->setup(
 	table => 'circ_prestamo',
 
 	columns => [
-		id_prestamo => { type => 'serial', overflow => 'truncate', not_null => 1 },
-		id3         => { type => 'integer', overflow => 'truncate' },
-		nro_socio => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
-		tipo_prestamo =>
-		  { type => 'character', overflow => 'truncate', length => 2, default => 'DO', not_null => 1 }
-		,
-		fecha_prestamo   => { type => 'varchar', overflow => 'truncate', not_null => 1 },
-		id_ui_origen     => { type => 'varchar', overflow => 'truncate', length   => 4 },
-		id_ui_prestamo   => { type => 'varchar', overflow => 'truncate', length   => 4 },
-		fecha_devolucion => { type => 'varchar', overflow => 'truncate' },
-		renovaciones => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
-		fecha_ultima_renovacion => { type => 'varchar', overflow => 'truncate' },
-		timestamp               => { type => 'timestamp', not_null => 1 },
-		agregacion_temp => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
+		id_prestamo 				=> { type => 'serial', overflow => 'truncate', not_null => 1 },
+		id3         				=> { type => 'integer', overflow => 'truncate' },
+		nro_socio 					=> { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
+		tipo_prestamo 				=> { type => 'character', overflow => 'truncate', length => 2, default => 'DO', not_null => 1 },
+		fecha_prestamo   			=> { type => 'varchar', overflow => 'truncate', not_null => 1 },
+		id_ui_origen     			=> { type => 'varchar', overflow => 'truncate', length   => 4 },
+		id_ui_prestamo   			=> { type => 'varchar', overflow => 'truncate', length   => 4 },
+		fecha_devolucion 			=> { type => 'varchar', overflow => 'truncate' },
+		fecha_vencimiento_reporte 	=> { type => 'varchar', overflow => 'truncate' },
+		renovaciones 				=> { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
+		fecha_ultima_renovacion 	=> { type => 'varchar', overflow => 'truncate' },
+		timestamp               	=> { type => 'timestamp', not_null => 1 },
+		agregacion_temp 			=> { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
 	],
 
 	primary_key_columns => ['id_prestamo'],
@@ -113,6 +112,13 @@ sub getFecha_prestamo_formateada {
 	my ($self) = shift;
 	my $dateformat = C4::Date::get_date_format();
 	return C4::Date::format_date( $self->getFecha_prestamo, $dateformat );
+}
+
+sub getFecha_vencimiento_reporte_formateada{
+	my ($self) = shift;
+	my $dateformat = C4::Date::get_date_format();
+	return C4::Date::format_date( $self->fecha_vencimiento_reporte, $dateformat );
+
 }
 
 sub getFecha_prestamo_formateada_ticket {
@@ -223,6 +229,7 @@ sub agregar {
 	$self->setId_ui_origen( $data_hash->{'id_ui'} );
 	$self->setId_ui_prestamo( $data_hash->{'id_ui_prestamo'} );
 	$self->setRenovaciones(0);
+	$self->fecha_vencimiento_reporte($self->getFecha_vencimiento());
 	$self->save();
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
