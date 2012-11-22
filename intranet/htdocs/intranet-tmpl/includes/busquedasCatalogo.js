@@ -28,13 +28,19 @@ function ordenar_busqueda_catalogo(orden){
 
 
 function updateInfoBusquedas(responseText){
+    
 
     var result_div_id = "marco_contenido_datos";
 
-    if (es_avanzada)
+    if (es_avanzada){
         result_div_id = "resultBusqueda";
+    } else {
+        $('#marco_contenido_datos').html("");
+    }   
+
     $("#volver").hide();
     $('#'+result_div_id).html(responseText);
+
     closeModal();
     if (shouldScroll)
       scrollTo(result_div_id);
@@ -108,6 +114,7 @@ function changePage_search(ini, orden){
 
 function buscarBar(){
     objAH_search=new AjaxHelper(updateInfoBusquedasBar);
+    es_avanzada= false;
     objAH_search.showOverlay       = true;
     objAH_search.debug= true;
     objAH_search.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
