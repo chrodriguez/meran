@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #obtener el código fuente
 #apt-get install git-core -y
 #cd /usr/share/
