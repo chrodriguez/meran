@@ -46,7 +46,10 @@ generarJaula()
 actualizarBDD()
 {
    echo "Tenemos que ACTUALIZAR la base de datos $DD_MERAN y para eso pediremos los permisos de root de MySQL"
-   mysql --default-character-set=utf8  -p > $sources_MERAN/updates.sql
+
+   sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g $sources_MERAN/updates.sql > /tmp/UPDATES_MERAN_SANDBOX.sql
+   mysql --default-character-set=utf8  -p < /tmp/UPDATES_MERAN_SANDBOX.sql
+   rm /tmp/UPDATES_MERAN_SANDBOX.sql
 }
 
 
