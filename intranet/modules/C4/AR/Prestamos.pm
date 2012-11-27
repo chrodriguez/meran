@@ -191,6 +191,7 @@ sub getCountPrestamosDeGrupoPorUsuario {
                                                                                         with_objects => [ 'nivel3' ]
                                                             );
 
+        C4::AR::Debug::debug("\n\n\n\n\n\n\n"."CANTIDA DE PRESTAMOS DE ".$nro_socio. " PARA ".$tipo_prestamo." --------------------------- > ".$prestamos_grupo_count."\n\n\n\n\n\n\n");
         return ($prestamos_grupo_count);
 }
 

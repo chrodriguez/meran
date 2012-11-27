@@ -42,6 +42,14 @@ generarJaula()
   a2ensite $ID-apache-jaula-opac
 }
 
+
+actualizarBDD()
+{
+   echo "Tenemos que ACTUALIZAR la base de datos $DD_MERAN y para eso pediremos los permisos de root de MySQL"
+   mysql --default-character-set=utf8  -p > $sources_MERAN/updates.sql
+}
+
+
 generarPermisosBDD()
 {
   head -n3 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g > /tmp/$ID.permisosbdd
@@ -51,7 +59,8 @@ generarPermisosBDD()
   tail -n1 $sources_MERAN/permisosbdd.sql | sed s/$(escaparVariable reemplazarDATABASE)/$BDD_MERAN/g > /tmp/$ID.permisosbdd4
   sed s/reemplazarIUSER/$(escaparVariable $IUSER_BDD_MERAN)/g /tmp/$ID.permisosbdd4 > /tmp/$ID.permisosbdd5
   sed s/reemplazarIPASS/$(escaparVariable $IPASS_BDD_MERAN)/g /tmp/$ID.permisosbdd5 >> /tmp/$ID.permisosbdd3
-  echo "Creando Base de DAtos, esto se va a demorar un buen rato"
+
+  echo "Creando la base de Datos..."
   echo "Tenemos que crear la base de datos $DD_MERAN y para eso pediremos los permisos de root de MySQL"
   mysql --default-character-set=utf8  -p < /tmp/$ID.permisosbdd3
   rm /tmp/$ID.permisosbdd*
@@ -286,7 +295,7 @@ select OPCION in InstalacionNueva Actualizar
       #Crear bdd
       echo "Generando la Base de datos"
       generarPermisosBDD
-      
+      actualizarBDD
       #Configurar cron
       generarCrons
       echo "La instalación esta concluida"
@@ -304,6 +313,7 @@ select OPCION in InstalacionNueva Actualizar
 	   then
 	     descomprimirArchivos
       	     cambiarPermisos
+             actualizarBDD
             /etc/init.d/apache2 restart
 	     break
 	   else
