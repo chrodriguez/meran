@@ -790,6 +790,7 @@ sub generarIndice {
             }
             next if ($dato eq 'NO_TIENE');
             next if ($dato eq '');
+            next if (!$dato);
 
     ###################REFERENCIAS################REFERENCIAS##################REFERENCIAS##################
 
