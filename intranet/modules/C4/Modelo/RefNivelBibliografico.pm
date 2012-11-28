@@ -121,7 +121,7 @@ sub obtenerValorCampo {
     return ($ref_valores->[0]->getCampo($campo));
   }else{
     #no se pudo recuperar el objeto por el id pasado por parametro
-    return 'NO_TIENE';
+    return undef;
   }
 }
 
