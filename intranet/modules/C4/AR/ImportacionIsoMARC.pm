@@ -1192,7 +1192,8 @@ sub getNivelesFromRegistro {
                   switch ($estructura->getNivel) {
                   case 1 { 
                         #C4::AR::Debug::debug("NIVEL 1  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n1->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
-                          #El campo es de Nivel 1 
+                          #El campo es de Nivel 1
+                          
                           if (($marc_record_n1->field($campo))&&($estructura->getRepetible)){
                               #Existe el campo y es repetible, agrego el subcampo
                               $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
