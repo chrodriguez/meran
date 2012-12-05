@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
         id                  => { type => 'serial', overflow => 'truncate', not_null => 1 },
         campo               => { type => 'character', overflow => 'truncate', length => 3, not_null => 1 },
         subcampo            => { type => 'character', overflow => 'truncate', length => 1, not_null => 1 },
-        itemtype            => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
+        itemtype            => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
         liblibrarian        => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         rules               => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
         tipo                => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
