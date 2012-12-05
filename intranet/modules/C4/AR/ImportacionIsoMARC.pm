@@ -1191,19 +1191,52 @@ sub getNivelesFromRegistro {
                   use Switch;
                   switch ($estructura->getNivel) {
                   case 1 { 
-                        #C4::AR::Debug::debug("NIVEL 1  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n1->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
-                          #El campo es de Nivel 1
-                          
-                          if (($marc_record_n1->field($campo))&&($estructura->getRepetible)){
-                              #Existe el campo y es repetible, agrego el subcampo
-                              $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
-                          }
-                          else{
-                              #No existe el campo o existe y no es repetible, se crea uno nuevo
-                              my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
-                              $marc_record_n1->append_fields($field);
-                              }
-                      }
+                        C4::AR::Debug::debug("NIVEL 1  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n1->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+                        #El campo es de Nivel 1
+                         
+                        #preguntamos si existe el campo primero  
+                        if ($marc_record_n1->field($campo)){
+
+                            C4::AR::Debug::debug("EL CAMPO $campo EXISTE");
+
+                            if  ($estructura->getRepetible) {
+
+                                C4::AR::Debug::debug("EL CAMPO ES REPETIBLE");
+
+                                #si es hacemos un add_subfields
+                                #Existe el campo y es repetible, agrego el subcampo
+                                $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
+
+                            } else {
+                                C4::AR::Debug::debug("EL CAMPO  NO ! ES REPETIBLE");
+                                #NO es repetible
+
+                                #preguntamos si existe el subcampo
+                                if ($marc_record_n1->subfield($campo,$subcampo)) {
+
+                                    C4::AR::Debug::debug("Existe el subcampo $subcampo ");
+
+                                    #existe el subcampo y no es repetible, hay que agregar uno nuevo
+                                    my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                                    $marc_record_n1->append_fields($field);
+     
+                                } else {
+                                    C4::AR::Debug::debug("NO ! existe el subcampo $subcampo , lo agregamos ");
+                                    #NO existe el SUBCAMPO LO AGREGO
+                                    $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
+                                }
+
+                            }
+
+                        } else {
+
+                            C4::AR::Debug::debug("EL CAMPO $campo NO! EXISTE");
+
+                            my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                            $marc_record_n1->append_fields($field);
+                        }
+
+                      } #end case1
                   case 2 {
                           #Nivel 2
       
