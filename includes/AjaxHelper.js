@@ -173,9 +173,9 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	}
 
 	this.log= function(str){
-			if( (this.debug)&&(window.console) ){
-					window.console.log(str);
-			}
+			// if( (this.debug)&&(window.console) ){
+			// 		window.console.log(str);
+			// }
 	}
 
 	this.ajaxCallback= function(helper){
