@@ -423,31 +423,30 @@ sub eliminarSanciones{
   $db->begin_work;
 
   foreach my $id_sancion (@$sanciones_ids) {
-  my $sancion = C4::Modelo::CircSancion->new(id_sancion => $id_sancion, db => $db);
-  $sancion->load();
+    my $sancion = C4::Modelo::CircSancion->new(id_sancion => $id_sancion, db => $db);
+  
+    $sancion->load();
     my $socio_sancionado = $sancion->getNro_socio;
     my $socio_temp       = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio_sancionado);
     my $nombre_persona   = $socio_temp->persona->getNombre();
     my $apellido_persona = $socio_temp->persona->getApellido();
-        if(!$msg_object->{'error'}){
-                eval{ 
-                    $sancion->eliminar_sancion($userid);
-                  $db->commit;
-                };
-                if ($@){
-                    $db->rollback;
-                    $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$apellido_persona, $nombre_persona, $socio_sancionado]} ) ;
-                    C4::AR::Debug::debug("Sanciones::eliminarSanciones => NO se pudo eliminar");
-                }
-                #TODO mostrar el nombre y apellido del socio
-                $msg_object->{'error'}= 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S202', 'params' => [$apellido_persona, $nombre_persona, $socio_sancionado]} ) ;
-                C4::AR::Debug::debug("Sanciones::eliminarSanciones => se elimino correctamente");
-        }else{
+
+    if(!$msg_object->{'error'}){
+        eval{ 
+            $sancion->eliminar_sancion($userid);
+            $db->commit;
+        };
+        if ($@){
+            $db->rollback;
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$apellido_persona, $nombre_persona, $socio_sancionado]} ) ;
         }
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S202', 'params' => [$apellido_persona, $nombre_persona, $socio_sancionado]} ) ;
+    }else{
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$apellido_persona, $nombre_persona, $socio_sancionado]} ) ;
+    }
 
   }
 
